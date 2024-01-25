@@ -37,6 +37,7 @@ END			: 'end';
 
 
 IDENTIFIER: (Char|'_') (Char|Num|'_')*;
+ARRAYDIMEN: OPENSQBRACKET NUMBER (','NUMBER)* CLOSESQBRACKET;
 
 // Operators
 LOGIC	: (NOT|AND|OR);
@@ -45,6 +46,8 @@ AND		: 'and';
 OR		: 'or';
 ARIOPER	: '+'|'-'|'*'|'/'|'%';
 COMPARE	: ([!=]'=')|([<>]'='?);
+ASSIGN	: '<-';
+CONCAT	: '...';
 
 // Separators
 OPENPAREN	: '(';
@@ -53,9 +56,10 @@ OPENSQBRACKET	: '[';
 CLOSESQBRACKET	: ']';
 
 // Literals
-NUMBER: Num+ ('.'Num+)? Expo?;
-BOOLVAL: TRUE|FALSE;
-STRING: DoubleQuote (~["]|(SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH)* DoubleQuote {text.self=text.self[1:-1]};
+NUMBER	: Num+ ('.'Num+)? Expo?;
+BOOLVAL	: TRUE|FALSE;
+STRING	: DoubleQuote (~["]|(SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH)* DoubleQuote {text.self=text.self[1:-1]};
+ARRAY	: OPENSQBRACKET ((NUMBER|ARRAY) (','(NUMBER|ARRAY))*)? CLOSESQBRACKET; //BOOLVAL AND STRING
 
 // Fragments
 fragment Char: [a-zA-Z];
@@ -67,13 +71,13 @@ fragment DoubleQuote: '"';
 fragment BACKSPACE	: '\b';
 fragment FORMFEED	: '\f';
 fragment CR			: '\r'; // Carriage return
-fragment NEWLINE	: '\n';
+NEWLINE				: '\n';
 fragment TAB		: '\t';
 fragment SINGLEQUOTE: '\'';
 fragment BACKSLASH	: '\\';
 
 
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+WS : [ \t\r]+ -> skip ; // skip spaces, tabs, newlines
 ERROR_CHAR: . {raise ErrorToken(self.text)};
 UNCLOSE_STRING: .;
 ILLEGAL_ESCAPE: .;
