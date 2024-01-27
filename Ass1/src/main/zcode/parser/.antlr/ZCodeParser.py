@@ -1,4 +1,4 @@
-# Generated from d:/Code/HK232/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
+# Generated from /Users/thong/WorkSpace/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -10,8 +10,9 @@ else:
 
 def serializedATN():
     return [
-        4,1,44,5,2,0,7,0,1,0,1,0,1,0,0,0,1,0,0,0,3,0,2,1,0,0,0,2,3,1,0,0,
-        0,3,1,1,0,0,0,0
+        4,1,49,9,2,0,7,0,2,1,7,1,1,0,1,0,1,1,1,1,1,1,0,0,2,0,2,0,0,6,0,4,
+        1,0,0,0,2,6,1,0,0,0,4,5,1,0,0,0,5,1,1,0,0,0,6,7,1,0,0,0,7,3,1,0,
+        0,0,0
     ]
 
 class ZCodeParser ( Parser ):
@@ -24,28 +25,30 @@ class ZCodeParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "<INVALID>", "'main'", "'true'", "'false'", 
+    literalNames = [ "<INVALID>", "'##'", "'main'", "'true'", "'false'", 
                      "'number'", "'bool'", "'string'", "'return'", "'var'", 
                      "'dynamic'", "'func'", "'for'", "'until'", "'by'", 
                      "'break'", "'continue'", "'if'", "'else'", "'elif'", 
                      "'begin'", "'end'", "<INVALID>", "<INVALID>", "<INVALID>", 
-                     "'not'", "'and'", "'or'", "<INVALID>", "<INVALID>", 
-                     "'<-'", "'...'", "'('", "')'", "'['", "']'", "<INVALID>", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "'\\n'" ]
+                     "'not'", "'and'", "'or'", "<INVALID>", "'+'", "'-'", 
+                     "'*'", "'/'", "'%'", "<INVALID>", "'=='", "'<-'", "'...'", 
+                     "'('", "')'", "'['", "']'", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "'\\n'" ]
 
     symbolicNames = [ "<INVALID>", "CMT", "MAIN", "TRUE", "FALSE", "KWNUMBER", 
                       "KWBOOL", "KWSTRING", "RETURN", "VAR", "DYNAMIC", 
                       "FUNC", "FOR", "UNTIL", "BY", "BREAK", "CONTINUE", 
                       "IF", "ELSE", "ELIF", "BEGIN", "END", "IDENTIFIER", 
                       "ARRAYDIMEN", "LOGIC", "NOT", "AND", "OR", "ARIOPER", 
-                      "COMPARE", "ASSIGN", "CONCAT", "OPENPAREN", "CLOSEPAREN", 
-                      "OPENSQBRACKET", "CLOSESQBRACKET", "NUMBER", "BOOLVAL", 
-                      "STRING", "ARRAY", "NEWLINE", "WS", "ERROR_CHAR", 
-                      "UNCLOSE_STRING", "ILLEGAL_ESCAPE" ]
+                      "ADD", "SUB", "MUL", "DIV", "MOD", "COMPARENUM", "COMPARESTR", 
+                      "ASSIGN", "CONCAT", "OPENPAREN", "CLOSEPAREN", "OPENSQBRACKET", 
+                      "CLOSESQBRACKET", "NUMBER", "BOOLVAL", "STRING", "NEWLINE", 
+                      "WS", "ERROR_CHAR", "UNCLOSE_STRING", "ILLEGAL_ESCAPE" ]
 
     RULE_program = 0
+    RULE_array = 1
 
-    ruleNames =  [ "program" ]
+    ruleNames =  [ "program", "array" ]
 
     EOF = Token.EOF
     CMT=1
@@ -76,22 +79,27 @@ class ZCodeParser ( Parser ):
     AND=26
     OR=27
     ARIOPER=28
-    COMPARE=29
-    ASSIGN=30
-    CONCAT=31
-    OPENPAREN=32
-    CLOSEPAREN=33
-    OPENSQBRACKET=34
-    CLOSESQBRACKET=35
-    NUMBER=36
-    BOOLVAL=37
-    STRING=38
-    ARRAY=39
-    NEWLINE=40
-    WS=41
-    ERROR_CHAR=42
-    UNCLOSE_STRING=43
-    ILLEGAL_ESCAPE=44
+    ADD=29
+    SUB=30
+    MUL=31
+    DIV=32
+    MOD=33
+    COMPARENUM=34
+    COMPARESTR=35
+    ASSIGN=36
+    CONCAT=37
+    OPENPAREN=38
+    CLOSEPAREN=39
+    OPENSQBRACKET=40
+    CLOSESQBRACKET=41
+    NUMBER=42
+    BOOLVAL=43
+    STRING=44
+    NEWLINE=45
+    WS=46
+    ERROR_CHAR=47
+    UNCLOSE_STRING=48
+    ILLEGAL_ESCAPE=49
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -120,6 +128,36 @@ class ZCodeParser ( Parser ):
 
         localctx = ZCodeParser.ProgramContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_program)
+        try:
+            self.enterOuterAlt(localctx, 1)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class ArrayContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+
+        def getRuleIndex(self):
+            return ZCodeParser.RULE_array
+
+
+
+
+    def array(self):
+
+        localctx = ZCodeParser.ArrayContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 2, self.RULE_array)
         try:
             self.enterOuterAlt(localctx, 1)
 

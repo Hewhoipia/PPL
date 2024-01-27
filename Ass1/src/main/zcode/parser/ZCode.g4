@@ -11,7 +11,7 @@ options {
 program: ;
 
 // Comment
-CMT: '##'[.]*;
+CMT: '##';
 
 // Key words
 MAIN		: 'main';
@@ -44,8 +44,14 @@ LOGIC	: (NOT|AND|OR);
 NOT		: 'not';
 AND		: 'and';
 OR		: 'or';
-ARIOPER	: '+'|'-'|'*'|'/'|'%';
-COMPARE	: ([!=]'=')|([<>]'='?);
+ARIOPER	: ADD|SUB|MUL|DIV|MOD;
+ADD: '+';
+SUB: '-';
+MUL: '*';
+DIV: '/';
+MOD: '%';
+COMPARENUM	: ('!'?'=')|([<>]'='?);
+COMPARESTR	: '==';
 ASSIGN	: '<-';
 CONCAT	: '...';
 
@@ -59,7 +65,7 @@ CLOSESQBRACKET	: ']';
 NUMBER	: Num+ ('.'Num+)? Expo?;
 BOOLVAL	: TRUE|FALSE;
 STRING	: DoubleQuote (~["]|(SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH)* DoubleQuote {text.self=text.self[1:-1]};
-ARRAY	: OPENSQBRACKET ((NUMBER|ARRAY) (','(NUMBER|ARRAY))*)? CLOSESQBRACKET; //BOOLVAL AND STRING
+array:; // Parser
 
 // Fragments
 fragment Char: [a-zA-Z];

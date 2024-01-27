@@ -1,4 +1,4 @@
-# Generated from d:/Code/HK232/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
+# Generated from /Users/thong/WorkSpace/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .ZCodeParser import ZCodeParser
