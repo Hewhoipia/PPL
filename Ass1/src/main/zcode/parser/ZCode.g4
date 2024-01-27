@@ -4,14 +4,30 @@ grammar ZCode;
 from lexererr import *
 }
 
+@lexer::members {
+def emit(self):
+    tk = self.type
+    result = super().emit()
+    if tk == self.UNCLOSE_STRING:       
+        raise UncloseString(result.text)
+    elif tk == self.ILLEGAL_ESCAPE:
+        raise IllegalEscape(result.text)
+    elif tk == self.ERROR_CHAR:
+        raise ErrorToken(result.text)
+    elif tk == self.UNTERMINATED_COMMENT:
+        raise UnterminatedComment()
+    else:
+        return result;
+}
+
 options {
 	language=Python3;
 }
 
 program: ;
 
-// Comment
-CMT: '##';
+// ID
+IDENTIFIER: (Char|'_') (Char|Num|'_')*;
 
 // Key words
 MAIN		: 'main';
@@ -35,16 +51,10 @@ ELIF		: 'elif';
 BEGIN		: 'begin';
 END			: 'end';
 
-
-IDENTIFIER: (Char|'_') (Char|Num|'_')*;
-ARRAYDIMEN: OPENSQBRACKET NUMBER (','NUMBER)* CLOSESQBRACKET;
-
 // Operators
-LOGIC	: (NOT|AND|OR);
 NOT		: 'not';
 AND		: 'and';
 OR		: 'or';
-ARIOPER	: ADD|SUB|MUL|DIV|MOD;
 ADD: '+';
 SUB: '-';
 MUL: '*';
@@ -64,8 +74,8 @@ CLOSESQBRACKET	: ']';
 // Literals
 NUMBER	: Num+ ('.'Num+)? Expo?;
 BOOLVAL	: TRUE|FALSE;
-STRING	: DoubleQuote (~["]|(SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH)* DoubleQuote {text.self=text.self[1:-1]};
-array:; // Parser
+STRING	: DoubleQuote ((SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH|~["])* DoubleQuote {text.self=text.self[1:-1]};
+// Array in Parser
 
 // Fragments
 fragment Char: [a-zA-Z];
@@ -82,8 +92,10 @@ fragment TAB		: '\t';
 fragment SINGLEQUOTE: '\'';
 fragment BACKSLASH	: '\\';
 
+// Comment
+CMT: '##' (.)*? -> skip;
 
-WS : [ \t\r]+ -> skip ; // skip spaces, tabs, newlines
-ERROR_CHAR: . {raise ErrorToken(self.text)};
+WS : [ \t\r]+ -> skip; // skip spaces, tabs
+ERROR_CHAR: . ;
 UNCLOSE_STRING: .;
 ILLEGAL_ESCAPE: .;

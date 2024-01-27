@@ -1,6 +1,6 @@
 token literal names:
 null
-'##'
+null
 'main'
 'true'
 'false'
@@ -21,13 +21,9 @@ null
 'elif'
 'begin'
 'end'
-null
-null
-null
 'not'
 'and'
 'or'
-null
 '+'
 '-'
 '*'
@@ -49,10 +45,11 @@ null
 null
 null
 null
+null
 
 token symbolic names:
 null
-CMT
+IDENTIFIER
 MAIN
 TRUE
 FALSE
@@ -73,13 +70,9 @@ ELSE
 ELIF
 BEGIN
 END
-IDENTIFIER
-ARRAYDIMEN
-LOGIC
 NOT
 AND
 OR
-ARIOPER
 ADD
 SUB
 MUL
@@ -97,6 +90,7 @@ NUMBER
 BOOLVAL
 STRING
 NEWLINE
+CMT
 WS
 ERROR_CHAR
 UNCLOSE_STRING
@@ -104,8 +98,7 @@ ILLEGAL_ESCAPE
 
 rule names:
 program
-array
 
 
 atn:
-[4, 1, 49, 9, 2, 0, 7, 0, 2, 1, 7, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 2, 0, 2, 0, 0, 6, 0, 4, 1, 0, 0, 0, 2, 6, 1, 0, 0, 0, 4, 5, 1, 0, 0, 0, 5, 1, 1, 0, 0, 0, 6, 7, 1, 0, 0, 0, 7, 3, 1, 0, 0, 0, 0]
+[4, 1, 46, 5, 2, 0, 7, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 3, 0, 2, 1, 0, 0, 0, 2, 3, 1, 0, 0, 0, 3, 1, 1, 0, 0, 0, 0]
