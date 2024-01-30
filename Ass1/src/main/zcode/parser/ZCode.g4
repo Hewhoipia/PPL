@@ -56,10 +56,7 @@ stmt_vari_decl: vari_decls;
 stmt_assi: assi_type assi_id ASSIGN expr;
 assi_type: vari_type | ;
 assi_id: IDENTIFIER | array;
-stmt_if: IF exp THEN list_stmt
-        (ELSEIF exp THEN list_stmt)*
-        (ELSE list_stmt)?
-        ENDIF DOT ;
+stmt_if: ;
 
 stmt_return: ;
 stmt_block: BEGIN stmt_block_sepa list_stmt stmt_block_sepa END;
