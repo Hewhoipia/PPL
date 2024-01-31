@@ -51,20 +51,25 @@ func_sepa: NEWLINE func_sepa | ;
 func_body : stmt_return | stmt_block;
 
 // stmt
-stmt: ;
+stmt: ; // each stmt
+list_stmt: ; // list of stmts
 stmt_vari_decl: vari_decls;
 stmt_assi: assi_type assi_id ASSIGN expr;
 assi_type: vari_type | ;
 assi_id: IDENTIFIER | array;
-stmt_if: ;
+stmt_cond: stmt_if stmt_sepa_block stmt_elif stmt_sepa_block stmt_else;
+stmt_if: IF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_cond list_stmt;
+stmt_elif: ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_cond list_stmt stmt_sepa_block stmt_elif | ;
+stmt_else: ;
+stmt_sepa_cond: NEWLINE stmt_sepa_cond | ;
 
 stmt_return: ;
-stmt_block: BEGIN stmt_block_sepa list_stmt stmt_block_sepa END;
-stmt_block_sepa: NEWLINE stmt_block_sepa | NEWLINE;
-list_stmt: ;
+stmt_block: BEGIN stmt_sepa_block list_stmt stmt_sepa_block END;
+stmt_sepa_block: NEWLINE stmt_sepa_block | NEWLINE;
 
 // Expr
 expr: ;
+expr_cond: ;
 
 
 
