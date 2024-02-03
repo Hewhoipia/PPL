@@ -195,9 +195,9 @@ class ZCodeLexer(Lexer):
     STRING = 41
     CMT = 42
     WS = 43
-    ERROR_CHAR = 44
-    UNCLOSE_STRING = 45
-    ILLEGAL_ESCAPE = 46
+    UNCLOSE_STRING = 44
+    ILLEGAL_ESCAPE = 45
+    ERROR_CHAR = 46
 
     channelNames = [ u"DEFAULT_TOKEN_CHANNEL", u"HIDDEN" ]
 
@@ -218,7 +218,7 @@ class ZCodeLexer(Lexer):
             "NOT", "AND", "OR", "ADD", "SUB", "MUL", "DIV", "MOD", "COMPARENUM", 
             "COMPARESTR", "ASSIGN", "CONCAT", "OPENPAREN", "CLOSEPAREN", 
             "OPENSQBRACKET", "CLOSESQBRACKET", "COMMA", "NEWLINE", "NUMBER", 
-            "STRING", "CMT", "WS", "ERROR_CHAR", "UNCLOSE_STRING", "ILLEGAL_ESCAPE" ]
+            "STRING", "CMT", "WS", "UNCLOSE_STRING", "ILLEGAL_ESCAPE", "ERROR_CHAR" ]
 
     ruleNames = [ "IDENTIFIER", "MAIN", "TRUE", "FALSE", "KWNUMBER", "KWBOOL", 
                   "KWSTRING", "RETURN", "VAR", "DYNAMIC", "FUNC", "FOR", 
@@ -229,7 +229,7 @@ class ZCodeLexer(Lexer):
                   "COMMA", "NEWLINE", "NUMBER", "STRING", "Char", "LowChar", 
                   "Num", "Expo", "DoubleQuote", "BACKSPACE", "FORMFEED", 
                   "CR", "TAB", "SINGLEQUOTE", "BACKSLASH", "CMT", "WS", 
-                  "ERROR_CHAR", "UNCLOSE_STRING", "ILLEGAL_ESCAPE" ]
+                  "UNCLOSE_STRING", "ILLEGAL_ESCAPE", "ERROR_CHAR" ]
 
     grammarFileName = "ZCode.g4"
 
