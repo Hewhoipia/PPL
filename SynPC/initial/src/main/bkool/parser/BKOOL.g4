@@ -41,6 +41,7 @@ expr_other: ID | NUMBER | ID param;
 
 ID: [a-zA-Z][0-9a-zA-Z]*;
 NUMBER	: Num+ ('.'Num+)? Expo?;
+//STRING	: DoubleQuote ((SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH|~["])* DoubleQuote {text.self=text.self[1:-1]};
 fragment Num: [0-9];
 fragment Expo: [eE][-+]?Num+;
 
