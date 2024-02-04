@@ -156,14 +156,14 @@ NEWLINE		: '\n';
 NUMBER	: Num+ ('.'Num+)? Expo?;
 // ES: escape sequence
 fragment ES: ES_BACKSLASH | ES_SINGLEQUOTE ;
-fragment ES_BACKSLASH: '\\' [bfrnt'\\] ;
-fragment ES_SINGLEQUOTE: ['] ["] ;
-fragment POSTFIX_ES_BACKSLASH: [bfrnt'\\] ;
+fragment ES_BACKSLASH: BACKSPACE | FORMFEED | CR | TAB | BACKSLASH ;
+fragment ES_SINGLEQUOTE: SINGLEQUOTE DoubleQuote | SINGLEQUOTE;
+fragment POSTFIX_ES_BACKSLASH: [bftr'\\] ;
 fragment POSTFIX_ES_SINGLEQUOTE: ["] ;
-fragment NOT_POSTFIX_ES_BACKSLASH: ~[bfrnt'\\] ;
+fragment NOT_POSTFIX_ES_BACKSLASH: ~[bftr'\\] ;
 fragment NOT_POSTFIX_ES_SINGLEQUOTE: ~["] ;
-fragment STRING_CHAR: ~["'\b\f\r\n\\] | ES ;
-STRING: '"' STRING_CHAR* '"' {self.text = self.text[1:-1]};
+fragment STRING_CHAR: ~["'\b\f\t\r\n\\] | ES ;
+STRING: DoubleQuote STRING_CHAR* DoubleQuote {self.text = self.text[1:-1]};
 // Array in Parser
 
 // ID
@@ -176,28 +176,30 @@ fragment Num: [0-9];
 fragment Expo: [eE][-+]?Num+;
 fragment DoubleQuote: '"';
 // Supported escape sequences
-fragment BACKSPACE	: '\b';
-fragment FORMFEED	: '\f';
-fragment CR			: '\r'; // Carriage return
-fragment TAB		: '\t';
-fragment SINGLEQUOTE: '\'';
-fragment BACKSLASH	: '\\';
+fragment BACKSPACE	:'\b';
+fragment FORMFEED	:'\f';
+fragment CR			:'\r'; // Carriage return
+fragment TAB		:'\t';
+fragment SINGLEQUOTE:'\\' ['] | ['];
+fragment BACKSLASH	:'\\' '\\';
 
 // Comment
 CMT: '##' (.)*? -> skip;
 
 WS : [ \t]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: '"' STRING_CHAR* (['\b\f\r\n\\] | EOF)
+UNCLOSE_STRING: (DoubleQuote STRING_CHAR*) | (DoubleQuote STRING_CHAR* ('\n' | EOF) DoubleQuote)
 {
     imposible = ["'",'\b','\f','\r','\n','\\']
-    if(self.text[-1] in imposible): #EOF?
-        raise UncloseString(self.text[1:-1])
+    if(self.text[-1] in imposible):
+        text_normalized = self.text.replace('\r\n', '\n') #.replace('\n', '\\n')
+        raise UncloseString(text_normalized[1:])
     else:
-        raise UncloseString(self.text[1:])
+        text_normalized = self.text.replace('\r\n', '\n')
+        raise UncloseString(text_normalized[1:])
 } ;
 
-ILLEGAL_ESCAPE: '"' STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?) | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)) .*? '"'
+ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?)) .*? DoubleQuote // | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)
 {
     for x in range(len(self.text)):
         if self.text[x] == '\\':
