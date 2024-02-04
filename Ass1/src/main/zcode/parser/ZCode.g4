@@ -24,10 +24,11 @@ options {
 }
 
 // PARSER
-program: decls_stmt EOF;
+program: decls_list EOF;
 
-decls_stmt: stmt decls_stmt_tail | vari_decls decls_stmt_tail | func_decls decls_stmt_tail | NEWLINE | ;
-    decls_stmt_tail: NEWLINE decls_stmt | ;
+decls_list: decls decls_list_tail | ;
+    decls_list_tail: NEWLINE decls decls_list_tail | ;
+    decls: vari_decls | func_decls | ;
 
 // Vari
 vari_decls: vari_decls_type1 | vari_decls_type2 | vari_decls_type3 | vari_decls_type4;
@@ -56,15 +57,14 @@ func_decls: FUNC IDENTIFIER func_param func_sepa func_body;
 // stmt
 stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
     | stmt_continue | stmt_return | stmt_func_call | stmt_block; // each stmt
-    list_stmt: stmt list_stmt_tail | ; // list of stmts
-        list_stmt_tail: stmt_sepa_nonnull stmt list_stmt_tail | ;
+    list_stmt: stmt_sepa_nonnull stmt list_stmt | ; // list of stmts
     stmt_vari_decl: vari_decls;
     stmt_assi: assi_type assi_id ASSIGN expr;
         assi_type: vari_type | ;
         assi_id: IDENTIFIER | array;
-    stmt_cond: stmt_if stmt_sepa_nonnull stmt_elif stmt_sepa_nonnull stmt_else;
+    stmt_cond: stmt_if stmt_elif stmt_sepa_nonnull stmt_else;
         stmt_if: IF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt;
-        stmt_elif: ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt stmt_sepa_nonnull stmt_elif | ;
+        stmt_elif: stmt_sepa_nonnull ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt stmt_elif | ;
         stmt_else: ELSE stmt_sepa_null stmt | ;
     stmt_for: FOR IDENTIFIER UNTIL expr_cond BY expr stmt_sepa_null stmt;
         stmt_break: BREAK;
@@ -75,7 +75,7 @@ stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
         sfc_list_args: sfc_args sfc_list_args_tail | ;
         sfc_list_args_tail: COMMA sfc_args sfc_list_args_tail | ;
         sfc_args: expr;
-    stmt_block: BEGIN stmt_sepa_nonnull list_stmt stmt_sepa_nonnull END;
+    stmt_block: BEGIN list_stmt stmt_sepa_nonnull END;
 
         stmt_sepa_nonnull: NEWLINE stmt_sepa_nonnull | NEWLINE;
         stmt_sepa_null: NEWLINE stmt_sepa_null | ;
@@ -108,11 +108,8 @@ expr_num: e_n_addsub; // number
 
 
 // LEXER
-// ID
-IDENTIFIER: (Char|'_') (Char|Num|'_')*;
 
 // Key words
-MAIN		: 'main';
 TRUE		: 'true';
 FALSE		: 'false';
 KWNUMBER	: 'number';
@@ -156,7 +153,7 @@ COMMA       : ',';
 NEWLINE		: '\n';
 
 // Literals
-NUMBER	: Num ('.'Num)? Expo?;
+NUMBER	: Num+ ('.'Num+)? Expo?;
 // ES: escape sequence
 fragment ES: ES_BACKSLASH | ES_SINGLEQUOTE ;
 fragment ES_BACKSLASH: '\\' [bfrnt'\\] ;
@@ -169,11 +166,14 @@ fragment STRING_CHAR: ~["'\b\f\r\n\\] | ES ;
 STRING: '"' STRING_CHAR* '"' {self.text = self.text[1:-1]};
 // Array in Parser
 
+// ID
+IDENTIFIER: (Char|'_') (Char|Num|'_')*;
+
 // Fragments
 fragment Char: [a-zA-Z];
 fragment LowChar: [a-z];
-fragment Num: [0-9]+;
-fragment Expo: [eE][-+]?Num;
+fragment Num: [0-9];
+fragment Expo: [eE][-+]?Num+;
 fragment DoubleQuote: '"';
 // Supported escape sequences
 fragment BACKSPACE	: '\b';
@@ -186,7 +186,7 @@ fragment BACKSLASH	: '\\';
 // Comment
 CMT: '##' (.)*? -> skip;
 
-WS : [ \t\r]+ -> skip; // skip spaces, tabs
+WS : [ \t]+ -> skip; // skip spaces, tabs
 
 UNCLOSE_STRING: '"' STRING_CHAR* (['\b\f\r\n\\] | EOF)
 {

@@ -14,13 +14,18 @@ class ZCodeVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZCodeParser#decls_stmt.
-    def visitDecls_stmt(self, ctx:ZCodeParser.Decls_stmtContext):
+    # Visit a parse tree produced by ZCodeParser#decls_list.
+    def visitDecls_list(self, ctx:ZCodeParser.Decls_listContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZCodeParser#decls_stmt_tail.
-    def visitDecls_stmt_tail(self, ctx:ZCodeParser.Decls_stmt_tailContext):
+    # Visit a parse tree produced by ZCodeParser#decls_list_tail.
+    def visitDecls_list_tail(self, ctx:ZCodeParser.Decls_list_tailContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZCodeParser#decls.
+    def visitDecls(self, ctx:ZCodeParser.DeclsContext):
         return self.visitChildren(ctx)
 
 
@@ -131,11 +136,6 @@ class ZCodeVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ZCodeParser#list_stmt.
     def visitList_stmt(self, ctx:ZCodeParser.List_stmtContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZCodeParser#list_stmt_tail.
-    def visitList_stmt_tail(self, ctx:ZCodeParser.List_stmt_tailContext):
         return self.visitChildren(ctx)
 
 
