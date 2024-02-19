@@ -15,8 +15,6 @@ def emit(self):
         raise IllegalEscape(result.text)
     elif tk == self.ERROR_CHAR:
         raise ErrorToken(result.text)
-    elif tk == self.UNTERMINATED_COMMENT:
-        raise UnterminatedComment()
     else:
         return result;
 }
@@ -26,10 +24,11 @@ options {
 }
 
 // PARSER
-program: decls_stmt EOF;
+program: decls_list EOF;
 
-decls_stmt: stmt decls_stmt_tail | vari_decls decls_stmt_tail | func_decls decls_stmt_tail | NEWLINE | ;
-    decls_stmt_tail: NEWLINE decls_stmt | ;
+decls_list: decls decls_list_tail | ;
+    decls_list_tail: NEWLINE decls decls_list_tail | ;
+    decls: vari_decls | func_decls | ;
 
 // Vari
 vari_decls: vari_decls_type1 | vari_decls_type2 | vari_decls_type3 | vari_decls_type4;
@@ -40,9 +39,11 @@ vari_decls: vari_decls_type1 | vari_decls_type2 | vari_decls_type3 | vari_decls_
     vari_type: KWNUMBER | KWBOOL | KWSTRING;
     array: IDENTIFIER array_tail;
         array_tail: OPENSQBRACKET list_expr_num CLOSESQBRACKET;
-        list_expr_num: ;
+        list_expr_num: expr_num list_expr_num_tail | expr_num;
+            list_expr_num_tail: COMMA expr_num list_expr_num_tail | ;
     array_val: OPENSQBRACKET list_expr CLOSESQBRACKET;
-        list_expr: ;
+        list_expr: expr list_expr_tail | ;
+            list_expr_tail: COMMA expr list_expr_tail | ;
 
 // Func
 func_decls: FUNC IDENTIFIER func_param func_sepa func_body;
@@ -56,15 +57,14 @@ func_decls: FUNC IDENTIFIER func_param func_sepa func_body;
 // stmt
 stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
     | stmt_continue | stmt_return | stmt_func_call | stmt_block; // each stmt
-    list_stmt: stmt list_stmt_tail | ; // list of stmts
-        list_stmt_tail: stmt_sepa_nonnull stmt list_stmt_tail | ;
+    list_stmt: stmt_sepa_nonnull stmt list_stmt | ; // list of stmts
     stmt_vari_decl: vari_decls;
     stmt_assi: assi_type assi_id ASSIGN expr;
         assi_type: vari_type | ;
         assi_id: IDENTIFIER | array;
-    stmt_cond: stmt_if stmt_sepa_nonnull stmt_elif stmt_sepa_nonnull stmt_else;
+    stmt_cond: stmt_if stmt_elif stmt_sepa_nonnull stmt_else;
         stmt_if: IF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt;
-        stmt_elif: ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt stmt_sepa_nonnull stmt_elif | ;
+        stmt_elif: stmt_sepa_nonnull ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt stmt_elif | ;
         stmt_else: ELSE stmt_sepa_null stmt | ;
     stmt_for: FOR IDENTIFIER UNTIL expr_cond BY expr stmt_sepa_null stmt;
         stmt_break: BREAK;
@@ -75,31 +75,41 @@ stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
         sfc_list_args: sfc_args sfc_list_args_tail | ;
         sfc_list_args_tail: COMMA sfc_args sfc_list_args_tail | ;
         sfc_args: expr;
-    stmt_block: BEGIN stmt_sepa_nonnull list_stmt stmt_sepa_nonnull END;
+    stmt_block: BEGIN list_stmt stmt_sepa_nonnull END;
 
         stmt_sepa_nonnull: NEWLINE stmt_sepa_nonnull | NEWLINE;
         stmt_sepa_null: NEWLINE stmt_sepa_null | ;
 
 // Expr
-expr: ;
-expr_cond: ; // boolean
+expr: expr_cond | expr_string | expr_num;
+expr_cond: expr_cond_andor; // boolean
     expr_cond_andor : expr_cond_andor AND expr_cond_andor
                     | expr_cond_andor OR expr_cond_andor
                     | expr_cond_not;
     expr_cond_not: NOT expr_cond_not | expr_cond_other;
-    expr_cond_other: IDENTIFIER | boolval;
-    boolval: TRUE | FALSE ;
-expr_string: ; // string
-expr_num: ; // number
+    expr_cond_other: OPENPAREN expr_cond CLOSEPAREN | IDENTIFIER | boolval | array | array_val | stmt_func_call;
+    boolval: TRUE | FALSE;
+expr_string: expr_string_compare | expr_string_concat; // string
+    expr_string_concat: stringval CONCAT stringval e_s_c_tail;
+        e_s_c_tail: CONCAT stringval e_s_c_tail | ;
+    expr_string_compare: stringval COMPARESTR stringval;
+    stringval: OPENPAREN expr_string CLOSEPAREN | IDENTIFIER | STRING | array | array_val | stmt_func_call;
+expr_num: e_n_addsub; // number
+    e_n_addsub      : e_n_addsub ADD e_n_addsub
+                    | e_n_addsub SUB e_n_addsub
+                    | e_n_muldivmod;
+    e_n_muldivmod   : e_n_muldivmod MUL e_n_muldivmod
+                    | e_n_muldivmod DIV e_n_muldivmod
+                    | e_n_muldivmod MOD e_n_muldivmod
+                    | e_n_nega;
+    e_n_nega        : SUB e_n_nega | e_n_other;
+    e_n_other: OPENPAREN expr_num CLOSEPAREN | IDENTIFIER | NUMBER | array | array_val | stmt_func_call;
 
 
 
 // LEXER
-// ID
-IDENTIFIER: (Char|'_') (Char|Num|'_')*;
 
 // Key words
-MAIN		: 'main';
 TRUE		: 'true';
 FALSE		: 'false';
 KWNUMBER	: 'number';
@@ -143,29 +153,73 @@ COMMA       : ',';
 NEWLINE		: '\n';
 
 // Literals
-NUMBER	: Num ('.'Num)? Expo?;
-STRING	: DoubleQuote ((SINGLEQUOTE DoubleQuote)|BACKSPACE|FORMFEED|CR|NEWLINE|TAB|BACKSLASH|~["])* DoubleQuote {text.self=text.self[1:-1]};
+NUMBER	: Num+ ('.'Num+)? Expo?;
+// ES: escape sequence
+fragment ES: ES_BACKSLASH | ES_SINGLEQUOTE ;
+fragment ES_BACKSLASH: BACKSPACE | FORMFEED | CR | TAB | BACKSLASH ;
+fragment ES_SINGLEQUOTE: SINGLEQUOTE DoubleQuote | SINGLEQUOTE;
+fragment POSTFIX_ES_BACKSLASH: [bftr'\\] ;
+fragment POSTFIX_ES_SINGLEQUOTE: ["] ;
+fragment NOT_POSTFIX_ES_BACKSLASH: ~[bftr'\\] ;
+fragment NOT_POSTFIX_ES_SINGLEQUOTE: ~["] ;
+fragment STRING_CHAR: ~["'\b\f\t\r\n\\] | ES ;
+STRING: DoubleQuote STRING_CHAR* DoubleQuote {self.text = self.text[1:-1]};
 // Array in Parser
+
+// ID
+IDENTIFIER: (Char|'_') (Char|Num|'_')*;
 
 // Fragments
 fragment Char: [a-zA-Z];
 fragment LowChar: [a-z];
-fragment Num: [0-9]+;
-fragment Expo: [eE][-+]?Num;
+fragment Num: [0-9];
+fragment Expo: [eE][-+]?Num+;
 fragment DoubleQuote: '"';
 // Supported escape sequences
-fragment BACKSPACE	: '\b';
-fragment FORMFEED	: '\f';
-fragment CR			: '\r'; // Carriage return
-fragment TAB		: '\t';
-fragment SINGLEQUOTE: '\'';
-fragment BACKSLASH	: '\\';
+fragment BACKSPACE	:'\b';
+fragment FORMFEED	:'\f';
+fragment CR			:'\r'; // Carriage return
+fragment TAB		:'\t';
+fragment SINGLEQUOTE:'\\' ['] | ['];
+fragment BACKSLASH	:'\\' '\\';
 
 // Comment
 CMT: '##' (.)*? -> skip;
 
-WS : [ \t\r]+ -> skip; // skip spaces, tabs
+WS : [ \t]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: .;
-ILLEGAL_ESCAPE: .;
+UNCLOSE_STRING: (DoubleQuote STRING_CHAR*) | (DoubleQuote STRING_CHAR* ('\n' | EOF) DoubleQuote)
+{
+    imposible = ["'",'\b','\f','\r','\n','\\']
+    if(self.text[-1] in imposible):
+        text_normalized = self.text.replace('\r\n', '\n') #.replace('\n', '\\n')
+        raise UncloseString(text_normalized[1:])
+    else:
+        text_normalized = self.text.replace('\r\n', '\n')
+        raise UncloseString(text_normalized[1:])
+} ;
+
+ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?)) .*? DoubleQuote // | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)
+{
+    for x in range(len(self.text)):
+        if self.text[x] == '\\':
+            if (self.text[x+1] == 'b') or (self.text[x+1] == 'f') or (self.text[x+1] == 'r'):
+                continue
+            elif (self.text[x+1] == 'n') or (self.text[x+1] == 't') or (self.text[x+1] == '\'') or (self.text[x+1] == '\\'):
+                continue
+            elif (x+2)==(len(self.text)):
+                x=x-1
+                break
+            else:
+                break
+        elif self.text[x] == '\'':
+            if(self.text[x+1] == '"'):
+                continue 
+            elif (x+2)==(len(self.text)):
+                x=x-1
+                break
+            else:
+                break                                      
+    raise IllegalEscape(self.text[1:x+2])
+} ;
 ERROR_CHAR: . ;
