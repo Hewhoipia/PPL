@@ -1,1 +1,1 @@
-Unclosed String: abc def  
+Unclosed String: "1234 5678  

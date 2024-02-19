@@ -1,4 +1,4 @@
-# Generated from /Users/thong/WorkSpace/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
+# Generated from d:/Code/HK232/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
 from antlr4 import *
 from io import StringIO
 import sys
@@ -274,19 +274,6 @@ class ZCodeLexer(Lexer):
         self._predicates = None
 
 
-    def emit(self):
-        tk = self.type
-        result = super().emit()
-        if tk == self.UNCLOSE_STRING:       
-            raise UncloseString(result.text)
-        elif tk == self.ILLEGAL_ESCAPE:
-            raise IllegalEscape(result.text)
-        elif tk == self.ERROR_CHAR:
-            raise ErrorToken(result.text)
-        else:
-            return result;
-
-
     def action(self, localctx:RuleContext, ruleIndex:int, actionIndex:int):
         if self._actions is None:
             actions = dict()
@@ -309,13 +296,8 @@ class ZCodeLexer(Lexer):
     def UNCLOSE_STRING_action(self, localctx:RuleContext , actionIndex:int):
         if actionIndex == 1:
 
-                imposible = ["'",'\b','\f','\r','\n','\\']
-                if(self.text[-1] in imposible):
-                    text_normalized = self.text.replace('\r\n', '\n') #.replace('\n', '\\n')
-                    raise UncloseString(text_normalized[1:])
-                else:
-                    text_normalized = self.text.replace('\r\n', '\n')
-                    raise UncloseString(text_normalized[1:])
+                text_normalized = self.text.replace('\r\n', '\n')
+                raise UncloseString(text_normalized[1:])
 
      
 

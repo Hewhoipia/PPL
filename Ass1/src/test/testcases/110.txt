@@ -1,4 +1,4 @@
- "this
-is
-multiline
-string" 
+"Faker,
+what
+was
+that?"
