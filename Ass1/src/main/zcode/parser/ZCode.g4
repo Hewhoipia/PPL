@@ -142,11 +142,11 @@ NEWLINE		: '\n';
 NUMBER	: Num+ ('.'Num+)? Expo?;
 // ES: escape sequence
 fragment ES: ES_BACKSLASH | ES_SINGLEQUOTE ;
-fragment ES_BACKSLASH: BACKSPACE | FORMFEED | CR | TAB | BACKSLASH ;
+fragment ES_BACKSLASH: '\\' [bfrnt'\\] ;
 fragment ES_SINGLEQUOTE: SINGLEQUOTE DoubleQuote | SINGLEQUOTE;
-fragment POSTFIX_ES_BACKSLASH: [bftr'\\] ;
+fragment POSTFIX_ES_BACKSLASH: [bftnr'\\] ;
 fragment POSTFIX_ES_SINGLEQUOTE: ["] ;
-fragment NOT_POSTFIX_ES_BACKSLASH: ~[\b\f\t\r'\\] ;
+fragment NOT_POSTFIX_ES_BACKSLASH: ~[bftnr'\\] ;
 fragment NOT_POSTFIX_ES_SINGLEQUOTE: ~["] ;
 fragment STRING_CHAR: ~["'\b\f\t\r\n\\] | ES ;
 STRING: DoubleQuote STRING_CHAR* DoubleQuote {self.text = self.text[1:-1]};
@@ -174,13 +174,13 @@ CMT: '##' (.)*? -> skip;
 
 WS : [ \t]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: (DoubleQuote STRING_CHAR* (NEWLINE | EOF))
+UNCLOSE_STRING: (DoubleQuote STRING_CHAR* ('\n' | EOF))
 {
     text_normalized = self.text.replace('\r\n', '\n')
     raise UncloseString(text_normalized[1:])
 } ;
 
-ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* ( NOT_POSTFIX_ES_BACKSLASH?) .*? DoubleQuote // | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)
+ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?) | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)) .*? DoubleQuote
 {
     for x in range(len(self.text)):
         if self.text[x] == '\\':
