@@ -146,7 +146,7 @@ fragment ES_BACKSLASH: BACKSPACE | FORMFEED | CR | TAB | BACKSLASH ;
 fragment ES_SINGLEQUOTE: SINGLEQUOTE DoubleQuote | SINGLEQUOTE;
 fragment POSTFIX_ES_BACKSLASH: [bftr'\\] ;
 fragment POSTFIX_ES_SINGLEQUOTE: ["] ;
-fragment NOT_POSTFIX_ES_BACKSLASH: ~[bftr'\\] ;
+fragment NOT_POSTFIX_ES_BACKSLASH: ~[\b\f\t\r'\\] ;
 fragment NOT_POSTFIX_ES_SINGLEQUOTE: ~["] ;
 fragment STRING_CHAR: ~["'\b\f\t\r\n\\] | ES ;
 STRING: DoubleQuote STRING_CHAR* DoubleQuote {self.text = self.text[1:-1]};
@@ -167,20 +167,20 @@ fragment FORMFEED	:'\f';
 fragment CR			:'\r'; // Carriage return
 fragment TAB		:'\t';
 fragment SINGLEQUOTE:'\\' ['] | ['];
-fragment BACKSLASH	:'\\' '\\';
+fragment BACKSLASH	:'\\';
 
 // Comment
 CMT: '##' (.)*? -> skip;
 
 WS : [ \t]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: (DoubleQuote STRING_CHAR* ('\n' | EOF))
+UNCLOSE_STRING: (DoubleQuote STRING_CHAR* (NEWLINE | EOF))
 {
     text_normalized = self.text.replace('\r\n', '\n')
     raise UncloseString(text_normalized[1:])
 } ;
 
-ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?)) .*? DoubleQuote // | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)
+ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* ( NOT_POSTFIX_ES_BACKSLASH?) .*? DoubleQuote // | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)
 {
     for x in range(len(self.text)):
         if self.text[x] == '\\':
