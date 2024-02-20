@@ -15,7 +15,7 @@ from lexererr import *
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2/")
-        buf.write("\u01b0\b\1\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7")
+        buf.write("\u01ba\b\1\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7")
         buf.write("\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r")
         buf.write("\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23")
         buf.write("\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30")
@@ -49,26 +49,27 @@ def serializedATN():
         buf.write("\16\65\u0171\3\66\3\66\3\67\3\67\38\38\39\39\3:\3:\3;")
         buf.write("\3;\3;\5;\u0181\n;\3<\3<\3<\3=\3=\3=\3=\7=\u018a\n=\f")
         buf.write("=\16=\u018d\13=\3=\3=\3>\6>\u0192\n>\r>\16>\u0193\3>\3")
-        buf.write(">\3?\3?\3?\3@\3@\7@\u019d\n@\f@\16@\u01a0\13@\3@\3@\5")
-        buf.write("@\u01a4\n@\3@\7@\u01a7\n@\f@\16@\u01aa\13@\3@\3@\3@\3")
-        buf.write("A\3A\4\u018b\u01a8\2B\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21")
-        buf.write("\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22#\23%\24")
-        buf.write("\'\25)\26+\27-\30/\31\61\32\63\33\65\34\67\359\36;\37")
-        buf.write("= ?!A\"C#E$G%I&K\'M(O\2Q\2S\2U\2W\2Y\2[\2]\2_)a*c\2e\2")
-        buf.write("g\2i\2k\2m\2o\2q\2s\2u\2w\2y+{,}-\177.\u0081/\3\2\16\4")
-        buf.write("\2>>@@\b\2))^^ddhhttvv\3\2$$\7\2\n\f\16\17$$))^^\4\2C")
-        buf.write("\\c|\3\2c|\3\2\62;\4\2GGgg\4\2--//\3\2))\4\2\13\13\"\"")
-        buf.write("\3\2^^\2\u01b7\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t")
-        buf.write("\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3")
-        buf.write("\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2")
-        buf.write("\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2")
-        buf.write("\2#\3\2\2\2\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2")
-        buf.write("\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2\63\3\2\2\2\2\65")
-        buf.write("\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2\2=\3\2\2\2")
-        buf.write("\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2")
-        buf.write("\2\2I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2_\3\2\2\2\2a\3\2")
-        buf.write("\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2\2\2")
-        buf.write("\u0081\3\2\2\2\3\u0083\3\2\2\2\5\u0088\3\2\2\2\7\u008e")
+        buf.write(">\3?\3?\7?\u019a\n?\f?\16?\u019d\13?\3?\5?\u01a0\n?\3")
+        buf.write("?\3?\3@\3@\7@\u01a6\n@\f@\16@\u01a9\13@\3@\3@\5@\u01ad")
+        buf.write("\n@\3@\7@\u01b0\n@\f@\16@\u01b3\13@\3@\3@\3@\3A\3A\3A")
+        buf.write("\4\u018b\u01b1\2B\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23")
+        buf.write("\13\25\f\27\r\31\16\33\17\35\20\37\21!\22#\23%\24\'\25")
+        buf.write(")\26+\27-\30/\31\61\32\63\33\65\34\67\359\36;\37= ?!A")
+        buf.write("\"C#E$G%I&K\'M(O\2Q\2S\2U\2W\2Y\2[\2]\2_)a*c\2e\2g\2i")
+        buf.write("\2k\2m\2o\2q\2s\2u\2w\2y+{,}-\177.\u0081/\3\2\17\4\2>")
+        buf.write(">@@\b\2))^^ddhhttvv\3\2$$\7\2\n\f\16\17$$))^^\4\2C\\c")
+        buf.write("|\3\2c|\3\2\62;\4\2GGgg\4\2--//\3\2))\4\2\13\13\"\"\3")
+        buf.write("\3\f\f\3\2^^\2\u01c2\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2")
+        buf.write("\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2")
+        buf.write("\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31")
+        buf.write("\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2")
+        buf.write("\2\2\2#\3\2\2\2\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3")
+        buf.write("\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2\63\3\2\2\2")
+        buf.write("\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2\2=\3")
+        buf.write("\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G")
+        buf.write("\3\2\2\2\2I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2_\3\2\2\2\2")
+        buf.write("a\3\2\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2")
+        buf.write("\2\2\u0081\3\2\2\2\3\u0083\3\2\2\2\5\u0088\3\2\2\2\7\u008e")
         buf.write("\3\2\2\2\t\u0095\3\2\2\2\13\u009a\3\2\2\2\r\u00a1\3\2")
         buf.write("\2\2\17\u00a8\3\2\2\2\21\u00ac\3\2\2\2\23\u00b4\3\2\2")
         buf.write("\2\25\u00b9\3\2\2\2\27\u00bd\3\2\2\2\31\u00c3\3\2\2\2")
@@ -86,7 +87,7 @@ def serializedATN():
         buf.write("\3\2\2\2k\u0173\3\2\2\2m\u0175\3\2\2\2o\u0177\3\2\2\2")
         buf.write("q\u0179\3\2\2\2s\u017b\3\2\2\2u\u0180\3\2\2\2w\u0182\3")
         buf.write("\2\2\2y\u0185\3\2\2\2{\u0191\3\2\2\2}\u0197\3\2\2\2\177")
-        buf.write("\u019a\3\2\2\2\u0081\u01ae\3\2\2\2\u0083\u0084\7v\2\2")
+        buf.write("\u01a3\3\2\2\2\u0081\u01b7\3\2\2\2\u0083\u0084\7v\2\2")
         buf.write("\u0084\u0085\7t\2\2\u0085\u0086\7w\2\2\u0086\u0087\7g")
         buf.write("\2\2\u0087\4\3\2\2\2\u0088\u0089\7h\2\2\u0089\u008a\7")
         buf.write("c\2\2\u008a\u008b\7n\2\2\u008b\u008c\7u\2\2\u008c\u008d")
@@ -188,20 +189,25 @@ def serializedATN():
         buf.write("\u018d\u018b\3\2\2\2\u018e\u018f\b=\3\2\u018fz\3\2\2\2")
         buf.write("\u0190\u0192\t\f\2\2\u0191\u0190\3\2\2\2\u0192\u0193\3")
         buf.write("\2\2\2\u0193\u0191\3\2\2\2\u0193\u0194\3\2\2\2\u0194\u0195")
-        buf.write("\3\2\2\2\u0195\u0196\b>\3\2\u0196|\3\2\2\2\u0197\u0198")
-        buf.write("\13\2\2\2\u0198\u0199\b?\4\2\u0199~\3\2\2\2\u019a\u019e")
-        buf.write("\5k\66\2\u019b\u019d\5]/\2\u019c\u019b\3\2\2\2\u019d\u01a0")
-        buf.write("\3\2\2\2\u019e\u019c\3\2\2\2\u019e\u019f\3\2\2\2\u019f")
-        buf.write("\u01a1\3\2\2\2\u01a0\u019e\3\2\2\2\u01a1\u01a3\t\r\2\2")
-        buf.write("\u01a2\u01a4\5Y-\2\u01a3\u01a2\3\2\2\2\u01a3\u01a4\3\2")
-        buf.write("\2\2\u01a4\u01a8\3\2\2\2\u01a5\u01a7\13\2\2\2\u01a6\u01a5")
-        buf.write("\3\2\2\2\u01a7\u01aa\3\2\2\2\u01a8\u01a9\3\2\2\2\u01a8")
-        buf.write("\u01a6\3\2\2\2\u01a9\u01ab\3\2\2\2\u01aa\u01a8\3\2\2\2")
-        buf.write("\u01ab\u01ac\5k\66\2\u01ac\u01ad\b@\5\2\u01ad\u0080\3")
-        buf.write("\2\2\2\u01ae\u01af\13\2\2\2\u01af\u0082\3\2\2\2\32\2\u0102")
-        buf.write("\u0107\u0109\u0124\u012a\u012c\u012f\u0133\u013a\u0140")
-        buf.write("\u014c\u0152\u015a\u015f\u0161\u016c\u0171\u0180\u018b")
-        buf.write("\u0193\u019e\u01a3\u01a8\6\3\60\2\b\2\2\3?\3\3@\4")
+        buf.write("\3\2\2\2\u0195\u0196\b>\3\2\u0196|\3\2\2\2\u0197\u019b")
+        buf.write("\5k\66\2\u0198\u019a\5]/\2\u0199\u0198\3\2\2\2\u019a\u019d")
+        buf.write("\3\2\2\2\u019b\u0199\3\2\2\2\u019b\u019c\3\2\2\2\u019c")
+        buf.write("\u019f\3\2\2\2\u019d\u019b\3\2\2\2\u019e\u01a0\t\r\2\2")
+        buf.write("\u019f\u019e\3\2\2\2\u01a0\u01a1\3\2\2\2\u01a1\u01a2\b")
+        buf.write("?\4\2\u01a2~\3\2\2\2\u01a3\u01a7\5k\66\2\u01a4\u01a6\5")
+        buf.write("]/\2\u01a5\u01a4\3\2\2\2\u01a6\u01a9\3\2\2\2\u01a7\u01a5")
+        buf.write("\3\2\2\2\u01a7\u01a8\3\2\2\2\u01a8\u01aa\3\2\2\2\u01a9")
+        buf.write("\u01a7\3\2\2\2\u01aa\u01ac\t\16\2\2\u01ab\u01ad\5Y-\2")
+        buf.write("\u01ac\u01ab\3\2\2\2\u01ac\u01ad\3\2\2\2\u01ad\u01b1\3")
+        buf.write("\2\2\2\u01ae\u01b0\13\2\2\2\u01af\u01ae\3\2\2\2\u01b0")
+        buf.write("\u01b3\3\2\2\2\u01b1\u01b2\3\2\2\2\u01b1\u01af\3\2\2\2")
+        buf.write("\u01b2\u01b4\3\2\2\2\u01b3\u01b1\3\2\2\2\u01b4\u01b5\5")
+        buf.write("k\66\2\u01b5\u01b6\b@\5\2\u01b6\u0080\3\2\2\2\u01b7\u01b8")
+        buf.write("\13\2\2\2\u01b8\u01b9\bA\6\2\u01b9\u0082\3\2\2\2\34\2")
+        buf.write("\u0102\u0107\u0109\u0124\u012a\u012c\u012f\u0133\u013a")
+        buf.write("\u0140\u014c\u0152\u015a\u015f\u0161\u016c\u0171\u0180")
+        buf.write("\u018b\u0193\u019b\u019f\u01a7\u01ac\u01b1\7\3\60\2\b")
+        buf.write("\2\2\3?\3\3@\4\3A\5")
         return buf.getvalue()
 
 
@@ -301,12 +307,28 @@ class ZCodeLexer(Lexer):
         self._predicates = None
 
 
+    def emit(self):
+        tk = self.type
+        result = super().emit()
+        if tk == self.UNCLOSE_STRING:       
+            raise UncloseString(result.text)
+        elif tk == self.ILLEGAL_ESCAPE:
+            raise IllegalEscape(result.text)
+        elif tk == self.ERROR_CHAR:
+            raise ErrorToken(result.text)
+        elif tk == self.UNTERMINATED_COMMENT:
+            raise UnterminatedComment()
+        else:
+            return result;
+
+
     def action(self, localctx:RuleContext, ruleIndex:int, actionIndex:int):
         if self._actions is None:
             actions = dict()
             actions[46] = self.STRING_action 
             actions[61] = self.UNCLOSE_STRING_action 
             actions[62] = self.ILLEGAL_ESCAPE_action 
+            actions[63] = self.ERROR_CHAR_action 
             self._actions = actions
         action = self._actions.get(ruleIndex, None)
         if action is not None:
@@ -352,6 +374,11 @@ class ZCodeLexer(Lexer):
                             break                                      
                 raise IllegalEscape(self.text[1:x+2])
 
+     
+
+    def ERROR_CHAR_action(self, localctx:RuleContext , actionIndex:int):
+        if actionIndex == 3:
+            raise ErrorToken(self.text)
      
 
 

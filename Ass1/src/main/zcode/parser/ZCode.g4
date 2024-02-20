@@ -5,6 +5,22 @@ grammar ZCode;
 from lexererr import *
 }
 
+@lexer::members {
+def emit(self):
+    tk = self.type
+    result = super().emit()
+    if tk == self.UNCLOSE_STRING:       
+        raise UncloseString(result.text)
+    elif tk == self.ILLEGAL_ESCAPE:
+        raise IllegalEscape(result.text)
+    elif tk == self.ERROR_CHAR:
+        raise ErrorToken(result.text)
+    elif tk == self.UNTERMINATED_COMMENT:
+        raise UnterminatedComment()
+    else:
+        return result;
+}
+
 options {
 	language=Python3;
 }
@@ -203,4 +219,4 @@ ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?)) .*? 
                 break                                      
     raise IllegalEscape(self.text[1:x+2])
 } ;
-ERROR_CHAR: . ;
+ERROR_CHAR: . {raise ErrorToken(self.text)};

@@ -29,7 +29,7 @@ class LexerSuite(unittest.TestCase):
 
     def test107(self):
         """test normal string with escape"""
-        self.assertTrue(TestLexer.test(""" "ab'"c\\n def"  ""","""ab'"c\\n def,<EOF>""",107))       
+        self.assertTrue(TestLexer.test(""" "ab'"c\\\\n def"  ""","""ab'"c\\\\n def,<EOF>""",107))       
     def test108(self):
         """test fast"""
         self.assertTrue(TestLexer.test("a\n\n\n#","a,\n,\n,\n,Error Token #",108))
