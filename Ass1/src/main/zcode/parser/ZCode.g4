@@ -174,7 +174,7 @@ CMT: '##' (.)*? -> skip;
 
 WS : [ \t]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: (DoubleQuote STRING_CHAR* ('\n' | EOF) DoubleQuote?)
+UNCLOSE_STRING: (DoubleQuote STRING_CHAR* ('\n' | EOF))
 {
     text_normalized = self.text.replace('\r\n', '\n')
     raise UncloseString(text_normalized[1:])
