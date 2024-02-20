@@ -1,4 +1,4 @@
-# Generated from d:/Code/HK232/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
+# Generated from /Users/thong/WorkSpace/PPL/Ass1/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
 from antlr4 import *
 from io import StringIO
 import sys
@@ -268,21 +268,6 @@ class ZCodeLexer(Lexer):
         self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
         self._actions = None
         self._predicates = None
-
-
-    def emit(self):
-        tk = self.type
-        result = super().emit()
-        if tk == self.UNCLOSE_STRING:       
-            raise UncloseString(result.text)
-        elif tk == self.ILLEGAL_ESCAPE:
-            raise IllegalEscape(result.text)
-        elif tk == self.ERROR_CHAR:
-            raise ErrorToken(result.text)
-        elif tk == self.UNTERMINATED_COMMENT:
-            raise UnterminatedComment()
-        else:
-            return result;
 
 
     def action(self, localctx:RuleContext, ruleIndex:int, actionIndex:int):
