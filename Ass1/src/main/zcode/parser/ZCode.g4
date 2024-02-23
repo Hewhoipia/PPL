@@ -170,14 +170,17 @@ fragment SINGLEQUOTE:'\\' ['] | ['];
 fragment BACKSLASH	:'\\';
 
 // Comment
-CMT: '##' (.)*? -> skip;
+CMT: '##' ~[\n\r\f]* -> skip;
 
-WS : [ \t]+ -> skip; // skip spaces, tabs
+WS : [ \t\r]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: (DoubleQuote STRING_CHAR* ('\n' | EOF))
+UNCLOSE_STRING: '"' STRING_CHAR* (['\b\f\r\n\\] | EOF)
 {
-    text_normalized = self.text.replace('\r\n', '\n')
-    raise UncloseString(text_normalized[1:])
+    imposible = ["'",'\b','\f','\r','\n','\\']
+    if(self.text[-1] in imposible):
+        raise UncloseString(self.text[1:-1])
+    else:
+        raise UncloseString(self.text[1:])
 } ;
 
 ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?) | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)) .*? DoubleQuote
