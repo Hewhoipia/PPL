@@ -1,2 +1,3 @@
-func main() begin
-end
+
+        bool a <- not x + y and (random <= 9999) = true
+        

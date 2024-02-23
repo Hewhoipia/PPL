@@ -1,1 +1,3 @@
-int main( {}
+
+        string a <- "random" ... "string" / 2
+        

@@ -142,7 +142,7 @@ NEWLINE		: '\n';
 NUMBER	: Num+ ('.'Num+)? Expo?;
 // ES: escape sequence
 fragment ES: ES_BACKSLASH | ES_SINGLEQUOTE ;
-fragment ES_BACKSLASH: '\\' [bfrnt'\\] ;
+fragment ES_BACKSLASH: '\\' [bfrnt'\\] | BACKSPACE | FORMFEED | CR | TAB;
 fragment ES_SINGLEQUOTE: SINGLEQUOTE DoubleQuote | SINGLEQUOTE;
 fragment POSTFIX_ES_BACKSLASH: [bftnr'\\] ;
 fragment POSTFIX_ES_SINGLEQUOTE: ["] ;
@@ -167,43 +167,25 @@ fragment FORMFEED	:'\f';
 fragment CR			:'\r'; // Carriage return
 fragment TAB		:'\t';
 fragment SINGLEQUOTE:'\\' ['] | ['];
-fragment BACKSLASH	:'\\';
+fragment BACKSLASH	:'\\''\\';
 
 // Comment
 CMT: '##' ~[\n\r\f]* -> skip;
 
 WS : [ \t\r]+ -> skip; // skip spaces, tabs
 
-UNCLOSE_STRING: '"' STRING_CHAR* (['\b\f\r\n\\] | EOF)
+UNCLOSE_STRING: DoubleQuote STRING_CHAR* ('\r\n' | '\n' | EOF) 
 {
-    imposible = ["'",'\b','\f','\r','\n','\\']
-    if(self.text[-1] in imposible):
-        raise UncloseString(self.text[1:-1])
-    else:
-        raise UncloseString(self.text[1:])
-} ;
+	if(len(self.text) >= 2 and self.text[-1] == '\n' and self.text[-2] == '\r'):
+		raise UncloseString(self.text[1:-2])
+	elif (self.text[-1] == '\n'):
+		raise UncloseString(self.text[1:-1])
+	else:
+		raise UncloseString(self.text[1:])
+};
 
-ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?) | (['] NOT_POSTFIX_ES_SINGLEQUOTE?)) .*? DoubleQuote
+ILLEGAL_ESCAPE: DoubleQuote STRING_CHAR* (([\\] NOT_POSTFIX_ES_BACKSLASH?) | (['] NOT_POSTFIX_ES_SINGLEQUOTE?))
 {
-    for x in range(len(self.text)):
-        if self.text[x] == '\\':
-            if (self.text[x+1] == 'b') or (self.text[x+1] == 'f') or (self.text[x+1] == 'r'):
-                continue
-            elif (self.text[x+1] == 'n') or (self.text[x+1] == 't') or (self.text[x+1] == '\'') or (self.text[x+1] == '\\'):
-                continue
-            elif (x+2)==(len(self.text)):
-                x=x-1
-                break
-            else:
-                break
-        elif self.text[x] == '\'':
-            if(self.text[x+1] == '"'):
-                continue 
-            elif (x+2)==(len(self.text)):
-                x=x-1
-                break
-            else:
-                break                                      
-    raise IllegalEscape(self.text[1:x+2])
+    raise IllegalEscape(self.text[1:])
 } ;
 ERROR_CHAR: . {raise ErrorToken(self.text)};

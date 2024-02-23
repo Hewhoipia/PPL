@@ -1,0 +1,7 @@
+
+            func main()
+            func foo(number y[6],number x[6,9])
+            func fun(number num1, number num2)
+                var num <- 1.1e-9
+            func main(number exp <- r + t)
+        

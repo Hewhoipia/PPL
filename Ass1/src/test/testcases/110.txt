@@ -1,4 +1,2 @@
-"Faker,
-what
-was
-that?"
+"'"\b
+"
