@@ -1,0 +1,19 @@
+
+            ## a comment
+            func main(number a)
+                ## a comment
+                ## a comment
+
+                begin
+                    number a
+                         for i until i > 5 by 1
+                             begin
+                                 if (a = 1) a <- 2
+                                 else a <- 4
+                                 number a <- a + 1
+                             end
+                end
+
+                ## a comment
+            func main(number a)
+        

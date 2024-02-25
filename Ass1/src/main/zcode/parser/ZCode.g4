@@ -17,37 +17,39 @@ decls_list: decls decls_list_tail | ;
     decls: vari_decls | func_decls | ;
 
 // Vari
-vari_decls: vari_decls_type1 | vari_decls_type2 | vari_decls_type3 | vari_decls_type4;
-    vari_decls_type1: vari_type IDENTIFIER; // number, bool, string
-    vari_decls_type2: VAR IDENTIFIER ASSIGN expr; // var
-    vari_decls_type3: DYNAMIC IDENTIFIER; // dynamic
-    vari_decls_type4: vari_type array; // array
-    vari_type: KWNUMBER | KWBOOL | KWSTRING;
+vari_decls: vari_decls_1 | vari_decls_2;
+    vari_decls_1: vari_decls_type vari_id; // number, bool, string, dyna
+    vari_decls_2: stmt_assi;
+    vari_decls_type: KWNUMBER | KWBOOL | KWSTRING | DYNAMIC;
     array: IDENTIFIER array_tail;
         array_tail: OPENSQBRACKET list_expr_num CLOSESQBRACKET;
-        list_expr_num: expr_num list_expr_num_tail | expr_num;
+        list_expr_num: expr_num list_expr_num_tail | ;
             list_expr_num_tail: COMMA expr_num list_expr_num_tail | ;
     array_val: OPENSQBRACKET list_expr CLOSESQBRACKET;
         list_expr: expr list_expr_tail | ;
             list_expr_tail: COMMA expr list_expr_tail | ;
+    vari_id: IDENTIFIER | array;
 
 // Func
 func_decls: FUNC IDENTIFIER func_param func_sepa func_body;
     func_param: OPENPAREN list_param CLOSEPAREN;
     list_param: params list_param_tail | ;
     list_param_tail: COMMA params list_param_tail | ;
-    params: vari_decls_type1 | vari_decls_type4;
+    params: vd_for_func;
+        vd_for_func: vd_type_ff vari_id;
+        vd_type_ff: KWNUMBER | KWBOOL | KWSTRING;
     func_sepa: NEWLINE func_sepa | ;
-    func_body : stmt_return | stmt_block;
+    func_body : stmt_return | stmt_block | ;
 
 // stmt
 stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
     | stmt_continue | stmt_return | stmt_func_call | stmt_block; // each stmt
     list_stmt: stmt_sepa_nonnull stmt list_stmt | ; // list of stmts
     stmt_vari_decl: vari_decls;
-    stmt_assi: assi_type assi_id ASSIGN expr;
-        assi_type: vari_type | ;
-        assi_id: IDENTIFIER | array;
+    stmt_assi: stmt_assi_1 | stmt_assi_2;
+        stmt_assi_1: vari_id ASSIGN expr;
+        stmt_assi_2: assi_type vari_id ASSIGN expr;
+            assi_type: vari_decls_type | VAR;
     stmt_cond: stmt_if stmt_elif stmt_sepa_nonnull stmt_else;
         stmt_if: IF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt;
         stmt_elif: stmt_sepa_nonnull ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt stmt_elif | ;
@@ -55,7 +57,7 @@ stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
     stmt_for: FOR IDENTIFIER UNTIL expr_cond BY expr stmt_sepa_null stmt;
         stmt_break: BREAK;
         stmt_continue: CONTINUE;
-    stmt_return: RETURN expr;
+    stmt_return: RETURN expr | RETURN;
     stmt_func_call: IDENTIFIER sfc_param;
         sfc_param: OPENPAREN sfc_list_args CLOSEPAREN;
         sfc_list_args: sfc_args sfc_list_args_tail | ;
@@ -63,23 +65,20 @@ stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
         sfc_args: expr;
     stmt_block: BEGIN list_stmt stmt_sepa_nonnull END;
 
-        stmt_sepa_nonnull: NEWLINE stmt_sepa_nonnull | NEWLINE;
+        stmt_sepa_nonnull: NEWLINE s_s_nn_tail;
+            s_s_nn_tail: NEWLINE s_s_nn_tail | ;
         stmt_sepa_null: NEWLINE stmt_sepa_null | ;
 
 // Expr
-expr: expr_cond | expr_string | expr_num;
-expr_cond: expr_cond_andor; // boolean
+expr: expr_cond;
+expr_cond: expr_compare; // boolean
+    expr_compare: expr_compare COMPARENUM expr_compare
+                | expr_compare COMPARESTR expr_compare
+                | expr_cond_andor;
     expr_cond_andor : expr_cond_andor AND expr_cond_andor
                     | expr_cond_andor OR expr_cond_andor
                     | expr_cond_not;
-    expr_cond_not: NOT expr_cond_not | expr_cond_other;
-    expr_cond_other: OPENPAREN expr_cond CLOSEPAREN | IDENTIFIER | boolval | array | array_val | stmt_func_call;
-    boolval: TRUE | FALSE;
-expr_string: expr_string_compare | expr_string_concat; // string
-    expr_string_concat: stringval CONCAT stringval e_s_c_tail;
-        e_s_c_tail: CONCAT stringval e_s_c_tail | ;
-    expr_string_compare: stringval COMPARESTR stringval;
-    stringval: OPENPAREN expr_string CLOSEPAREN | IDENTIFIER | STRING | array | array_val | stmt_func_call;
+    expr_cond_not: NOT expr_cond_not | expr_num;
 expr_num: e_n_addsub; // number
     e_n_addsub      : e_n_addsub ADD e_n_addsub
                     | e_n_addsub SUB e_n_addsub
@@ -88,8 +87,16 @@ expr_num: e_n_addsub; // number
                     | e_n_muldivmod DIV e_n_muldivmod
                     | e_n_muldivmod MOD e_n_muldivmod
                     | e_n_nega;
-    e_n_nega        : SUB e_n_nega | e_n_other;
-    e_n_other: OPENPAREN expr_num CLOSEPAREN | IDENTIFIER | NUMBER | array | array_val | stmt_func_call;
+    e_n_nega        : SUB e_n_nega | expr_string;
+expr_string: expr_string_concat; // string
+    expr_string_concat: expr_other CONCAT expr_other e_s_c_tail | expr_other;
+        e_s_c_tail: CONCAT expr_other e_s_c_tail | ;
+expr_other  : OPENPAREN expr CLOSEPAREN
+            | IDENTIFIER
+            | NUMBER
+            | STRING
+            | boolval | array | array_val | stmt_func_call;
+    boolval: TRUE | FALSE;
 
 
 

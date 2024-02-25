@@ -1,3 +1,3 @@
 
-        bool a <- not x + y and (random <= 9999) = true
+        bool a <- not x + y and ("random" <= 9999) = true
         
