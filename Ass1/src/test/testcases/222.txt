@@ -1,0 +1,11 @@
+
+        func main()
+        begin
+            number a
+            bool b
+            string c
+            var d <- 1 + 1
+            dynamic e
+            var array[1, 2]
+        end
+        

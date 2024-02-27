@@ -12,22 +12,19 @@ options {
 // PARSER
 program: decls_list EOF;
 
-decls_list: decls decls_list_tail | ;
-    decls_list_tail: NEWLINE decls decls_list_tail | ;
+decls_list: decls NEWLINE decls_list_tail;
+    decls_list_tail: decls NEWLINE decls_list_tail | ;
     decls: vari_decls | func_decls | ;
 
 // Vari
 vari_decls: vari_decls_1 | vari_decls_2;
-    vari_decls_1: vari_decls_type vari_id; // number, bool, string, dyna
+    vari_decls_1: vari_decls_type vari_id | DYNAMIC IDENTIFIER; // number, bool, string, dyna
     vari_decls_2: stmt_assi;
-    vari_decls_type: KWNUMBER | KWBOOL | KWSTRING | DYNAMIC;
+    vari_decls_type: KWNUMBER | KWBOOL | KWSTRING;
+    vari_decls_impli: DYNAMIC | VAR;
     array: IDENTIFIER array_tail;
-        array_tail: OPENSQBRACKET list_expr_num CLOSESQBRACKET;
-        list_expr_num: expr_num list_expr_num_tail | ;
-            list_expr_num_tail: COMMA expr_num list_expr_num_tail | ;
-    array_val: OPENSQBRACKET list_expr CLOSESQBRACKET;
-        list_expr: expr list_expr_tail | ;
-            list_expr_tail: COMMA expr list_expr_tail | ;
+        array_tail: OPENSQBRACKET list_expr CLOSESQBRACKET;
+        list_expr: expr | expr COMMA list_expr;
     vari_id: IDENTIFIER | array;
 
 // Func
@@ -48,54 +45,52 @@ stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
     stmt_vari_decl: vari_decls;
     stmt_assi: stmt_assi_1 | stmt_assi_2;
         stmt_assi_1: vari_id ASSIGN expr;
-        stmt_assi_2: assi_type vari_id ASSIGN expr;
-            assi_type: vari_decls_type | VAR;
-    stmt_cond: stmt_if stmt_elif stmt_sepa_nonnull stmt_else;
-        stmt_if: IF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt;
-        stmt_elif: stmt_sepa_nonnull ELIF OPENPAREN expr_cond CLOSEPAREN stmt_sepa_null stmt stmt_elif | ;
-        stmt_else: ELSE stmt_sepa_null stmt | ;
-    stmt_for: FOR IDENTIFIER UNTIL expr_cond BY expr stmt_sepa_null stmt;
+        stmt_assi_2: vari_decls_type vari_id ASSIGN expr | vari_decls_impli IDENTIFIER ASSIGN expr;
+    stmt_cond: stmt_if stmt_elif stmt_else;
+        stmt_if: IF OPENPAREN expr CLOSEPAREN stmt_sepa_null stmt;
+        stmt_elif: stmt_sepa_nonnull ELIF OPENPAREN expr CLOSEPAREN stmt_sepa_null stmt stmt_elif | ;
+        stmt_else: stmt_sepa_nonnull ELSE stmt_sepa_null stmt | ;
+    stmt_for: FOR IDENTIFIER UNTIL expr BY expr stmt_sepa_null stmt;
         stmt_break: BREAK;
         stmt_continue: CONTINUE;
     stmt_return: RETURN expr | RETURN;
-    stmt_func_call: IDENTIFIER sfc_param;
+    stmt_func_call: IDENTIFIER sfc_param sfc_body;
         sfc_param: OPENPAREN sfc_list_args CLOSEPAREN;
         sfc_list_args: sfc_args sfc_list_args_tail | ;
         sfc_list_args_tail: COMMA sfc_args sfc_list_args_tail | ;
         sfc_args: expr;
+        sfc_body: array_tail | ;
     stmt_block: BEGIN list_stmt stmt_sepa_nonnull END;
 
-        stmt_sepa_nonnull: NEWLINE s_s_nn_tail;
-            s_s_nn_tail: NEWLINE s_s_nn_tail | ;
+        stmt_sepa_nonnull: NEWLINE | NEWLINE stmt_sepa_nonnull;
         stmt_sepa_null: NEWLINE stmt_sepa_null | ;
 
 // Expr
-expr: expr_cond;
-expr_cond: expr_compare; // boolean
-    expr_compare: expr_compare COMPARENUM expr_compare
-                | expr_compare COMPARESTR expr_compare
-                | expr_cond_andor;
-    expr_cond_andor : expr_cond_andor AND expr_cond_andor
-                    | expr_cond_andor OR expr_cond_andor
-                    | expr_cond_not;
-    expr_cond_not: NOT expr_cond_not | expr_num;
-expr_num: e_n_addsub; // number
-    e_n_addsub      : e_n_addsub ADD e_n_addsub
-                    | e_n_addsub SUB e_n_addsub
-                    | e_n_muldivmod;
-    e_n_muldivmod   : e_n_muldivmod MUL e_n_muldivmod
-                    | e_n_muldivmod DIV e_n_muldivmod
-                    | e_n_muldivmod MOD e_n_muldivmod
-                    | e_n_nega;
-    e_n_nega        : SUB e_n_nega | expr_string;
+expr: expr_string;
 expr_string: expr_string_concat; // string
-    expr_string_concat: expr_other CONCAT expr_other e_s_c_tail | expr_other;
-        e_s_c_tail: CONCAT expr_other e_s_c_tail | ;
+    expr_string_concat: expr_cond CONCAT expr_cond | expr_cond;
+expr_cond: expr_compare; // boolean
+    expr_compare: expr_cond_andor COMPARENUM expr_cond_andor
+                | expr_cond_andor COMPARESTR expr_cond_andor
+                | expr_cond_andor;
+    expr_cond_andor : expr_cond_andor AND expr_num
+                    | expr_cond_andor OR expr_num
+                    | expr_num;
+    expr_cond_not: NOT expr_cond_not | e_n_nega;
+expr_num: e_n_addsub; // number
+    e_n_addsub      : e_n_addsub ADD e_n_muldivmod
+                    | e_n_addsub SUB e_n_muldivmod
+                    | e_n_muldivmod;
+    e_n_muldivmod   : e_n_muldivmod MUL expr_cond_not
+                    | e_n_muldivmod DIV expr_cond_not
+                    | e_n_muldivmod MOD expr_cond_not
+                    | expr_cond_not;
+    e_n_nega        : SUB e_n_nega | expr_other;
 expr_other  : OPENPAREN expr CLOSEPAREN
             | IDENTIFIER
             | NUMBER
             | STRING
-            | boolval | array | array_val | stmt_func_call;
+            | boolval | array | array_tail | stmt_func_call;
     boolval: TRUE | FALSE;
 
 

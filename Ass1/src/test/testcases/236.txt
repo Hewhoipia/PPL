@@ -1,0 +1,7 @@
+func random(number a) return
+func main()
+begin
+    if (random()) begin
+        writeString("What's good" + 1.23e-12)
+    end
+end

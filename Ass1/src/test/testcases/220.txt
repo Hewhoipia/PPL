@@ -1,3 +1,11 @@
 
-            var troll <- 1 or 2 and 3 or 4 and 6 and 7 ## confusing
+        func main()
+        begin
+            number a
+            bool b
+            string c
+            var d
+            dynamic e
+            number array[1]
+        end
         

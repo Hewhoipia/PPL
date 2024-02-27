@@ -1,3 +1,8 @@
 
-        string a <- "random" ... "string" / 2
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- b["language" / 2 + true, ("hello"..."world") and not -"successful"]
+        end
         

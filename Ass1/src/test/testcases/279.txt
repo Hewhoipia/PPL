@@ -1,0 +1,9 @@
+func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x < 2
+    end
+    else begin 
+    
+    end
+end 

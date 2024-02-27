@@ -1,2 +1,12 @@
- var x <- "a" ... "new" ... "string"
+
+        func main()
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")
+            begin
+                print("hehe")
+                break
+            end
+            break
+        end
         

@@ -1,0 +1,5 @@
+func random(int a)
+func main()
+begin
+    if (random()) print("false")
+end

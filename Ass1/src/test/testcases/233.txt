@@ -1,0 +1,18 @@
+
+        func lmao() 
+            ## break
+            
+        func lol(number a, bool b)
+        func QuanDepTrai() return true
+        
+        func loi (foo())
+        
+        func main() ## main function
+        
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
+            
+        end
+        
+        

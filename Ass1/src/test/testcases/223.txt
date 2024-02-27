@@ -1,0 +1,18 @@
+
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) 
+                print("hehe")
+                if (a = a and QuanDepTrai()) print("true")
+                elif (true = true)
+                    print("true")
+                else QuanDepTrai()  
+            
+            elif (a = 1) 
+                print("haha")
+            elif (a = 2) print("hoho")
+            else 
+                print("huhu")
+        end
+        

@@ -1,14 +1,8 @@
- func main(string a[3])
-                begin
-                    begin
-                        number a
-                        for i until i > 5 by 1
-                            begin
-                                if (a = 1) a <- 2
-                                else a <- 4
-                                number a <- a + 1
-                            end
-                    end
-                    return this
-                end
+
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- b["language" / 2 + true, ("hello"..."world") not -"successful"]
+        end
         

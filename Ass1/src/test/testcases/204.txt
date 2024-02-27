@@ -1,39 +1,9 @@
- number a <- 4
-                    number b[2,3] <- [[1,2,3],[4,5,6]]
-                    string b <- "xyz"
-                    string a [2] <- ["a","b"]
-                    dynamic a <- 3
-                    dynamic a
-                    var e <- 3
-                    number e [2] <- [1,2]
-        func main2(string a[3],number b[3],bool c) 
-                begin 
-                    break
-                    a[0] <- foo(1)
-                    number d[0,3] <- foo(1)
-                    number d [0,1] <- [1,2]
-                    begin
-                        number a
-                        for i until i > 5 by 1
-                            begin
-                                if (a = 1) a <- 2
-                                elif (a = 3) a <- 4
-                                else 
-                                    begin
-                                        bool j
-                                        j <- true
-                                    end
-                                number a <- a + 1
-                                a[b,c] <- 8
-                            end
-                    end
-                    return
-                end
-            func main(number d, bool c)
-                begin
-                    main2 (a,b,c)
-                    number a
-                    a <- 1
-                    d <- a
-                end
+
+        func main()
+        begin
+            number a <- (1 + 2 - 3 / 4 % 5) <= not ((-"bruh" * ((2)...(3.2))) != (foo() == bar()))
+            number b[1,2]
+            a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
+            a <- foo()[1, 2, 3]
+        end
         

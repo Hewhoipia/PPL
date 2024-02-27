@@ -1,1 +1,19 @@
-func main() 
+
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) 
+            begin
+            
+            
+                return true
+                
+            end
+            elif (a = 1) begin 
+                print("haha")
+            end
+            elif (a = 2) print("hoho")
+            else 
+                print("huhu")
+        end
+        

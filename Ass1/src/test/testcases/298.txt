@@ -1,0 +1,4 @@
+func main()
+begin
+    if (main() <- 2) return main <- 2
+end

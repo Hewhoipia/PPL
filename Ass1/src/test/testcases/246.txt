@@ -1,0 +1,5 @@
+func main()
+begin
+    boolean bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+end

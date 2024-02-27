@@ -1,0 +1,5 @@
+number a <- 3
+bool arr[1, 2, 3]
+
+func main()
+    arr[1, 1, 1] <- arr[2,2,2]

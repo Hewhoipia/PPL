@@ -3,224 +3,224 @@ from TestUtils import TestParser
 
 class ParserSuite(unittest.TestCase):
     
-    # def test201(self):
-    #     input = """
-    #     var x <- 2 + -7 / 6 % -7 * 2
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input, expect, 201))
-    # def test202(self):
-    #     input = """
-    #     bool a <- not x + y and ("random" <= 9999) = true
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input, expect, 202))
-    # def test203(self):
-    #     input = """
-    #     string a <- "random" ... "string" / 2
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input,expect,203))
-    # def test204(self):
-    #     """Simple program"""
-    #     input = """ number a <- 4
-    #                 number b[2,3] <- [[1,2,3],[4,5,6]]
-    #                 string b <- "xyz"
-    #                 string a [2] <- ["a","b"]
-    #                 dynamic a <- 3
-    #                 dynamic a
-    #                 var e <- 3
-    #                 number e [2] <- [1,2]
-    #     func main2(string a[3],number b[3],bool c) 
-    #             begin 
-    #                 break
-    #                 a[0] <- foo(1)
-    #                 number d[0,3] <- foo(1)
-    #                 number d [0,1] <- [1,2]
-    #                 begin
-    #                     number a
-    #                     for i until i > 5 by 1
-    #                         begin
-    #                             if (a = 1) a <- 2
-    #                             elif (a = 3) a <- 4
-    #                             else 
-    #                                 begin
-    #                                     bool j
-    #                                     j <- true
-    #                                 end
-    #                             number a <- a + 1
-    #                             a[b,c] <- 8
-    #                         end
-    #                 end
-    #                 return
-    #             end
-    #         func main(number d, bool c)
-    #             begin
-    #                 main2 (a,b,c)
-    #                 number a
-    #                 a <- 1
-    #                 d <- a
-    #             end
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input,expect,204))
-    # def test205(self):
-    #     """Parser Test"""
-    #     input = """
-    #     func main()
-    #         begin
-    #         var i <- 0
-    #         for i until i >= 10 by 1
-    #         begin
-    #             number r
-    #             number s
-    #             r <- 2.0
-    #             number a[5]
-    #             number b[5]
-    #             s <- r * r * 3.14
-    #             a[0] <- s
-    #         end
-    #         a[9 + fun(1)] <- x[y[2, 3]] + 4
-    #         number z[5] <- [1, 2, 3, 4, 5]
-    #         number t[2, 3] <- [[1, 2, 3], [4, 5, 6]]
-    #         end
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input,expect,205))
-    # def test206(self):
-    #     """Parser Test"""
-    #     input = """
-    #     func main()
-    #         begin
-    #         end
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input,expect,206))
-    # def test207(self):
-    #     """Parser Test"""
-    #     input = """
-    #         func main()
-    #         ## a comment
-    #         func fen() func bug(dynamic a) ## error for sure
-    #     """
-    #     expect = "Error on line 4 col 23: func"
-    #     self.assertTrue(TestParser.test(input,expect,207))
-    # def test208(self):
-    #     """Parser Test"""
-    #     input = """
-    #         func main()
-    #         func foo(number y[6],number x[6,9])
-    #         func fun(number num1, number num2)
-    #             var num <- 1.1e-9
-    #         func main(number exp <- r + t)
-    #     """
-    #     expect = "Error on line 6 col 33: <-"
-    #     self.assertTrue(TestParser.test(input,expect,208))
-    # def test209(self):
-    #     """Parser Test"""
-    #     input = """ func main(string a[3])
-    #             begin
-    #                 begin
-    #                     number a
-    #                     for i until i > 5 by 1
-    #                         begin
-    #                             if (a = 1) a <- 2
-    #                             else a <- 4
-    #                             number a <- a + 1
-    #                         end
-    #                 end
-    #                 return this
-    #             end
-    #     """
-    #     expect = "successful"
-    #     self.assertTrue(TestParser.test(input,expect,209))
-    # def test210(self):
-    #     """Parser Test"""
-    #     input = """
-    #         ## a comment
-    #         func main() var bb <- 2.3
-    #     """
-    #     expect = "Error on line 3 col 24: var"
-    #     self.assertTrue(TestParser.test(input,expect,210))
-    def test211(self):
-        """Parser Test"""
-        input = """
-            func main()
-                continue
-        """
-        expect = "Error on line 3 col 16: continue"
-        self.assertTrue(TestParser.test(input,expect,211))
-    def test212(self):
-        """Parser Test"""
-        input = """
-            ## a comment
-            func main(number a)
-                ## a comment
-                ## a comment
+#     def test201(self):
+#         input = """
+#         var x <- 2 + -7 / 6 % -7 * 2
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input, expect, 201))
+#     def test202(self):
+#         input = """
+#         bool a <- not x + y and ("random" <= 9999) = true
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input, expect, 202))
+#     def test203(self):
+#         input = """
+#         string a <- "random" ... "string" / 2
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,203))
+#     def test204(self):
+#         """Simple program"""
+#         input = """ number a <- 4
+#                     number b[2,3] <- [[1,2,3],[4,5,6]]
+#                     string b <- "xyz"
+#                     string a [2] <- ["a","b"]
+#                     dynamic a <- 3
+#                     dynamic a
+#                     var e <- 3
+#                     number e [2] <- [1,2]
+#         func main2(string a[3],number b[3],bool c) 
+#                 begin 
+#                     break
+#                     a[0] <- foo(1)
+#                     number d[0,3] <- foo(1)
+#                     number d [0,1] <- [1,2]
+#                     begin
+#                         number a
+#                         for i until i > 5 by 1
+#                             begin
+#                                 if (a = 1) a <- 2
+#                                 elif (a = 3) a <- 4
+#                                 else 
+#                                     begin
+#                                         bool j
+#                                         j <- true
+#                                     end
+#                                 number a <- a + 1
+#                                 a[b,c] <- 8
+#                             end
+#                     end
+#                     return
+#                 end
+#             func main(number d, bool c)
+#                 begin
+#                     main2 (a,b,c)
+#                     number a
+#                     a <- 1
+#                     d <- a
+#                 end
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,204))
+#     def test205(self):
+#         """Parser Test"""
+#         input = """
+#         func main()
+#             begin
+#             var i <- 0
+#             for i until i >= 10 by 1
+#             begin
+#                 number r
+#                 number s
+#                 r <- 2.0
+#                 number a[5]
+#                 number b[5]
+#                 s <- r * r * 3.14
+#                 a[0] <- s
+#             end
+#             a[9 + fun(1)] <- x[y[2, 3]] + 4
+#             number z[5] <- [1, 2, 3, 4, 5]
+#             number t[2, 3] <- [[1, 2, 3], [4, 5, 6]]
+#             end
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,205))
+#     def test206(self):
+#         """Parser Test"""
+#         input = """
+#         func main()
+#             begin
+#             end
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,206))
+#     def test207(self):
+#         """Parser Test"""
+#         input = """
+#             func main()
+#             ## a comment
+#             func fen() func bug(dynamic a) ## error for sure
+#         """
+#         expect = "Error on line 4 col 23: func"
+#         self.assertTrue(TestParser.test(input,expect,207))
+#     def test208(self):
+#         """Parser Test"""
+#         input = """
+#             func main()
+#             func foo(number y[6],number x[6,9])
+#             func fun(number num1, number num2)
+#                 var num <- 1.1e-9
+#             func main(number exp <- r + t)
+#         """
+#         expect = "Error on line 6 col 33: <-"
+#         self.assertTrue(TestParser.test(input,expect,208))
+#     def test209(self):
+#         """Parser Test"""
+#         input = """ func main(string a[3])
+#                 begin
+#                     begin
+#                         number a
+#                         for i until i > 5 by 1
+#                             begin
+#                                 if (a = 1) a <- 2
+#                                 else a <- 4
+#                                 number a <- a + 1
+#                             end
+#                     end
+#                     return this
+#                 end
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,209))
+#     def test210(self):
+#         """Parser Test"""
+#         input = """
+#             ## a comment
+#             func main() var bb <- 2.3
+#         """
+#         expect = "Error on line 3 col 24: var"
+#         self.assertTrue(TestParser.test(input,expect,210))
+#     def test211(self):
+#         """Parser Test"""
+#         input = """
+#             func main()
+#                 continue
+#         """
+#         expect = "Error on line 3 col 16: continue"
+#         self.assertTrue(TestParser.test(input,expect,211))
+#     def test212(self):
+#         """Parser Test"""
+#         input = """
+#             ## a comment
+#             func main(number a)
+#                 ## a comment
+#                 ## a comment
 
-                begin
-                    number a
-                         for i until i > 5 by 1
-                             begin
-                                 if (a = 1) a <- 2
-                                 else a <- 4
-                                 number a <- a + 1
-                             end
-                end
+#                 begin
+#                     number a
+#                          for i until i > 5 by 1
+#                              begin
+#                                  if (a = 1) a <- 2
+#                                  else a <- 4
+#                                  number a <- a + 1
+#                              end
+#                 end
 
-                ## a comment
-            func main(number a)
-        """
-        expect = "successful"
-        self.assertTrue(TestParser.test(input,expect,212))
-    def test213(self):
-        """Parser Test"""
-        input = """
-            number x[3] <- [0,1,2] ## This is comment
-        """
-        expect = "successful"
-        self.assertTrue(TestParser.test(input,expect,213))
-    def test214(self):
-        """Parser Test"""
-        input = """var x <- 9898"""
-        expect = "Error on line 1 col 13: <EOF>"
-        self.assertTrue(TestParser.test(input,expect,214))
-    def test215(self):
-        """Parser Test"""
-        input = """func main() """
-        expect = "Error on line 1 col 12: <EOF>"
-        self.assertTrue(TestParser.test(input,expect,215))
-    def test216(self):
-        """Parser Test"""
-        input = """ """
-        expect = "Error on line 1 col 1: <EOF>"
-        self.assertTrue(TestParser.test(input,expect,216))
-    def test217(self):
-        """Parser Test"""
-        input = """ var x <- "a" ... "new" ... "string"
-        """
-        expect = "Error on line 1 col 24: ..."
-        self.assertTrue(TestParser.test(input,expect,217))
-    def test218(self):
-        """Parser Test"""
-        input = """
-            var variable <- false>= "string"...3 <1
-        """
-        expect = "successful"
-        self.assertTrue(TestParser.test(input,expect,218))
-    def test219(self):
-        """Parser Test"""
-        input = """ var xyz <- 1 / 4 * 1.2 % 4
-        """
-        expect = "successful"
-        self.assertTrue(TestParser.test(input,expect,219))
-    def test220(self):
-        """Parser Test"""
-        input = """
-            var troll <- 1 or 2 and 3 or 4 and 6 and 7 ## confusing
-        """
-        expect = "successful"
-        self.assertTrue(TestParser.test(input,expect,220))
+#                 ## a comment
+#             func main(number a)
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,212))
+#     def test213(self):
+#         """Parser Test"""
+#         input = """
+#             number x[3] <- [0,1,2] ## This is comment
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,213))
+#     def test214(self):
+#         """Parser Test"""
+#         input = """var x <- 9898"""
+#         expect = "Error on line 1 col 13: <EOF>"
+#         self.assertTrue(TestParser.test(input,expect,214))
+#     def test215(self):
+#         """Parser Test"""
+#         input = """func main() """
+#         expect = "Error on line 1 col 12: <EOF>"
+#         self.assertTrue(TestParser.test(input,expect,215))
+#     def test216(self):
+#         """Parser Test"""
+#         input = """ """
+#         expect = "Error on line 1 col 1: <EOF>"
+#         self.assertTrue(TestParser.test(input,expect,216))
+#     def test217(self):
+#         """Parser Test"""
+#         input = """ var x <- "a" ... "new" ... "string"
+#         """
+#         expect = "Error on line 1 col 24: ..."
+#         self.assertTrue(TestParser.test(input,expect,217))
+#     def test218(self):
+#         """Parser Test"""
+#         input = """
+#             var variable <- false>= "string"...3 <1
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,218))
+#     def test219(self):
+#         """Parser Test"""
+#         input = """ var xyz <- 1 / 4 * 1.2 % 4
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,219))
+#     def test220(self):
+#         """Parser Test"""
+#         input = """
+#             var troll <- 1 or 2 and 3 or 4 and 6 and 7 ## confusing
+#         """
+#         expect = "successful"
+#         self.assertTrue(TestParser.test(input,expect,220))
 #     def test221(self):
 #         """Parser Test"""
 #         input = """var troll <- 1 > 2 >= true
@@ -515,7 +515,7 @@ class ParserSuite(unittest.TestCase):
 #         self.assertTrue(TestParser.test(input,expect,250))
 #     def test251(self):
 #         """Parser Test"""
-#         input = """var x
+#         input = """var x 
 #         ## not let uninitialized in var word declarations
 #         """
 #         expect = """Error on line 1 col 6: 
@@ -2096,1456 +2096,1456 @@ class ParserSuite(unittest.TestCase):
         
 ########### Quan
 
-#     def test1(self):
-#         input = """
-#         var a <- 1 + -1 / 2 % -3 * 1
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 201))
-#     def test2(self):
-#         input = """
-#         string a <- "random" ... "string" / 2
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 202))
-#     def test3(self):
-#         input = """
-#         bool a <- not x + y and ("random string" <= 123) = true
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 203))
-#     def test4(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             number b[1,2]
-#             a <- b["language" / 2 + true, ("hello"..."world") and not -"successful"]
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 203))
-#     def test5(self):
-#         input = """
-#         func main()
-#         begin
-#             number a <- (1 + 2 - 3 / 4 % 5) <= not ((-"bruh" * ((2)...(3.2))) != (foo() == bar()))
-#             number b[1,2]
-#             a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
-#             a <- foo()[1, 2, 3]
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 204))
-#     def test6(self):
-#         input = """
-#         bool a <- not x + y and "random string" <= 123 = true
-#         """
-#         expect = "Error on line 2 col 55: ="
-#         self.assertTrue(TestParser.test(input, expect, 205))
-#     def test7(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             number b[1,2]
-#             a <- (1 + 2 + foo())["language" / 2 + true, ("hello"..."world") and not -"successful"]
-#         end
-#         """
-#         expect = "Error on line 6 col 32: ["
-#         self.assertTrue(TestParser.test(input, expect, 206))
-#     def test8(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             number b[1,2]
-#             a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
-#             a <- foo()[1, 2, 3][1, 2, 3]
-#         end
-#         """
-#         expect = "Error on line 7 col 31: ["
-#         self.assertTrue(TestParser.test(input, expect, 207))
-#     def test9(self):
-#         input = """
-#         func main()
-#         begin
-#             a[3 + foo(2)] <- (a[b[2, 3]] + 4)()[1]
-#         end
-#         """
-#         expect = "Error on line 4 col 45: ("
-#         self.assertTrue(TestParser.test(input, expect, 208))
-#     def test10(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             number b[1,2]
-#             a <- b["language" / 2 + true, ("hello"..."world") not -"successful"]
-#         end
-#         """
-#         expect = "Error on line 6 col 62: not"
-#         self.assertTrue(TestParser.test(input, expect, 209))
+    def test1(self):
+        input = """
+        var a <- 1 + -1 / 2 % -3 * 1
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 201))
+    def test2(self):
+        input = """
+        string a <- "random" ... "string" / 2
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 202))
+    def test3(self):
+        input = """
+        bool a <- not x + y and ("random string" <= 123) = true
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 203))
+    def test4(self):
+        input = """
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- b["language" / 2 + true, ("hello"..."world") and not -"successful"]
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 203))
+    def test5(self):
+        input = """
+        func main()
+        begin
+            number a <- (1 + 2 - 3 / 4 % 5) <= not ((-"bruh" * ((2)...(3.2))) != (foo() == bar()))
+            number b[1,2]
+            a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
+            a <- foo()[1, 2, 3]
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 204))
+    def test6(self):
+        input = """
+        bool a <- not x + y and "random string" <= 123 = true
+        """
+        expect = "Error on line 2 col 55: ="
+        self.assertTrue(TestParser.test(input, expect, 205))
+    def test7(self):
+        input = """
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- (1 + 2 + foo())["language" / 2 + true, ("hello"..."world") and not -"successful"]
+        end
+        """
+        expect = "Error on line 6 col 32: ["
+        self.assertTrue(TestParser.test(input, expect, 206))
+    def test8(self):
+        input = """
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
+            a <- foo()[1, 2, 3][1, 2, 3]
+        end
+        """
+        expect = "Error on line 7 col 31: ["
+        self.assertTrue(TestParser.test(input, expect, 207))
+    def test9(self):
+        input = """
+        func main()
+        begin
+            a[3 + foo(2)] <- (a[b[2, 3]] + 4)()[1]
+        end
+        """
+        expect = "Error on line 4 col 45: ("
+        self.assertTrue(TestParser.test(input, expect, 208))
+    def test10(self):
+        input = """
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- b["language" / 2 + true, ("hello"..."world") not -"successful"]
+        end
+        """
+        expect = "Error on line 6 col 62: not"
+        self.assertTrue(TestParser.test(input, expect, 209))
     
-#     def test11(self):
-#         input = """
-#         var x <- 1.2e12
-#         func main()
-#         begin
-#             number a
-#             a[1, main()] <- 1 + foo()
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 210))
-#     def test12(self):
-#         input = """
-#         var x <- 1.2e12
-#         func main()
-#         begin
-#             bool x
-#             string c <- bruh
-#             dynamic a
-#             a[1, main()] <- 1 + foo()
-#             bool y[1, 2, 3] <- [a = c, b - foo(), "bye bye"]
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 211))
-#     def test13(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             if (a <= 3.14 and not (a > 0)) print("hehe")
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 212))      
-#     def test14(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             if (a <= 3.14 and not (a > 0)) 
-#             print("hehe")
-#             elif (a = 1) print("haha")
-#             else print("hoho")
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 213))
-#     def test15(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             if (a <= 3.14 and not (a > 0)) begin
-#                 print("hehe")
-#                 if (a = a and QuanDepTrai()) print("true")
-#                 elif (true = true)
-#                     print("true")
-#                 else QuanDepTrai()
+    def test11(self):
+        input = """
+        var x <- 1.2e12
+        func main()
+        begin
+            number a
+            a[1, main()] <- 1 + foo()
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 210))
+    def test12(self):
+        input = """
+        var x <- 1.2e12
+        func main()
+        begin
+            bool x
+            string c <- bruh
+            dynamic a
+            a[1, main()] <- 1 + foo()
+            bool y[1, 2, 3] <- [a = c, b - foo(), "bye bye"]
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 211))
+    def test13(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) print("hehe")
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 212))      
+    def test14(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) 
+            print("hehe")
+            elif (a = 1) print("haha")
+            else print("hoho")
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 213))
+    def test15(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) begin
+                print("hehe")
+                if (a = a and QuanDepTrai()) print("true")
+                elif (true = true)
+                    print("true")
+                else QuanDepTrai()
                 
-#             end
-#             elif (a = 1) 
-#                 print("haha")
-#             elif (a = 2) print("hoho")
-#             else 
-#                 print("huhu")
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 214))  
-#     def test16(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             if (a <= 3.14 and not (a > 0)) 
-#             begin
+            end
+            elif (a = 1) 
+                print("haha")
+            elif (a = 2) print("hoho")
+            else 
+                print("huhu")
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 214))  
+    def test16(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) 
+            begin
             
             
-#                 return true
+                return true
                 
-#             end
-#             elif (a = 1) begin 
-#                 print("haha")
-#             end
-#             elif (a = 2) print("hoho")
-#             else 
-#                 print("huhu")
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 215))
-#     def test17(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             for i until lmao + 4 > foo(i) / bar(i) by 1 print("hehe")
+            end
+            elif (a = 1) begin 
+                print("haha")
+            end
+            elif (a = 2) print("hoho")
+            else 
+                print("huhu")
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 215))
+    def test17(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            for i until lmao + 4 > foo(i) / bar(i) by 1 print("hehe")
             
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 216))
-#     def test18(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")
-#             begin
-#                 print("hehe")
-#                 break
-#             end
-#             break
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 217))
-#     def test19(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")...print("lmao2") 
-#             begin
-#                 if (a = 1) continue
-#                 else begin
-#                     for j until j < main() by -1 begin
-#                         lmao[foo(i), j] <- [i, j]
-#                     end
-#                 end
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 216))
+    def test18(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")
+            begin
+                print("hehe")
+                break
+            end
+            break
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 217))
+    def test19(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")...print("lmao2") 
+            begin
+                if (a = 1) continue
+                else begin
+                    for j until j < main() by -1 begin
+                        lmao[foo(i), j] <- [i, j]
+                    end
+                end
                 
-#             end
-#             return
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 218))
-#     def test20(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")...print("lmao2") 
-#             begin
-#                 func1()
-#                 func2(print("hj"))
-#                 func3(lmao, 1 + not true, func1(), func4()[1, foo()], array[a], 2 < 10)
-#             end
-#             return
-#         end
-#         """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 219))
+            end
+            return
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 218))
+    def test20(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")...print("lmao2") 
+            begin
+                func1()
+                func2(print("hj"))
+                func3(lmao, 1 + not true, func1(), func4()[1, foo()], array[a], 2 < 10)
+            end
+            return
+        end
+        """
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 219))
     
-#     def test21(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             bool b
-#             string c
-#             var d
-#             dynamic e
-#             number array[1]
-#         end
-#         """
-#         expect = """Error on line 7 col 18: 
-# """
-#         self.assertTrue(TestParser.test(input, expect, 220))
-#     def test22(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             bool b
-#             string c
-#             var d <- 1 + 1
-#             dynamic e
-#             number array[foo()]
-#         end
-#         """
-#         expect = "Error on line 9 col 25: foo"
-#         self.assertTrue(TestParser.test(input, expect, 221))
-#     def test23(self):
-#         input = """
-#         func main()
-#         begin
-#             number a
-#             bool b
-#             string c
-#             var d <- 1 + 1
-#             dynamic e
-#             var array[1, 2]
-#         end
-#         """
-#         expect = "Error on line 9 col 21: ["
-#         self.assertTrue(TestParser.test(input, expect, 222))
-#     def test24(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             if (a <= 3.14 and not (a > 0)) 
-#                 print("hehe")
-#                 if (a = a and QuanDepTrai()) print("true")
-#                 elif (true = true)
-#                     print("true")
-#                 else QuanDepTrai()  
+    def test21(self):
+        input = """
+        func main()
+        begin
+            number a
+            bool b
+            string c
+            var d
+            dynamic e
+            number array[1]
+        end
+        """
+        expect = """Error on line 7 col 18: 
+"""
+        self.assertTrue(TestParser.test(input, expect, 220))
+    def test22(self):
+        input = """
+        func main()
+        begin
+            number a
+            bool b
+            string c
+            var d <- 1 + 1
+            dynamic e
+            number array[foo()]
+        end
+        """
+        expect = "Error on line 9 col 25: foo"
+        self.assertTrue(TestParser.test(input, expect, 221))
+    def test23(self):
+        input = """
+        func main()
+        begin
+            number a
+            bool b
+            string c
+            var d <- 1 + 1
+            dynamic e
+            var array[1, 2]
+        end
+        """
+        expect = "Error on line 9 col 21: ["
+        self.assertTrue(TestParser.test(input, expect, 222))
+    def test24(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) 
+                print("hehe")
+                if (a = a and QuanDepTrai()) print("true")
+                elif (true = true)
+                    print("true")
+                else QuanDepTrai()  
             
-#             elif (a = 1) 
-#                 print("haha")
-#             elif (a = 2) print("hoho")
-#             else 
-#                 print("huhu")
-#         end
-#         """
-#         expect = "Error on line 12 col 12: elif"
-#         self.assertTrue(TestParser.test(input, expect, 223))
-#     def test25(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             if (a <= 3.14 and not (a > 0)) begin
-#                 print("hehe")
-#                 if (a = a and QuanDepTrai()) print("true")
-#                 elif (true = true)
-#                     print("true")
-#                 else QuanDepTrai()
+            elif (a = 1) 
+                print("haha")
+            elif (a = 2) print("hoho")
+            else 
+                print("huhu")
+        end
+        """
+        expect = "Error on line 12 col 12: elif"
+        self.assertTrue(TestParser.test(input, expect, 223))
+    def test25(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            if (a <= 3.14 and not (a > 0)) begin
+                print("hehe")
+                if (a = a and QuanDepTrai()) print("true")
+                elif (true = true)
+                    print("true")
+                else QuanDepTrai()
                 
-#             end elif (a = 1) 
-#                 print("haha")
-#             elif (a = 2) print("hoho")
-#             else print("huhu")
-#         end
-#         """
-#         expect = "Error on line 12 col 16: elif"
-#         self.assertTrue(TestParser.test(input, expect, 224))
-#     def test26(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             for foo() until lmao + 4 > foo(i) / bar(i) by 1 print("hehe")
+            end elif (a = 1) 
+                print("haha")
+            elif (a = 2) print("hoho")
+            else print("huhu")
+        end
+        """
+        expect = "Error on line 12 col 16: elif"
+        self.assertTrue(TestParser.test(input, expect, 224))
+    def test26(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            for foo() until lmao + 4 > foo(i) / bar(i) by 1 print("hehe")
             
-#         end
-#         """
-#         expect = "Error on line 5 col 19: ("
-#         self.assertTrue(TestParser.test(input, expect, 225))
-#     def test27(self):
-#         input = """
-#         func main()
-#         begin
-#             var a <- "lmao"
-#             for i until abc() by i <- i + 1 print("lmao")
+        end
+        """
+        expect = "Error on line 5 col 19: ("
+        self.assertTrue(TestParser.test(input, expect, 225))
+    def test27(self):
+        input = """
+        func main()
+        begin
+            var a <- "lmao"
+            for i until abc() by i <- i + 1 print("lmao")
 
-#             break
-#         end
-#         """
-#         expect = "Error on line 5 col 35: <-"
-#         self.assertTrue(TestParser.test(input, expect, 226))
-#     def test28(self):
-#         input = """
-#         func main()
-#         begin
-#             foo() + 2
-#         end
-#         """
-#         expect = "Error on line 4 col 18: +"
-#         self.assertTrue(TestParser.test(input, expect, 227))
-#     def test29(self):
-#         input = """
-#         func main()
-#         begin
-#             foo() <- 3 + 2
-#         end
-#         """
-#         expect = "Error on line 4 col 18: <-"
-#         self.assertTrue(TestParser.test(input, expect, 228))
-#     def test30(self):
-#         input = """
-#         func main()
-#         begin
-#             number arr[] <- [1, 2, lol()]
-#         end
-#         """
-#         expect = "Error on line 4 col 23: ]"
-#         self.assertTrue(TestParser.test(input, expect, 229))
+            break
+        end
+        """
+        expect = "Error on line 5 col 35: <-"
+        self.assertTrue(TestParser.test(input, expect, 226))
+    def test28(self):
+        input = """
+        func main()
+        begin
+            foo() + 2
+        end
+        """
+        expect = "Error on line 4 col 18: +"
+        self.assertTrue(TestParser.test(input, expect, 227))
+    def test29(self):
+        input = """
+        func main()
+        begin
+            foo() <- 3 + 2
+        end
+        """
+        expect = "Error on line 4 col 18: <-"
+        self.assertTrue(TestParser.test(input, expect, 228))
+    def test30(self):
+        input = """
+        func main()
+        begin
+            number arr[] <- [1, 2, lol()]
+        end
+        """
+        expect = "Error on line 4 col 23: ]"
+        self.assertTrue(TestParser.test(input, expect, 229))
         
-#     def test31(self):
-#         input = """
-#         func lmao()
-#             break
-#         func main() ## main function
+    def test31(self):
+        input = """
+        func lmao()
+            break
+        func main() ## main function
         
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
             
-#             ## block 
-#             begin
-#                 print("hehe")
-#                 break
-#             end
-#             break
-#         end
-#         """
-#         expect = "Error on line 3 col 12: break"
-#         self.assertTrue(TestParser.test(input, expect, 230))  
-#     def test32(self):
-#         input = """
-#         func lmao() 
-#             ## break
+            ## block 
+            begin
+                print("hehe")
+                break
+            end
+            break
+        end
+        """
+        expect = "Error on line 3 col 12: break"
+        self.assertTrue(TestParser.test(input, expect, 230))  
+    def test32(self):
+        input = """
+        func lmao() 
+            ## break
             
-#         var x <- 2
-#         number glob
-#         glob <- 8
+        var x <- 2
+        number glob
+        glob <- 8
         
-#         func main() ## main function
+        func main() ## main function
         
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
             
-#             ## block 
-#             begin
-#                 print("hehe")
-#                 break
-#             end
-#             break
-#         end
+            ## block 
+            begin
+                print("hehe")
+                break
+            end
+            break
+        end
         
-#         """
-#         expect = "Error on line 7 col 8: glob"
-#         self.assertTrue(TestParser.test(input, expect, 231))
-#     def test33(self):
-#         input = """
-#         func lmao() 
-#             ## break
+        """
+        expect = "Error on line 7 col 8: glob"
+        self.assertTrue(TestParser.test(input, expect, 231))
+    def test33(self):
+        input = """
+        func lmao() 
+            ## break
             
-#         func lol(number a, bool b)
-#         func QuanDepTrai() return true
+        func lol(number a, bool b)
+        func QuanDepTrai() return true
         
-#         func loi        (dynamic a)
+        func loi        (dynamic a)
         
-#         func main() ## main function
+        func main() ## main function
         
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
             
-#             ## block 
-#             begin
-#                 print("hehe")
-#                 break
-#             end
-#             break
-#         end
+            ## block 
+            begin
+                print("hehe")
+                break
+            end
+            break
+        end
         
-#         """
-#         expect = "Error on line 8 col 25: dynamic"
-#         self.assertTrue(TestParser.test(input, expect, 232))
-#     def test34(self):
-#         input = """
-#         func lmao() 
-#             ## break
+        """
+        expect = "Error on line 8 col 25: dynamic"
+        self.assertTrue(TestParser.test(input, expect, 232))
+    def test34(self):
+        input = """
+        func lmao() 
+            ## break
             
-#         func lol(number a, bool b)
-#         func QuanDepTrai() return true
+        func lol(number a, bool b)
+        func QuanDepTrai() return true
         
-#         func loi (foo())
+        func loi (foo())
         
-#         func main() ## main function
+        func main() ## main function
         
-#         begin
-#             var a <- "lmao"
-#             for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
             
-#         end
+        end
         
-#         """
-#         expect = "Error on line 8 col 18: foo"
-#         self.assertTrue(TestParser.test(input, expect, 233))
-#     def test35(self):
-#         input = """
-#         func lmao() 
-#             ## break
+        """
+        expect = "Error on line 8 col 18: foo"
+        self.assertTrue(TestParser.test(input, expect, 233))
+    def test35(self):
+        input = """
+        func lmao() 
+            ## break
             
-#         func lol(number a, bool b)
-#         func QuanDepTrai() return true
+        func lol(number a, bool b)
+        func QuanDepTrai() return true
         
-#         func loi (number a[1, 2], string s[1, foo()])
+        func loi (number a[1, 2], string s[1, foo()])
         
-#         func main() ## main function
+        func main() ## main function
         
-#         begin
-#             break
-#         end
+        begin
+            break
+        end
         
-#         """
-#         expect = "Error on line 8 col 46: foo"
-#         self.assertTrue(TestParser.test(input, expect, 234))
+        """
+        expect = "Error on line 8 col 46: foo"
+        self.assertTrue(TestParser.test(input, expect, 234))
 
-#     def test36(self):
-#         input = """func random(int a)
-# func main()
-# begin
-#     if (random()) print("false")
-# end
-# """
-#         expect = "Error on line 1 col 12: int"
-#         self.assertTrue(TestParser.test(input, expect, 235))
-        
-
-#     def test37(self):
-#         input = """func random(number a) return
-# func main()
-# begin
-#     if (random()) begin
-#         writeString("What's good" + 1.23e-12)
-#     end
-# end"""
-#         expect = "Error on line 7 col 3: <EOF>"
-#         self.assertTrue(TestParser.test(input, expect, 236))
+    def test36(self):
+        input = """func random(int a)
+func main()
+begin
+    if (random()) print("false")
+end
+"""
+        expect = "Error on line 1 col 12: int"
+        self.assertTrue(TestParser.test(input, expect, 235))
         
 
-#     def test38(self):
-#         input = """func random(number a)
-
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
-# func main()
-# begin
-#     if (random()) begin
-#         writeString("What's good" + 1.23e-12)
-#     end
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 237))
+    def test37(self):
+        input = """func random(number a) return
+func main()
+begin
+    if (random()) begin
+        writeString("What's good" + 1.23e-12)
+    end
+end"""
+        expect = "Error on line 7 col 3: <EOF>"
+        self.assertTrue(TestParser.test(input, expect, 236))
         
 
-#     def test39(self):
-#         input = """func random(number a)
+    def test38(self):
+        input = """func random(number a)
 
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
-
-# number a <- 16 / random(a)
-
-# func main()
-# begin
-#     for i until random(i) != "a"...a by random(a)
-#     begin
-#         writeString(i)
-#     end
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 238))
-        
-#     def test40(self):
-#         input = """func random(number a)
-
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
-
-# number a <- 16 / random(a)
-
-# func main()
-# begin
-#     for i until random(i) != "a"...a by random(a)
-#     begin
-#         if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
-#         elif i + 1 > 2 return
-#     end
-# end
-# """
-#         expect = "Error on line 15 col 13: i"
-#         self.assertTrue(TestParser.test(input, expect, 239))
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
+func main()
+begin
+    if (random()) begin
+        writeString("What's good" + 1.23e-12)
+    end
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 237))
         
 
+    def test39(self):
+        input = """func random(number a)
 
-#     def test41(self):
-#         input = """func random(number a)
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
 
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
+number a <- 16 / random(a)
 
-# number a <- 16 / random(a)
+func main()
+begin
+    for i until random(i) != "a"...a by random(a)
+    begin
+        writeString(i)
+    end
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 238))
+        
+    def test40(self):
+        input = """func random(number a)
 
-# func main()
-# begin
-#     for i until random(i) != "a"...a by random(a)
-#     begin
-#         if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
-#         elif (i + 1 > 2) return 1 else
-#         return 10
-#     end
-# end
-# """
-#         expect = "Error on line 15 col 34: else"
-#         self.assertTrue(TestParser.test(input, expect, 240))
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
+
+number a <- 16 / random(a)
+
+func main()
+begin
+    for i until random(i) != "a"...a by random(a)
+    begin
+        if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
+        elif i + 1 > 2 return
+    end
+end
+"""
+        expect = "Error on line 15 col 13: i"
+        self.assertTrue(TestParser.test(input, expect, 239))
         
 
-#     def test42(self):
-#         input = """func random(number a <- 6)
 
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
+    def test41(self):
+        input = """func random(number a)
 
-# number a <- 16 / random(a)
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
 
-# func main()
-# begin
-#     for i until random(i) != "a"...a by random(a)
-#     begin
-#         if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
-#         elif (i + 1 > 2) return 1
-#         else
-#         return 10
-#     end
-# end
-# """
-#         expect = "Error on line 1 col 21: <-"
-#         self.assertTrue(TestParser.test(input, expect, 241))
+number a <- 16 / random(a)
+
+func main()
+begin
+    for i until random(i) != "a"...a by random(a)
+    begin
+        if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
+        elif (i + 1 > 2) return 1 else
+        return 10
+    end
+end
+"""
+        expect = "Error on line 15 col 34: else"
+        self.assertTrue(TestParser.test(input, expect, 240))
         
 
-#     def test43(self):
-#         input = """func random(number a, arr[1, 2])
+    def test42(self):
+        input = """func random(number a <- 6)
 
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
 
-# number a <- 16 / random(a)
+number a <- 16 / random(a)
 
-# func main()
-# begin
-#     for i until random(i) != "a"...a by random(a)
-#     begin
-#         if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
-#         elif (i + 1 > 2) return 1
-#         else
-#         return 10
-#     end
-# end
-# """
-#         expect = "Error on line 1 col 22: arr"
-#         self.assertTrue(TestParser.test(input, expect, 242))
+func main()
+begin
+    for i until random(i) != "a"...a by random(a)
+    begin
+        if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
+        elif (i + 1 > 2) return 1
+        else
+        return 10
+    end
+end
+"""
+        expect = "Error on line 1 col 21: <-"
+        self.assertTrue(TestParser.test(input, expect, 241))
         
 
-#     def test44(self):
-#         input = """func random(number a, string arr[1, 2])
+    def test43(self):
+        input = """func random(number a, arr[1, 2])
 
-# begin
-#     if (a = 0) return 1 + a /3
-#     return random(a-1)
-# end
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
 
-# number a <- 16 / random(a)
+number a <- 16 / random(a)
 
-# func main()
-# begin
-#     for i until random(i) != "a"...a by random(a)
-#     begin
-#         if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
-#         elif (i + 1 > 2) return 1
-#         else
-#         return 10
-#     end
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 243))
+func main()
+begin
+    for i until random(i) != "a"...a by random(a)
+    begin
+        if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
+        elif (i + 1 > 2) return 1
+        else
+        return 10
+    end
+end
+"""
+        expect = "Error on line 1 col 22: arr"
+        self.assertTrue(TestParser.test(input, expect, 242))
         
 
-#     def test45(self):
-#         input = """number a <- 3
-# bool arr[1, 2, 3]
+    def test44(self):
+        input = """func random(number a, string arr[1, 2])
 
-# func main()
-#     arr[1, 1, 1] <- arr[2,2,2]
-# """
-#         expect = "Error on line 5 col 4: arr"
-#         self.assertTrue(TestParser.test(input, expect, 244))
+begin
+    if (a = 0) return 1 + a /3
+    return random(a-1)
+end
+
+number a <- 16 / random(a)
+
+func main()
+begin
+    for i until random(i) != "a"...a by random(a)
+    begin
+        if (i == random(a) and not ("a" + true > 1)) writeString("bruh")
+        elif (i + 1 > 2) return 1
+        else
+        return 10
+    end
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 243))
+        
+
+    def test45(self):
+        input = """number a <- 3
+bool arr[1, 2, 3]
+
+func main()
+    arr[1, 1, 1] <- arr[2,2,2]
+"""
+        expect = "Error on line 5 col 4: arr"
+        self.assertTrue(TestParser.test(input, expect, 244))
     
-#     def test46(self):
-#         input = """if (x < 3) return true
-# """
-#         expect = "Error on line 1 col 0: if"
-#         self.assertTrue(TestParser.test(input, expect, 245))
+    def test46(self):
+        input = """if (x < 3) return true
+"""
+        expect = "Error on line 1 col 0: if"
+        self.assertTrue(TestParser.test(input, expect, 245))
         
 
-#     def test47(self):
-#         input = """func main()
-# begin
-#     boolean bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-# end
-# """
-#         expect = "Error on line 3 col 12: bruh"
-#         self.assertTrue(TestParser.test(input, expect, 246))
+    def test47(self):
+        input = """func main()
+begin
+    boolean bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+end
+"""
+        expect = "Error on line 3 col 12: bruh"
+        self.assertTrue(TestParser.test(input, expect, 246))
         
 
-#     def test48(self):
-#         input = """func main()
-# begin
-#     bool bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 247))
+    def test48(self):
+        input = """func main()
+begin
+    bool bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 247))
         
 
-#     def test49(self):
-#         input = """func main()
-# begin
-#     var bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-#     if (arr) ## comment
-#     begin
-#         foo()
-#     end
-#     else arr <- foo(arr[foo(arr)])
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 248))
+    def test49(self):
+        input = """func main()
+begin
+    var bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+    if (arr) ## comment
+    begin
+        foo()
+    end
+    else arr <- foo(arr[foo(arr)])
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 248))
         
 
-#     def test50(self):
-#         input = """func main()
-# begin
-#     var bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-#     if (arr) ## comment
-#     begin
-#         foo()
-#     end
-#     else arr <- foo(arr[foo(arr)])()[1]
-# end
-# """
-#         expect = "Error on line 9 col 34: ("
-#         self.assertTrue(TestParser.test(input, expect, 249))
+    def test50(self):
+        input = """func main()
+begin
+    var bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+    if (arr) ## comment
+    begin
+        foo()
+    end
+    else arr <- foo(arr[foo(arr)])()[1]
+end
+"""
+        expect = "Error on line 9 col 34: ("
+        self.assertTrue(TestParser.test(input, expect, 249))
         
 
-#     def test51(self):
-#         input = """func main()
-# begin
-#     var bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-#     if (arr) ## comment
-#     begin
-#         foo()
-#     end
-#     else arr <- foo(arr[foo(arr)])[1]
-#     for (i + 1) until i by i
-# end
-# """
-#         expect = "Error on line 10 col 8: ("
-#         self.assertTrue(TestParser.test(input, expect, 250))
+    def test51(self):
+        input = """func main()
+begin
+    var bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+    if (arr) ## comment
+    begin
+        foo()
+    end
+    else arr <- foo(arr[foo(arr)])[1]
+    for (i + 1) until i by i
+end
+"""
+        expect = "Error on line 10 col 8: ("
+        self.assertTrue(TestParser.test(input, expect, 250))
           
 
-#     def test52(self):
-#         input = """func main()
-# begin
-#     var bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-#     if (arr) ## comment
-#     begin
-#         foo()
-#     end
-#     elif (arr != foo(arr[foo(arr)])[1])
-#     for i until i ##by i
-#         increment(i *- 2)
-#     else return 
-# end
-# """
-#         expect = """Error on line 10 col 25: 
-# """
-#         self.assertTrue(TestParser.test(input, expect, 251))
+    def test52(self):
+        input = """func main()
+begin
+    var bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+    if (arr) ## comment
+    begin
+        foo()
+    end
+    elif (arr != foo(arr[foo(arr)])[1])
+    for i until i ##by i
+        increment(i *- 2)
+    else return 
+end
+"""
+        expect = """Error on line 10 col 25: 
+"""
+        self.assertTrue(TestParser.test(input, expect, 251))
         
 
-#     def test53(self):
-#         input = """func main()
-# begin
-#     var bruh <- true
-#     number arr[3, 4] <- foo(arr[5, 6])
-#     if (arr) ## comment
-#     begin
-#         foo()
-#     end
-#     elif (arr != foo(arr[foo(arr)])[1])
-#     for i by 2
-#         increment(i *- 2*i)
-#     else return 
-# end
-# """
-#         expect = "Error on line 10 col 10: by"
-#         self.assertTrue(TestParser.test(input, expect, 252))
-        
-        
-
-#     def test54(self):
-#         input = """func main()
-# begin
-#     return break
-# end
-# """
-#         expect = "Error on line 3 col 11: break"
-#         self.assertTrue(TestParser.test(input, expect, 253))
-        
-
-#     def test55(self):
-#         input = """func main()
-# begin
-#     return main - 1
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 254))
-        
-
-#     def test56(self):
-#         input = """func main(number args[])
-# begin
-#     return 0
-# end
-# """
-#         expect = "Error on line 1 col 22: ]"
-#         self.assertTrue(TestParser.test(input, expect, 255))
-        
-
-#     def test57(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 = args[0]
-#     string x2 = args[1]
-
-# end
-# """
-#         expect = "Error on line 3 col 14: ="
-#         self.assertTrue(TestParser.test(input, expect, 256))
-        
-
-#     def test58(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 = x1..x2
-
-# end
-# """
-#         expect = "."
-#         self.assertTrue(TestParser.test(input, expect, 257))
-        
-
-#     def test59(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 = x1...(x2-x1)
-
-# end
-# """
-#         expect = "Error on line 5 col 7: ="
-#         self.assertTrue(TestParser.test(input, expect, 258))
-        
-
-#     def test60(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- x1...(x2-x1)
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 259))
-        
-
-#     def test61(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- x1...x2-x1
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 260))
-        
-
-#     def test61(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- x1...x2...x1
-
-# end
-# """
-#         expect = "Error on line 5 col 17: ..."
-#         self.assertTrue(TestParser.test(input, expect, 260))
-        
-
-#     def test62(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- x1 / x3 / x4 * 2 + not (x1 +- bool)
-
-# end
-# """
-#         expect = "Error on line 5 col 40: bool"
-#         self.assertTrue(TestParser.test(input, expect, 261))
-        
-
-#     def test63(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- (x1 / x3 / x4 * 2 + not (x1 +- x2))()
-
-# end
-# """
-#         expect = "Error on line 5 col 45: ("
-#         self.assertTrue(TestParser.test(input, expect, 262))
-        
-
-#     def test64(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- foo(x1 / x3 / x4 * 2 + not (x1 +- x2))()
-
-# end
-# """
-#         expect = "Error on line 5 col 48: ("
-#         self.assertTrue(TestParser.test(input, expect, 263))
-        
-
-#     def test65(self):
-#         input = """func main(number args[4])
-# begin
-#     string x1 <- args[0]
-#     string x2 <- args[1]
-#     x3 <- foo(x1 / x3 / x4 * 2 + not (x1 +- x2))
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 264))
-        
-
-#     def test66(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,]
-
-# end
-# """
-#         expect = "Error on line 3 col 20: ]"
-#         self.assertTrue(TestParser.test(input, expect, 265))
-
-#     def test67(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic <- x
-#     ## if (foo(y) - x > (2 > 3))
-#     ##print(x)
-#     ## else if (bar(x) - y == true) print(y) else return false
-
-# end
-# """
-#         expect = "Error on line 4 col 12: <-"
-#         self.assertTrue(TestParser.test(input, expect, 266))
-        
-
-#     def test68(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > 2 > 3)
-#     print(x)
-#     ## else if (bar(x) - y == true) print(y) else return false
-
-# end
-# """
-#         expect = "Error on line 5 col 23: >"
-#         self.assertTrue(TestParser.test(input, expect, 267))
-        
-
-#     def test69(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > (2 <= 3))
-#     print(x)
-#     ## else if (bar(x) - y == true) print(y) else return false
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 268))
-        
-
-#     def test70(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > (2 <= 3))
-#     print(x)
-#     else if (bar(x) - y == true) print(y) else return false
-
-# end
-# """
-#         expect = "Error on line 7 col 42: else"
-#         self.assertTrue(TestParser.test(input, expect, 269))
-        
-
-#     def test71(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > (2 <= 3))
-#     print(x)
-#     else if (bar(x) - y == true) print(y)
-#     else return false
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 270))
-        
-
-#     def test72(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > (2 <= 3))
-#     print(x)
-#     else if (bar(x) - y == true) print(y)
-#     else for i until true by main() begin
-#     end
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 271))
-        
-
-#     def test73(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > (2 <= 3))
-#     print(x)
-#     else if (bar(x) - y == true) print(y)
-#     else for i until true by main() begin
-#         for j until i > 10 by 1
-#     end
-
-# end
-# """
-#         expect = "Error on line 10 col 4: end"
-#         self.assertTrue(TestParser.test(input, expect, 272))
-        
-
-#     def test74(self):
-#         input = """func main(number args[4])
-# begin
-#     var x <- [1,2,3,4]
-#     dynamic y <- x
-#     if (foo(y) - x > (2 <= 3))
-#     print(x)
-#     else if (bar(x) - y == true) print(y)
-#     else for i until true by main() begin
-#         for j until i > 10 by 1 break
-#     end
-
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 273))
-        
-
-#     def test75(self):
-#         input = """function main()
-# begin
-# end """
-#         expect = "Error on line 1 col 0: function"
-#         self.assertTrue(TestParser.test(input, expect, 274))
-        
-
-#     def test76(self):
-#         input = """func main()
-# begin
-#     func function()
-#     begin
-#         return
-#     end
-# end 
-# """
-#         expect = "Error on line 3 col 4: func"
-#         self.assertTrue(TestParser.test(input, expect, 275))
-        
-
-#     def test77(self):
-#         input = """func main()
-# begin
-#     main(x <- 1)
-# end 
-# """
-#         expect = "Error on line 3 col 11: <-"
-#         self.assertTrue(TestParser.test(input, expect, 276))
-        
-
-#     def test78(self):
-#         input = """func main()
-# begin
-#     main([1,2,3,4])
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 277))
-        
-
-#     def test79(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4]))
-#     else return
-# end 
-# """
-#         expect = "Error on line 4 col 4: else"
-#         self.assertTrue(TestParser.test(input, expect, 278))
+    def test53(self):
+        input = """func main()
+begin
+    var bruh <- true
+    number arr[3, 4] <- foo(arr[5, 6])
+    if (arr) ## comment
+    begin
+        foo()
+    end
+    elif (arr != foo(arr[foo(arr)])[1])
+    for i by 2
+        increment(i *- 2*i)
+    else return 
+end
+"""
+        expect = "Error on line 10 col 10: by"
+        self.assertTrue(TestParser.test(input, expect, 252))
         
         
 
-#     def test80(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x < 2
-#     end
-#     else begin 
+    def test54(self):
+        input = """func main()
+begin
+    return break
+end
+"""
+        expect = "Error on line 3 col 11: break"
+        self.assertTrue(TestParser.test(input, expect, 253))
+        
+
+    def test55(self):
+        input = """func main()
+begin
+    return main - 1
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 254))
+        
+
+    def test56(self):
+        input = """func main(number args[])
+begin
+    return 0
+end
+"""
+        expect = "Error on line 1 col 22: ]"
+        self.assertTrue(TestParser.test(input, expect, 255))
+        
+
+    def test57(self):
+        input = """func main(number args[4])
+begin
+    string x1 = args[0]
+    string x2 = args[1]
+
+end
+"""
+        expect = "Error on line 3 col 14: ="
+        self.assertTrue(TestParser.test(input, expect, 256))
+        
+
+    def test58(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 = x1..x2
+
+end
+"""
+        expect = "."
+        self.assertTrue(TestParser.test(input, expect, 257))
+        
+
+    def test59(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 = x1...(x2-x1)
+
+end
+"""
+        expect = "Error on line 5 col 7: ="
+        self.assertTrue(TestParser.test(input, expect, 258))
+        
+
+    def test60(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- x1...(x2-x1)
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 259))
+        
+
+    def test61(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- x1...x2-x1
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 260))
+        
+
+    def test61(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- x1...x2...x1
+
+end
+"""
+        expect = "Error on line 5 col 17: ..."
+        self.assertTrue(TestParser.test(input, expect, 260))
+        
+
+    def test62(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- x1 / x3 / x4 * 2 + not (x1 +- bool)
+
+end
+"""
+        expect = "Error on line 5 col 40: bool"
+        self.assertTrue(TestParser.test(input, expect, 261))
+        
+
+    def test63(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- (x1 / x3 / x4 * 2 + not (x1 +- x2))()
+
+end
+"""
+        expect = "Error on line 5 col 45: ("
+        self.assertTrue(TestParser.test(input, expect, 262))
+        
+
+    def test64(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- foo(x1 / x3 / x4 * 2 + not (x1 +- x2))()
+
+end
+"""
+        expect = "Error on line 5 col 48: ("
+        self.assertTrue(TestParser.test(input, expect, 263))
+        
+
+    def test65(self):
+        input = """func main(number args[4])
+begin
+    string x1 <- args[0]
+    string x2 <- args[1]
+    x3 <- foo(x1 / x3 / x4 * 2 + not (x1 +- x2))
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 264))
+        
+
+    def test66(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,]
+
+end
+"""
+        expect = "Error on line 3 col 20: ]"
+        self.assertTrue(TestParser.test(input, expect, 265))
+
+    def test67(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic <- x
+    ## if (foo(y) - x > (2 > 3))
+    ##print(x)
+    ## else if (bar(x) - y == true) print(y) else return false
+
+end
+"""
+        expect = "Error on line 4 col 12: <-"
+        self.assertTrue(TestParser.test(input, expect, 266))
+        
+
+    def test68(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > 2 > 3)
+    print(x)
+    ## else if (bar(x) - y == true) print(y) else return false
+
+end
+"""
+        expect = "Error on line 5 col 23: >"
+        self.assertTrue(TestParser.test(input, expect, 267))
+        
+
+    def test69(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > (2 <= 3))
+    print(x)
+    ## else if (bar(x) - y == true) print(y) else return false
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 268))
+        
+
+    def test70(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > (2 <= 3))
+    print(x)
+    else if (bar(x) - y == true) print(y) else return false
+
+end
+"""
+        expect = "Error on line 7 col 42: else"
+        self.assertTrue(TestParser.test(input, expect, 269))
+        
+
+    def test71(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > (2 <= 3))
+    print(x)
+    else if (bar(x) - y == true) print(y)
+    else return false
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 270))
+        
+
+    def test72(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > (2 <= 3))
+    print(x)
+    else if (bar(x) - y == true) print(y)
+    else for i until true by main() begin
+    end
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 271))
+        
+
+    def test73(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > (2 <= 3))
+    print(x)
+    else if (bar(x) - y == true) print(y)
+    else for i until true by main() begin
+        for j until i > 10 by 1
+    end
+
+end
+"""
+        expect = "Error on line 10 col 4: end"
+        self.assertTrue(TestParser.test(input, expect, 272))
+        
+
+    def test74(self):
+        input = """func main(number args[4])
+begin
+    var x <- [1,2,3,4]
+    dynamic y <- x
+    if (foo(y) - x > (2 <= 3))
+    print(x)
+    else if (bar(x) - y == true) print(y)
+    else for i until true by main() begin
+        for j until i > 10 by 1 break
+    end
+
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 273))
+        
+
+    def test75(self):
+        input = """function main()
+begin
+end """
+        expect = "Error on line 1 col 0: function"
+        self.assertTrue(TestParser.test(input, expect, 274))
+        
+
+    def test76(self):
+        input = """func main()
+begin
+    func function()
+    begin
+        return
+    end
+end 
+"""
+        expect = "Error on line 3 col 4: func"
+        self.assertTrue(TestParser.test(input, expect, 275))
+        
+
+    def test77(self):
+        input = """func main()
+begin
+    main(x <- 1)
+end 
+"""
+        expect = "Error on line 3 col 11: <-"
+        self.assertTrue(TestParser.test(input, expect, 276))
+        
+
+    def test78(self):
+        input = """func main()
+begin
+    main([1,2,3,4])
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 277))
+        
+
+    def test79(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4]))
+    else return
+end 
+"""
+        expect = "Error on line 4 col 4: else"
+        self.assertTrue(TestParser.test(input, expect, 278))
+        
+        
+
+    def test80(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x < 2
+    end
+    else begin 
     
-#     end
-# end 
-# """
-#         expect = "Error on line 4 col 14: <"
-#         self.assertTrue(TestParser.test(input, expect, 279))
+    end
+end 
+"""
+        expect = "Error on line 4 col 14: <"
+        self.assertTrue(TestParser.test(input, expect, 279))
         
 
-#     def test81(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     else begin 
-#     return
-#     end
-# end 
-# """
-#         expect = "Error on line 5 col 4: else"
-#         self.assertTrue(TestParser.test(input, expect, 280))
+    def test81(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    else begin 
+    return
+    end
+end 
+"""
+        expect = "Error on line 5 col 4: else"
+        self.assertTrue(TestParser.test(input, expect, 280))
         
 
-#     def test82(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         var arr[1,2,3] <- main[foo()]
-#         return
-#     end
-# end 
-# """
-#         expect = "Error on line 7 col 15: ["
-#         self.assertTrue(TestParser.test(input, expect, 281))
+    def test82(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        var arr[1,2,3] <- main[foo()]
+        return
+    end
+end 
+"""
+        expect = "Error on line 7 col 15: ["
+        self.assertTrue(TestParser.test(input, expect, 281))
         
 
-#     def test83(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         void arr[1,2,3] <- main[foo()]
-#         return
-#     end
-# end 
-# """
-#         expect = "Error on line 7 col 13: arr"
-#         self.assertTrue(TestParser.test(input, expect, 282))
+    def test83(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        void arr[1,2,3] <- main[foo()]
+        return
+    end
+end 
+"""
+        expect = "Error on line 7 col 13: arr"
+        self.assertTrue(TestParser.test(input, expect, 282))
         
 
-#     def test84(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         string arr[1,2,3] <- main[foo()]
-#         return
-#     end
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 283))
+    def test84(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        string arr[1,2,3] <- main[foo()]
+        return
+    end
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 283))
         
 
-#     def test85(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         string arr[1,2,3] <- main[foo()]
-#         return
-#     end
-#     for i == 0 until i < 5 by 1
-#         print(i)
-# end 
-# """
-#         expect = "Error on line 10 col 10: =="
-#         self.assertTrue(TestParser.test(input, expect, 284))
+    def test85(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        string arr[1,2,3] <- main[foo()]
+        return
+    end
+    for i == 0 until i < 5 by 1
+        print(i)
+end 
+"""
+        expect = "Error on line 10 col 10: =="
+        self.assertTrue(TestParser.test(input, expect, 284))
         
 
-#     def test86(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         string arr[1,2,3] <- main[foo()]
-#         return
-#     end
-#     for arr[0] until i < 5 by 1
-#         print(i)
-# end 
-# """
-#         expect = "Error on line 10 col 11: ["
-#         self.assertTrue(TestParser.test(input, expect, 285))
+    def test86(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        string arr[1,2,3] <- main[foo()]
+        return
+    end
+    for arr[0] until i < 5 by 1
+        print(i)
+end 
+"""
+        expect = "Error on line 10 col 11: ["
+        self.assertTrue(TestParser.test(input, expect, 285))
         
 
-#     def test87(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         string arr[1,2,3] <- main[foo()]
-#         return
-#     end
-#     for i until i < arr[foo] by 1
-#         print(i)
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 286))
+    def test87(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        string arr[1,2,3] <- main[foo()]
+        return
+    end
+    for i until i < arr[foo] by 1
+        print(i)
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 286))
         
 
-#     def test88(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         string arr[1,2,3] <- main[foo()]
-#         return
-#     end
-#     for i until i...j <= arr[foo] by 1
-#         print(i)
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 287))
+    def test88(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        string arr[1,2,3] <- main[foo()]
+        return
+    end
+    for i until i...j <= arr[foo] by 1
+        print(i)
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 287))
         
 
-#     def test89(self):
-#         input = """func main()
-# begin
-#     if (main([1,2,3,4])) begin
-#         var x <- 2
-#     end
-#     else begin
-#         string arr[1,2,3] <- main[foo()]
-#         return
-#     end
-#     for i until i...(j <= arr[foo<1]) by 1
-#         print(i)
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 288))
+    def test89(self):
+        input = """func main()
+begin
+    if (main([1,2,3,4])) begin
+        var x <- 2
+    end
+    else begin
+        string arr[1,2,3] <- main[foo()]
+        return
+    end
+    for i until i...(j <= arr[foo<1]) by 1
+        print(i)
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 288))
         
 
         
 
-#     def test90(self):
-#         input = """func main()
-# begin
-#     string str <- "HelloWorld"..."!"
-#     if (not len(str) > 10)
-#     print("long string")
-#     else print("short string")
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 289))
+    def test90(self):
+        input = """func main()
+begin
+    string str <- "HelloWorld"..."!"
+    if (not len(str) > 10)
+    print("long string")
+    else print("short string")
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 289))
         
 
-#     def test91(self):
-#         input = """func main()
-# begin
-#     string str <- "HelloWorld"..."!"
-#     if (not len(str) and str..."bonus" > 10)
-#     print("long string")
-#     else print("short string")
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 290))
+    def test91(self):
+        input = """func main()
+begin
+    string str <- "HelloWorld"..."!"
+    if (not len(str) and str..."bonus" > 10)
+    print("long string")
+    else print("short string")
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 290))
         
 
-#     def test92(self):
-#         input = """func main()
-# begin
-#     string str <- "HelloWorld"..."!"
-#     if (not len(str) and (str..."bonus" > 10))
-#     print("long string")
-#     else print("short string")
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 291))
+    def test92(self):
+        input = """func main()
+begin
+    string str <- "HelloWorld"..."!"
+    if (not len(str) and (str..."bonus" > 10))
+    print("long string")
+    else print("short string")
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 291))
         
 
-#     def test93(self):
-#         input = """func main() begin
-#     if (failed) if (chained) print("nuh uh")
-#     else print("")
-#     else failed <- not true
-# end 
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 292))
+    def test93(self):
+        input = """func main() begin
+    if (failed) if (chained) print("nuh uh")
+    else print("")
+    else failed <- not true
+end 
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 292))
         
 
-#     def test94(self):
-#         input = """func main(number [1,2]) begin
+    def test94(self):
+        input = """func main(number [1,2]) begin
     
-# end 
-# """
-#         expect = "Error on line 1 col 17: ["
-#         self.assertTrue(TestParser.test(input, expect, 293))
+end 
+"""
+        expect = "Error on line 1 col 17: ["
+        self.assertTrue(TestParser.test(input, expect, 293))
         
 
-#     def test95(self):
-#         input = """func main(number abc[1,2]) begin
-#   break  
-# end 
-# if (main[1] == "95")
-# return
-# """
-#         expect = "Error on line 4 col 0: if"
-#         self.assertTrue(TestParser.test(input, expect, 294))
+    def test95(self):
+        input = """func main(number abc[1,2]) begin
+  break  
+end 
+if (main[1] == "95")
+return
+"""
+        expect = "Error on line 4 col 0: if"
+        self.assertTrue(TestParser.test(input, expect, 294))
         
 
-#     def test96(self):
-#         input = """func main(number abc[1,2]) begin
-#   break  
-# end
-# func chinsau()
-# if (main[1] == "95")
-# return
-# """
-#         expect = "Error on line 5 col 0: if"
-#         self.assertTrue(TestParser.test(input, expect, 295))
+    def test96(self):
+        input = """func main(number abc[1,2]) begin
+  break  
+end
+func chinsau()
+if (main[1] == "95")
+return
+"""
+        expect = "Error on line 5 col 0: if"
+        self.assertTrue(TestParser.test(input, expect, 295))
         
 
-#     def test97(self):
-#         input = """func main(number abc[1,2]) begin
-#   break  
-# end
-# func chinbay()
-# begin
-# if (main[1] == "95")
-# return
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 296))
+    def test97(self):
+        input = """func main(number abc[1,2]) begin
+  break  
+end
+func chinbay()
+begin
+if (main[1] == "95")
+return
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 296))
         
 
-#     def test98(self):
-#         input = """func main(number abc[1,2]) begin
-#   break  
-# end
-# func _()
-#  return _()[_()]
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 297))
+    def test98(self):
+        input = """func main(number abc[1,2]) begin
+  break  
+end
+func _()
+ return _()[_()]
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 297))
         
 
-#     def test99(self):
-#         input = """func main()
-# begin
-#     if (main() <- 2) return main <- 2
-# end
-# """
-#         expect = "Error on line 3 col 15: <-"
-#         self.assertTrue(TestParser.test(input, expect, 298))
+    def test99(self):
+        input = """func main()
+begin
+    if (main() <- 2) return main <- 2
+end
+"""
+        expect = "Error on line 3 col 15: <-"
+        self.assertTrue(TestParser.test(input, expect, 298))
 
 
-#     def test100(self):
-#         input = """func final()
-# begin
-#     if (final() < 2) return final()[1] != not 2
-# end
-# """
-#         expect = "successful"
-#         self.assertTrue(TestParser.test(input, expect, 299))
+    def test100(self):
+        input = """func final()
+begin
+    if (final() < 2) return final()[1] != not 2
+end
+"""
+        expect = "successful"
+        self.assertTrue(TestParser.test(input, expect, 299))

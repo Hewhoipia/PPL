@@ -1,0 +1,4 @@
+func main()
+begin
+    main(x <- 1)
+end 

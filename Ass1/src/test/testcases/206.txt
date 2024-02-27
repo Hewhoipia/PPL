@@ -1,5 +1,8 @@
 
         func main()
-            begin
-            end
+        begin
+            number a
+            number b[1,2]
+            a <- (1 + 2 + foo())["language" / 2 + true, ("hello"..."world") and not -"successful"]
+        end
         

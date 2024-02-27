@@ -1,0 +1,16 @@
+
+        func lmao() 
+            ## break
+            
+        func lol(number a, bool b)
+        func QuanDepTrai() return true
+        
+        func loi (number a[1, 2], string s[1, foo()])
+        
+        func main() ## main function
+        
+        begin
+            break
+        end
+        
+        

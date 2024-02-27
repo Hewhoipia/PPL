@@ -1,0 +1,17 @@
+
+        func lmao()
+            break
+        func main() ## main function
+        
+        begin
+            var a <- "lmao"
+            for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao") ## hjhj
+            
+            ## block 
+            begin
+                print("hehe")
+                break
+            end
+            break
+        end
+        

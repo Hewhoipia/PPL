@@ -1,5 +1,9 @@
 
-            func main()
-            ## a comment
-            func fen() func bug(dynamic a) ## error for sure
+        func main()
+        begin
+            number a
+            number b[1,2]
+            a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
+            a <- foo()[1, 2, 3][1, 2, 3]
+        end
         
