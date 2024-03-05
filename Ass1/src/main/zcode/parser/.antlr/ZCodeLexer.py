@@ -105,9 +105,9 @@ def serializedATN():
         0,0,204,205,5,110,0,0,205,206,5,116,0,0,206,207,5,105,0,0,207,208,
         5,110,0,0,208,209,5,117,0,0,209,210,5,101,0,0,210,28,1,0,0,0,211,
         212,5,105,0,0,212,213,5,102,0,0,213,30,1,0,0,0,214,215,5,101,0,0,
-        215,216,5,108,0,0,216,217,5,115,0,0,217,218,5,101,0,0,218,32,1,0,
-        0,0,219,220,5,101,0,0,220,221,5,108,0,0,221,222,5,105,0,0,222,223,
-        5,102,0,0,223,34,1,0,0,0,224,225,5,98,0,0,225,226,5,101,0,0,226,
+        215,216,5,108,0,0,216,217,5,105,0,0,217,218,5,102,0,0,218,32,1,0,
+        0,0,219,220,5,101,0,0,220,221,5,108,0,0,221,222,5,115,0,0,222,223,
+        5,101,0,0,223,34,1,0,0,0,224,225,5,98,0,0,225,226,5,101,0,0,226,
         227,5,103,0,0,227,228,5,105,0,0,228,229,5,110,0,0,229,36,1,0,0,0,
         230,231,5,101,0,0,231,232,5,110,0,0,232,233,5,100,0,0,233,38,1,0,
         0,0,234,235,5,110,0,0,235,236,5,111,0,0,236,237,5,116,0,0,237,40,
@@ -196,8 +196,8 @@ class ZCodeLexer(Lexer):
     BREAK = 13
     CONTINUE = 14
     IF = 15
-    ELSE = 16
-    ELIF = 17
+    ELIF = 16
+    ELSE = 17
     BEGIN = 18
     END = 19
     NOT = 20
@@ -234,7 +234,7 @@ class ZCodeLexer(Lexer):
     literalNames = [ "<INVALID>",
             "'true'", "'false'", "'number'", "'bool'", "'string'", "'return'", 
             "'var'", "'dynamic'", "'func'", "'for'", "'until'", "'by'", 
-            "'break'", "'continue'", "'if'", "'else'", "'elif'", "'begin'", 
+            "'break'", "'continue'", "'if'", "'elif'", "'else'", "'begin'", 
             "'end'", "'not'", "'and'", "'or'", "'+'", "'-'", "'*'", "'/'", 
             "'%'", "'=='", "'<-'", "'...'", "'('", "')'", "'['", "']'", 
             "','", "'\\n'" ]
@@ -242,7 +242,7 @@ class ZCodeLexer(Lexer):
     symbolicNames = [ "<INVALID>",
             "TRUE", "FALSE", "KWNUMBER", "KWBOOL", "KWSTRING", "RETURN", 
             "VAR", "DYNAMIC", "FUNC", "FOR", "UNTIL", "BY", "BREAK", "CONTINUE", 
-            "IF", "ELSE", "ELIF", "BEGIN", "END", "NOT", "AND", "OR", "ADD", 
+            "IF", "ELIF", "ELSE", "BEGIN", "END", "NOT", "AND", "OR", "ADD", 
             "SUB", "MUL", "DIV", "MOD", "COMPARENUM", "COMPARESTR", "ASSIGN", 
             "CONCAT", "OPENPAREN", "CLOSEPAREN", "OPENSQBRACKET", "CLOSESQBRACKET", 
             "COMMA", "NEWLINE", "NUMBER", "STRING", "IDENTIFIER", "CMT", 
@@ -250,7 +250,7 @@ class ZCodeLexer(Lexer):
 
     ruleNames = [ "TRUE", "FALSE", "KWNUMBER", "KWBOOL", "KWSTRING", "RETURN", 
                   "VAR", "DYNAMIC", "FUNC", "FOR", "UNTIL", "BY", "BREAK", 
-                  "CONTINUE", "IF", "ELSE", "ELIF", "BEGIN", "END", "NOT", 
+                  "CONTINUE", "IF", "ELIF", "ELSE", "BEGIN", "END", "NOT", 
                   "AND", "OR", "ADD", "SUB", "MUL", "DIV", "MOD", "COMPARENUM", 
                   "COMPARESTR", "ASSIGN", "CONCAT", "OPENPAREN", "CLOSEPAREN", 
                   "OPENSQBRACKET", "CLOSESQBRACKET", "COMMA", "NEWLINE", 

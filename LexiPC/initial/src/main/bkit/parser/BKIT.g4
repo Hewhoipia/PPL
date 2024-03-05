@@ -8,10 +8,12 @@ options{
 	language=Python3;
 }
 
-program  : INT+ EOF;
-
-INT: '0' | [1-9][0-9_]*{self.text=self.text.replace('_','')};
-
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
-
-ERROR_CHAR: .  {raise ErrorToken(self.text)};
+program: vardecls EOF;
+vardecls: vardecl vardecltail;
+vardecltail: vardecl vardecltail | ;
+vardecl: mptype ids ';' ;
+mptype: INTTYPE | FLOATTYPE;
+ids: ID ',' ids | ID;
+INTTYPE: 'int';
+FLOATTYPE: 'float';
+ID: [a-z]+ ;

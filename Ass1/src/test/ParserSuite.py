@@ -515,10 +515,10 @@ class ParserSuite(unittest.TestCase):
 #         self.assertTrue(TestParser.test(input,expect,250))
 #     def test251(self):
 #         """Parser Test"""
-#         input = """var x 
+#         input = """var x
 #         ## not let uninitialized in var word declarations
 #         """
-#         expect = """Error on line 1 col 6: 
+#         expect = """Error on line 1 col 5: 
 # """
 #         self.assertTrue(TestParser.test(input,expect,251))
 #     def test252(self):
@@ -2354,7 +2354,7 @@ class ParserSuite(unittest.TestCase):
             number array[1]
         end
         """
-        expect = """Error on line 7 col 18: 
+        expect = """Error on line 7 col 17: 
 """
         self.assertTrue(TestParser.test(input, expect, 220))
     def test22(self):
@@ -2879,7 +2879,7 @@ begin
     else return 
 end
 """
-        expect = """Error on line 10 col 25: 
+        expect = """Error on line 10 col 24: 
 """
         self.assertTrue(TestParser.test(input, expect, 251))
         
