@@ -29,7 +29,6 @@ vari_decls: vari_decls_type vari_decls_id | DYNAMIC IDENTIFIER | vari_decls_type
 
 // Func
 func_decls: FUNC IDENTIFIER OPENPAREN list_param CLOSEPAREN func_sepa func_body;
-    func_param: OPENPAREN list_param CLOSEPAREN;
     list_param: params list_param_tail | ;
     list_param_tail: COMMA params list_param_tail | ;
     params: vari_decls_type vari_decls_id;

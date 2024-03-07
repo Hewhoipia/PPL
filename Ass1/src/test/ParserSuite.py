@@ -2354,7 +2354,7 @@ class ParserSuite(unittest.TestCase):
             number array[1]
         end
         """
-        expect = """Error on line 7 col 17: 
+        expect = """Error on line 7 col 18: 
 """
         self.assertTrue(TestParser.test(input, expect, 220))
     def test22(self):
@@ -2879,7 +2879,7 @@ begin
     else return 
 end
 """
-        expect = """Error on line 10 col 24: 
+        expect = """Error on line 10 col 25: 
 """
         self.assertTrue(TestParser.test(input, expect, 251))
         

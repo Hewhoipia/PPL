@@ -17,66 +17,114 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitDecls(self, ctx: ZCodeParser.DeclsContext):
 #decls: vari_decls | func_decls | ;
-#class FuncDecl(Decl): def __init__(self, name, param, body=None):
         if ctx.vari_decls():
             return self.visit(ctx.vari_decls())
         elif ctx.func_decls():
             return self.visit(ctx.func_decls())
         else:
             return None
-    
+
+
+
+#VARI DECLS
+
     def visitVari_decls(self, ctx: ZCodeParser.Vari_declsContext):
 #vari_decls: vari_decls_type vari_decls_id | DYNAMIC IDENTIFIER | vari_decls_type vari_decls_id ASSIGN expr | vari_decls_impli IDENTIFIER ASSIGN expr;
 #class VarDecl(Decl, Stmt): def __init__(self, name, varType=None, modifier=None, varInit=None):
+# class ArrayType(Type):
+#     # size: List[float]
+#     # eleType: Type
+
+#     def __init__(self, size, eleType):
         self.name=None
         self.varType=None
         self.modifier=None
         self.varInit=None
+        if (ctx.vari_decls_impli()):
+            self.name=Id(ctx.IDENTIFIER().getText())
+            self.varType=None
+            self.modifier=self.visit(ctx.vari_decls_impli())
+            self.varInit=self.visit(ctx.expr())
+        elif (ctx.DYNAMIC()):
+            self.name=Id(ctx.IDENTIFIER().getText())
+            self.varType=None
+            self.modifier=ctx.DYNAMIC().getText()
+            self.varInit=None
+        elif(ctx.ASSIGN()):
+            vari=self.visit(ctx.vari_decls_id())
+            if (isinstance(vari,Id)):
+                self.name=vari
+                self.varType=self.visit(ctx.vari_decls_type())
+            else:
+                self.name=vari[0]
+                self.varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
+            self.modifier=None
+            self.varInit=self.visit(ctx.expr())
+        else:
+            vari=self.visit(ctx.vari_decls_id())
+            if (isinstance(vari,Id)):
+                self.name=vari
+                self.varType=self.visit(ctx.vari_decls_type())
+            else:
+                self.name=vari[0]
+                self.varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
+            self.modifier=None
+            self.varInit=None
         return VarDecl(self.name, self.varType, self.modifier, self.varInit)
     
     def visitVari_decls_type(self, ctx: ZCodeParser.Vari_decls_typeContext):
 #vari_decls_type: KWNUMBER | KWBOOL | KWSTRING;
-        return
+        if (ctx.KWNUMBER()):
+            return NumberType()
+        elif (ctx.KWBOOL()):
+            return BoolType()
+        else:
+            return StringType()
     
     def visitVari_decls_impli(self, ctx: ZCodeParser.Vari_decls_impliContext):
 #vari_decls_impli: DYNAMIC | VAR;
-        return
+        return ctx.DYNAMIC().getText() if ctx.DYNAMIC() else ctx.VAR().getText()
     
     def visitArray(self, ctx: ZCodeParser.ArrayContext):
 #array: IDENTIFIER OPENSQBRACKET list_expr CLOSESQBRACKET;
-        return
+        return ArrayCell(Id(ctx.IDENTIFIER().getText()),self.visit(ctx.list_expr()))
     
     def visitArray_tail(self, ctx: ZCodeParser.Array_tailContext):
 #array_tail: OPENSQBRACKET list_expr CLOSESQBRACKET;
-        return
+        return self.visit(ctx.list_expr())
     
     def visitArray_decls(self, ctx: ZCodeParser.Array_declsContext):
 #array_decls: IDENTIFIER OPENSQBRACKET list_num CLOSESQBRACKET;
-        return
+        return (Id(ctx.IDENTIFIER().getText()), self.visit(ctx.list_num()))
     
     def visitList_num(self, ctx: ZCodeParser.List_numContext):
 #list_num: NUMBER | NUMBER COMMA list_num;
-        return
+        return [float(ctx.NUMBER().getText())] + self.visit(ctx.list_num()) if ctx.list_num() else [float(ctx.NUMBER().getText())]
     
     def visitList_expr(self, ctx: ZCodeParser.List_exprContext):
 #list_expr: expr | expr COMMA list_expr;
-        return
+        return [self.visit(ctx.expr())] + self.visit(ctx.list_expr()) if ctx.list_expr() else [self.visit(ctx.expr())]
     
     def visitVari_decls_id(self, ctx: ZCodeParser.Vari_decls_idContext):
 #vari_decls_id: IDENTIFIER | array_decls;
-        return
+        return Id(ctx.IDENTIFIER().getText()) if ctx.IDENTIFIER() else self.visit(ctx.array_decls())
     
     def visitVari_id(self, ctx: ZCodeParser.Vari_idContext):
 #vari_id: IDENTIFIER | array;
-        return
+        return Id(ctx.IDENTIFIER().getText()) if ctx.IDENTIFIER() else self.visit(ctx.array())
+    
+    
+    
+#FUNC DECLS
     
     def visitFunc_decls(self, ctx: ZCodeParser.Func_declsContext):
 #func_decls: FUNC IDENTIFIER OPENPAREN list_param CLOSEPAREN func_sepa func_body;
-        return
-    
-    def visitFunc_param(self, ctx: ZCodeParser.Func_paramContext):
-#func_param: OPENPAREN list_param CLOSEPAREN;
-        return
+#class FuncDecl(Decl):
+    # name: Id
+    # param: List[VarDecl]  # empty list if there is no parameter
+    # body: Stmt = None  # None if this is just a declaration-part
+#def __init__(self, name, param, body=None):
+        return FuncDecl(Id(ctx.IDENTIFIER().getText()), self.visit(ctx.list_param()), self.visit(ctx.func_body()))
     
     def visitList_param(self, ctx: ZCodeParser.List_paramContext):
 #list_param: params list_param_tail | ;
@@ -97,6 +145,9 @@ class ASTGeneration(ZCodeVisitor):
     def visitFunc_body(self, ctx: ZCodeParser.Func_bodyContext):
 #func_body : stmt_return | stmt_block | ;
         return
+    
+    
+#STMT
     
     def visitStmt(self, ctx: ZCodeParser.StmtContext):
 #stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
@@ -149,6 +200,12 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitStmt_func_call(self, ctx: ZCodeParser.Stmt_func_callContext):
 #stmt_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN sfc_body;
+# class CallExpr(Expr):
+#     # name: Id
+#     # args: List[Expr]
+#     def __init__(self, name, args):
+#         self.name = name
+#         self.args = args
         return
     
     def visitSfc_list_args(self, ctx: ZCodeParser.Sfc_list_argsContext):
@@ -174,7 +231,11 @@ class ASTGeneration(ZCodeVisitor):
     def visitStmt_sepa_null(self, ctx: ZCodeParser.Stmt_sepa_nullContext):
 #stmt_sepa_null: NEWLINE stmt_sepa_null | ;
         return
-    
+
+
+
+#EXPR
+
     def visitExpr(self, ctx: ZCodeParser.ExprContext):
 #expr: expr_string_concat;
         return
