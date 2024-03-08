@@ -179,11 +179,6 @@ class ZCodeVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZCodeParser#sfc_body.
-    def visitSfc_body(self, ctx:ZCodeParser.Sfc_bodyContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ZCodeParser#stmt_block.
     def visitStmt_block(self, ctx:ZCodeParser.Stmt_blockContext):
         return self.visitChildren(ctx)
@@ -241,6 +236,11 @@ class ZCodeVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ZCodeParser#expr_other.
     def visitExpr_other(self, ctx:ZCodeParser.Expr_otherContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZCodeParser#expr_func_call.
+    def visitExpr_func_call(self, ctx:ZCodeParser.Expr_func_callContext):
         return self.visitChildren(ctx)
 
 

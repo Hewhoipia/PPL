@@ -19,7 +19,7 @@ decls_list: decls NEWLINE decls_list | ;
 vari_decls: vari_decls_type vari_decls_id | DYNAMIC IDENTIFIER | vari_decls_type vari_decls_id ASSIGN expr | vari_decls_impli IDENTIFIER ASSIGN expr;
     vari_decls_type: KWNUMBER | KWBOOL | KWSTRING;
     vari_decls_impli: DYNAMIC | VAR;
-    array: IDENTIFIER OPENSQBRACKET list_expr CLOSESQBRACKET;
+    array: (IDENTIFIER|expr_func_call) OPENSQBRACKET list_expr CLOSESQBRACKET;
     array_tail: OPENSQBRACKET list_expr CLOSESQBRACKET;
     array_decls: IDENTIFIER OPENSQBRACKET list_num CLOSESQBRACKET;
         list_num: NUMBER | NUMBER COMMA list_num;
@@ -49,10 +49,9 @@ stmt: stmt_vari_decl | stmt_assi | stmt_cond | stmt_for | stmt_break
         stmt_break: BREAK;
         stmt_continue: CONTINUE;
     stmt_return: RETURN expr | RETURN;
-    stmt_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN sfc_body;
+    stmt_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN;
         sfc_list_args: expr sfc_list_args_tail | ;
         sfc_list_args_tail: COMMA expr sfc_list_args_tail | ;
-        sfc_body: array_tail | ;
     stmt_block: BEGIN stmt_sepa_nonnull list_stmt END;
     stmt_sepa_nonnull: NEWLINE | NEWLINE stmt_sepa_nonnull;
     stmt_sepa_null: NEWLINE stmt_sepa_null | ;
@@ -82,7 +81,8 @@ expr: expr_string_concat;
                 | IDENTIFIER
                 | NUMBER
                 | STRING
-                | boolval | array | array_tail | stmt_func_call;
+                | boolval | array | array_tail | expr_func_call;
+    expr_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN;
     boolval: TRUE | FALSE;
 
 
