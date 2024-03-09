@@ -13,7 +13,7 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitDecls_list(self, ctx: ZCodeParser.Decls_listContext):
 #decls_list: decls NEWLINE decls_list | ;
-        return [self.visit(ctx.decls)] + self.visit(ctx.decls_list()) if ctx.decls() else []
+        return [self.visit(ctx.decls())] + self.visit(ctx.decls_list()) if ctx.decls() else []
     
     def visitDecls(self, ctx: ZCodeParser.DeclsContext):
 #decls: vari_decls | func_decls | ;
@@ -273,17 +273,17 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitExpr_string_concat(self, ctx: ZCodeParser.Expr_string_concatContext):
 #expr_string_concat: expr_compare CONCAT expr_compare | expr_compare;
-        return BinaryOp(ctx.CONCAT().getText(), self.visit(ctx.expr_compare()), self.visit(ctx.expr_compare())) if ctx.CONCAT() else self.visit(ctx.expr_compare())
+        return BinaryOp(ctx.CONCAT().getText(), self.visit(ctx.expr_compare(0)), self.visit(ctx.expr_compare(1))) if ctx.CONCAT() else self.visit(ctx.expr_compare(0))
     
     def visitExpr_compare(self, ctx: ZCodeParser.Expr_compareContext):
 # expr_compare: expr_cond_andor COMPARENUM expr_cond_andor
 #                 | expr_cond_andor COMPARESTR expr_cond_andor
 #                 | expr_cond_andor;
         if ctx.COMPARENUM():
-            return BinaryOp(ctx.COMPARENUM().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.expr_cond_andor()))
+            return BinaryOp(ctx.COMPARENUM().getText(), self.visit(ctx.expr_cond_andor(0)), self.visit(ctx.expr_cond_andor(1)))
         if ctx.COMPARESTR():
-            return BinaryOp(ctx.COMPARESTR().getText(),self.visit(ctx.expr_cond_andor()),self.visit(ctx.expr_cond_andor()))
-        return self.visit(ctx.expr_cond_andor())
+            return BinaryOp(ctx.COMPARESTR().getText(),self.visit(ctx.expr_cond_andor(0)),self.visit(ctx.expr_cond_andor(1)))
+        return self.visit(ctx.expr_cond_andor(0))
     
     def visitExpr_cond_andor(self, ctx: ZCodeParser.Expr_cond_andorContext):
 # expr_cond_andor : expr_cond_andor AND e_n_addsub
@@ -292,7 +292,7 @@ class ASTGeneration(ZCodeVisitor):
         if ctx.AND():
             return BinaryOp(ctx.AND().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.e_n_addsub()))
         if ctx.OR():
-            return BinaryOp(ctx.AND().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.e_n_addsub()))
+            return BinaryOp(ctx.OR().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.e_n_addsub()))
         return self.visit(ctx.e_n_addsub())
     
     def visitExpr_cond_not(self, ctx: ZCodeParser.Expr_cond_notContext):
@@ -316,7 +316,7 @@ class ASTGeneration(ZCodeVisitor):
 #                 | expr_cond_not;
         if ctx.MUL():
             return BinaryOp(ctx.MUL().getText(), self.visit(ctx.e_n_muldivmod()), self.visit(ctx.expr_cond_not()))
-        if ctx.SUB():
+        if ctx.DIV():
             return BinaryOp(ctx.DIV().getText(), self.visit(ctx.e_n_muldivmod()), self.visit(ctx.expr_cond_not()))
         if ctx.MOD():
             return BinaryOp(ctx.MOD().getText(), self.visit(ctx.e_n_muldivmod()), self.visit(ctx.expr_cond_not()))
@@ -331,7 +331,7 @@ class ASTGeneration(ZCodeVisitor):
 #                 | IDENTIFIER
 #                 | NUMBER
 #                 | STRING
-#                 | boolval | array | array_tail | stmt_func_call;
+#                 | boolval | array | array_tail | expr_func_call;
         if ctx.expr():
             return self.visit(ctx.expr())
         if ctx.IDENTIFIER():
@@ -346,7 +346,7 @@ class ASTGeneration(ZCodeVisitor):
             return self.visit(ctx.array())
         if ctx.array_tail():
             return self.visit(ctx.array_tail())
-        return self.visit(ctx.stmt_func_call())
+        return self.visit(ctx.expr_func_call())
     
     def visitExpr_func_call(self, ctx: ZCodeParser.Expr_func_callContext):
 # expr_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN sfc_body;
@@ -359,4 +359,6 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitBoolval(self, ctx: ZCodeParser.BoolvalContext):
 #boolval: TRUE | FALSE;
-        return BooleanLiteral(bool(ctx.TRUE().getText() if ctx.TRUE() else ctx.FALSE().getText()))
+        text_value = ctx.TRUE().getText() if ctx.TRUE() else ctx.FALSE().getText()
+        bool_value = text_value.lower() == 'true'
+        return BooleanLiteral(bool_value)
