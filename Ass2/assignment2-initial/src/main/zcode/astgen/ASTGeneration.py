@@ -86,8 +86,8 @@ class ASTGeneration(ZCodeVisitor):
         return ctx.DYNAMIC().getText() if ctx.DYNAMIC() else ctx.VAR().getText()
     
     def visitArray(self, ctx: ZCodeParser.ArrayContext):
-#array: IDENTIFIER OPENSQBRACKET list_expr CLOSESQBRACKET;
-        return ArrayCell(Id(ctx.IDENTIFIER().getText()),self.visit(ctx.list_expr()))
+#array: (IDENTIFIER|expr_func_call) OPENSQBRACKET list_expr CLOSESQBRACKET;
+        return ArrayCell(Id(ctx.IDENTIFIER().getText()) if ctx.IDENTIFIER() else self.visit(ctx.expr_func_call()) ,self.visit(ctx.list_expr()))
     
     def visitArray_tail(self, ctx: ZCodeParser.Array_tailContext):
 #array_tail: OPENSQBRACKET list_expr CLOSESQBRACKET;
@@ -118,7 +118,7 @@ class ASTGeneration(ZCodeVisitor):
 #FUNC DECLS
     
     def visitFunc_decls(self, ctx: ZCodeParser.Func_declsContext):
-#func_decls: FUNC IDENTIFIER OPENPAREN list_param CLOSEPAREN func_sepa func_body;
+#func_decls: FUNC IDENTIFIER OPENPAREN list_param CLOSEPAREN func_sepa;
 #class FuncDecl(Decl):
     # name: Id
     # param: List[VarDecl]  # empty list if there is no parameter
@@ -236,36 +236,32 @@ class ASTGeneration(ZCodeVisitor):
         return Return(self.expr)
     
     def visitStmt_func_call(self, ctx: ZCodeParser.Stmt_func_callContext):
-#stmt_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN sfc_body;
+#stmt_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN;
 #class CallStmt(Stmt):
 #     # name: Id
 #     # args: List[Expr]  # empty list if there is no argument
 #     def __init__(self, name, args):
-        return CallStmt()
+        return CallStmt(Id(ctx.IDENTIFIER().getText()), self.visit(ctx.sfc_list_args()))
     
     def visitSfc_list_args(self, ctx: ZCodeParser.Sfc_list_argsContext):
 #sfc_list_args: expr sfc_list_args_tail | ;
-        return
+        return [self.visit(ctx.expr())] + self.visit(ctx.sfc_list_args_tail()) if ctx.expr() else []
     
     def visitSfc_list_args_tail(self, ctx: ZCodeParser.Sfc_list_args_tailContext):
 #sfc_list_args_tail: COMMA expr sfc_list_args_tail | ;
-        return
-    
-    def visitSfc_body(self, ctx: ZCodeParser.Sfc_bodyContext):
-#sfc_body: array_tail | ;
-        return
+        return [self.visit(ctx.expr())] + self.visit(ctx.sfc_list_args_tail()) if ctx.expr() else []
     
     def visitStmt_block(self, ctx: ZCodeParser.Stmt_blockContext):
 #stmt_block: BEGIN stmt_sepa_nonnull list_stmt END;
-        return
+        return Block(self.visit(ctx.list_stmt()))
     
     def visitStmt_sepa_nonnull(self, ctx: ZCodeParser.Stmt_sepa_nonnullContext):
 #stmt_sepa_nonnull: NEWLINE | NEWLINE stmt_sepa_nonnull;
-        return
+        return None
     
     def visitStmt_sepa_null(self, ctx: ZCodeParser.Stmt_sepa_nullContext):
 #stmt_sepa_null: NEWLINE stmt_sepa_null | ;
-        return
+        return None
 
 
 
@@ -273,44 +269,62 @@ class ASTGeneration(ZCodeVisitor):
 
     def visitExpr(self, ctx: ZCodeParser.ExprContext):
 #expr: expr_string_concat;
-        return
+        return self.visit(ctx.expr_string_concat())
     
     def visitExpr_string_concat(self, ctx: ZCodeParser.Expr_string_concatContext):
 #expr_string_concat: expr_compare CONCAT expr_compare | expr_compare;
-        return
+        return BinaryOp(ctx.CONCAT().getText(), self.visit(ctx.expr_compare()), self.visit(ctx.expr_compare())) if ctx.CONCAT() else self.visit(ctx.expr_compare())
     
     def visitExpr_compare(self, ctx: ZCodeParser.Expr_compareContext):
 # expr_compare: expr_cond_andor COMPARENUM expr_cond_andor
 #                 | expr_cond_andor COMPARESTR expr_cond_andor
 #                 | expr_cond_andor;
-        return
+        if ctx.COMPARENUM():
+            return BinaryOp(ctx.COMPARENUM().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.expr_cond_andor()))
+        if ctx.COMPARESTR():
+            return BinaryOp(ctx.COMPARESTR().getText(),self.visit(ctx.expr_cond_andor()),self.visit(ctx.expr_cond_andor()))
+        return self.visit(ctx.expr_cond_andor())
     
     def visitExpr_cond_andor(self, ctx: ZCodeParser.Expr_cond_andorContext):
 # expr_cond_andor : expr_cond_andor AND e_n_addsub
 #                 | expr_cond_andor OR e_n_addsub
 #                 | e_n_addsub;
-        return
+        if ctx.AND():
+            return BinaryOp(ctx.AND().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.e_n_addsub()))
+        if ctx.OR():
+            return BinaryOp(ctx.AND().getText(), self.visit(ctx.expr_cond_andor()), self.visit(ctx.e_n_addsub()))
+        return self.visit(ctx.e_n_addsub())
     
     def visitExpr_cond_not(self, ctx: ZCodeParser.Expr_cond_notContext):
 #expr_cond_not: NOT expr_cond_not | e_n_nega;
-        return
+        return UnaryOp(ctx.NOT().getText(), self.visit(ctx.expr_cond_not())) if ctx.NOT() else self.visit(ctx.e_n_nega())
     
     def visitE_n_addsub(self, ctx: ZCodeParser.E_n_addsubContext):
 # e_n_addsub      : e_n_addsub ADD e_n_muldivmod
 #                 | e_n_addsub SUB e_n_muldivmod
 #                 | e_n_muldivmod;
-        return
+        if ctx.ADD():
+            return BinaryOp(ctx.ADD().getText(), self.visit(ctx.e_n_addsub()), self.visit(ctx.e_n_muldivmod()))
+        if ctx.SUB():
+            return BinaryOp(ctx.SUB().getText(), self.visit(ctx.e_n_addsub()), self.visit(ctx.e_n_muldivmod()))
+        return self.visit(ctx.e_n_muldivmod())
     
     def visitE_n_muldivmod(self, ctx: ZCodeParser.E_n_muldivmodContext):
 # e_n_muldivmod   : e_n_muldivmod MUL expr_cond_not
 #                 | e_n_muldivmod DIV expr_cond_not
 #                 | e_n_muldivmod MOD expr_cond_not
 #                 | expr_cond_not;
-        return
+        if ctx.MUL():
+            return BinaryOp(ctx.MUL().getText(), self.visit(ctx.e_n_muldivmod()), self.visit(ctx.expr_cond_not()))
+        if ctx.SUB():
+            return BinaryOp(ctx.DIV().getText(), self.visit(ctx.e_n_muldivmod()), self.visit(ctx.expr_cond_not()))
+        if ctx.MOD():
+            return BinaryOp(ctx.MOD().getText(), self.visit(ctx.e_n_muldivmod()), self.visit(ctx.expr_cond_not()))
+        return self.visit(ctx.expr_cond_not())
     
     def visitE_n_nega(self, ctx: ZCodeParser.E_n_negaContext):
 #e_n_nega        : SUB e_n_nega | expr_other;
-        return
+        return UnaryOp(ctx.SUB().getText() ,self.visit(ctx.e_n_nega())) if ctx.SUB() else self.visit(ctx.expr_other())
     
     def visitExpr_other(self, ctx: ZCodeParser.Expr_otherContext):
 # expr_other  : OPENPAREN expr CLOSEPAREN
@@ -318,7 +332,21 @@ class ASTGeneration(ZCodeVisitor):
 #                 | NUMBER
 #                 | STRING
 #                 | boolval | array | array_tail | stmt_func_call;
-        return
+        if ctx.expr():
+            return self.visit(ctx.expr())
+        if ctx.IDENTIFIER():
+            return Id(ctx.IDENTIFIER().getText())
+        if ctx.NUMBER():
+            return NumberLiteral(float(ctx.NUMBER().getText()))
+        if ctx.STRING():
+            return StringLiteral(ctx.STRING().getText())
+        if ctx.boolval():
+            return self.visit(ctx.boolval())
+        if ctx.array():
+            return self.visit(ctx.array())
+        if ctx.array_tail():
+            return self.visit(ctx.array_tail())
+        return self.visit(ctx.stmt_func_call())
     
     def visitExpr_func_call(self, ctx: ZCodeParser.Expr_func_callContext):
 # expr_func_call: IDENTIFIER OPENPAREN sfc_list_args CLOSEPAREN sfc_body;
@@ -327,8 +355,8 @@ class ASTGeneration(ZCodeVisitor):
 #     # args: List[Expr]
 
 #     def __init__(self, name, args):
-        return
+        return CallExpr(Id(ctx.IDENTIFIER().getText()), self.visit(ctx.sfc_list_args()))
     
     def visitBoolval(self, ctx: ZCodeParser.BoolvalContext):
 #boolval: TRUE | FALSE;
-        return
+        return BooleanLiteral(bool(ctx.TRUE().getText() if ctx.TRUE() else ctx.FALSE().getText()))
