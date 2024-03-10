@@ -200,11 +200,11 @@ class ASTGeneration(ZCodeVisitor):
     def visitStmt_cond(self, ctx: ZCodeParser.Stmt_condContext):
 #stmt_cond: stmt_if stmt_elif* stmt_else?;
         stmtIf=self.visit(ctx.stmt_if())
-        self.ifExpr=stmtIf[0]
-        self.thenStmt=stmtIf[1]
-        self.elifStmt=[self.visit(x) for x in ctx.stmt_elif()]
-        self.elseStmt=self.visit(ctx.stmt_else()) if ctx.stmt_else() else None
-        return If(self.ifExpr, self.thenStmt, self.elifStmt, self.elseStmt)
+        ifExpr=stmtIf[0]
+        thenStmt=stmtIf[1]
+        elifStmt=[self.visit(x) for x in ctx.stmt_elif()]
+        elseStmt=self.visit(ctx.stmt_else()) if ctx.stmt_else() else None
+        return If(ifExpr, thenStmt, elifStmt, elseStmt)
     
     def visitStmt_if(self, ctx: ZCodeParser.Stmt_ifContext):
 #stmt_if: IF OPENPAREN expr CLOSEPAREN stmt_sepa_null stmt;
