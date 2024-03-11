@@ -5,6 +5,12 @@ from AST import *
 
 class ASTGenSuite(unittest.TestCase):
     
+    def test0(self):
+        input = """number a
+"""
+        expect = "Program([VarDecl(Id(a), NumberType, None, None)])"
+        self.assertTrue(TestAST.test(input, expect, 000))
+    
     def test1(self):
         input = """var kq <- 1 + (-1 / 2 % -3) * 1
 """
