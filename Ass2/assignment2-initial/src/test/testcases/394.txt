@@ -1,4 +1,4 @@
-func calculate(number a, number b) 
+func cal(number a, number b) 
 begin
     if (a > b) 
     begin
@@ -15,5 +15,5 @@ begin
 end
 func main()
 begin
-    number result <- calculate(10, 20)
+    number kq <- cal(10, 20)
 end

@@ -1,10 +1,10 @@
 func main()
 begin
+    for i until 10 by 1 
+begin
+    if (i = 5) 
     begin
-    begin
-        a <- 3
-        call()
-        return
+        continue
     end
-    end
+end
 end

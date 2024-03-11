@@ -4,9 +4,9 @@ begin
         var x <- 2
     end
     else begin
-        string arr[1,2,3] <- main[foo()]
+        string arr[1,2,3] <- main[beo()]
         return
     end
-    for i until i...(j <= arr[foo<1]) by 1
+    for i until i...(j <= arr[beo<1]) by 1
         print(i)
 end 

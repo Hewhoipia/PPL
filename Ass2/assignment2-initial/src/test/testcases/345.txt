@@ -1,8 +1,8 @@
 func main(number abc[1,2]) begin
   break  
 end
-func chinbay()
+func kenchana()
 begin
-if (main[1] == "95")
+if (main[1] == "906090")
 return
 end

@@ -1,4 +1,8 @@
+func add(number a, number b) 
+begin
+    return a + b
+end
 func main()
 begin
-    main([1,2,3,4])
-end 
+    number kq <- add(10 + 20, 30 * 40)
+end

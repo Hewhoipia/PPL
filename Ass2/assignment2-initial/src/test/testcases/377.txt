@@ -1,4 +1,4 @@
-func getNumber() 
+func dieubong() 
 begin
     return 10 + 20
 end

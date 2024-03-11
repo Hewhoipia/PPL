@@ -1,10 +1,9 @@
+func inlist(number arr[3]) 
+begin
+    ## print array
+end
 func main()
 begin
-    if (main([1,2,3,4])) begin
-        var x <- 2
-    end
-    else begin
-        string arr[1,2,3] <- main[foo()]
-        return
-    end
-end 
+    number arr[3] <- [1 + 2, 3 * 4, 5 / 6]
+    inlist(arr)
+end

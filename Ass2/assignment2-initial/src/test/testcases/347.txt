@@ -1,4 +1,9 @@
-func final()
-begin
-    if (final() < 2) return final()[1] != not 2
-end
+func add(number a, number b) 
+    begin
+        return a + b
+    end
+func cpxF(number a, number b) 
+    begin
+        number arr[3] <- [1, 2, 3]
+        number kq <- add(arr[0], arr[1]) * arr[2]
+    end

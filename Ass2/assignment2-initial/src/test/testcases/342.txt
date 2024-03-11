@@ -1,7 +1,7 @@
 func main()
 begin
-    string str <- "HelloWorld"..."!"
+    string str <- "t dep trai"..."la do"
     if (not len(str) > 10)
-    print("long string")
-    else print("short string")
+    print("ong co noi t")
+    else print("de lai")
 end 

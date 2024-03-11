@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(main), [], Block([For(Id(i), BinaryOp(>, Id(i), CallExpr(Id(Q), [])), BinaryOp(-, CallExpr(Id(Q), []), Id(i)), CallStmt(Id(simple), []))]))])
+Program([FuncDecl(Id(main), [], Block([For(Id(i), BinaryOp(>, Id(i), CallExpr(Id(H), [])), BinaryOp(-, CallExpr(Id(H), []), Id(i)), CallStmt(Id(simple), []))]))])

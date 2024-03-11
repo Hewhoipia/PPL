@@ -13,16 +13,16 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitDecls_list(self, ctx: ZCodeParser.Decls_listContext):
 #decls_list: decls NEWLINE decls_list | ;
-        return [self.visit(ctx.decls())] + self.visit(ctx.decls_list()) if ctx.decls() else []
+        return self.visit(ctx.decls()) + self.visit(ctx.decls_list()) if ctx.decls() else []
     
     def visitDecls(self, ctx: ZCodeParser.DeclsContext):
 #decls: vari_decls | func_decls | ;
         if ctx.vari_decls():
-            return self.visit(ctx.vari_decls())
+            return [self.visit(ctx.vari_decls())]
         elif ctx.func_decls():
-            return self.visit(ctx.func_decls())
+            return [self.visit(ctx.func_decls())]
         else:
-            return None
+            return []
 
 
 
@@ -36,41 +36,41 @@ class ASTGeneration(ZCodeVisitor):
 #     # eleType: Type
 
 #     def __init__(self, size, eleType):
-        self.name=None
-        self.varType=None
-        self.modifier=None
-        self.varInit=None
+        name=None
+        varType=None
+        modifier=None
+        varInit=None
         if (ctx.vari_decls_impli()):
-            self.name=Id(ctx.IDENTIFIER().getText())
-            self.varType=None
-            self.modifier=self.visit(ctx.vari_decls_impli())
-            self.varInit=self.visit(ctx.expr())
+            name=Id(ctx.IDENTIFIER().getText())
+            varType=None
+            modifier=self.visit(ctx.vari_decls_impli())
+            varInit=self.visit(ctx.expr())
         elif (ctx.DYNAMIC()):
-            self.name=Id(ctx.IDENTIFIER().getText())
-            self.varType=None
-            self.modifier=ctx.DYNAMIC().getText()
-            self.varInit=None
+            name=Id(ctx.IDENTIFIER().getText())
+            varType=None
+            modifier=ctx.DYNAMIC().getText()
+            varInit=None
         elif(ctx.ASSIGN()):
             vari=self.visit(ctx.vari_decls_id())
             if (isinstance(vari,Id)):
-                self.name=vari
-                self.varType=self.visit(ctx.vari_decls_type())
+                name=vari
+                varType=self.visit(ctx.vari_decls_type())
             else:
-                self.name=vari[0]
-                self.varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
-            self.modifier=None
-            self.varInit=self.visit(ctx.expr())
+                name=vari[0]
+                varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
+            modifier=None
+            varInit=self.visit(ctx.expr())
         else:
             vari=self.visit(ctx.vari_decls_id())
             if (isinstance(vari,Id)):
-                self.name=vari
-                self.varType=self.visit(ctx.vari_decls_type())
+                name=vari
+                varType=self.visit(ctx.vari_decls_type())
             else:
-                self.name=vari[0]
-                self.varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
-            self.modifier=None
-            self.varInit=None
-        return VarDecl(self.name, self.varType, self.modifier, self.varInit)
+                name=vari[0]
+                varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
+            modifier=None
+            varInit=None
+        return VarDecl(name, varType, modifier, varInit)
     
     def visitVari_decls_type(self, ctx: ZCodeParser.Vari_decls_typeContext):
 #vari_decls_type: KWNUMBER | KWBOOL | KWSTRING;
@@ -136,18 +136,18 @@ class ASTGeneration(ZCodeVisitor):
     
     def visitParams(self, ctx: ZCodeParser.ParamsContext):
 #params: vari_decls_type vari_decls_id;
-        self.name=None
-        self.varType=None
-        self.modifier=None
-        self.varInit=None
+        name=None
+        varType=None
+        modifier=None
+        varInit=None
         vari=self.visit(ctx.vari_decls_id())
         if (isinstance(vari,Id)):
-            self.name=vari
-            self.varType=self.visit(ctx.vari_decls_type())
+            name=vari
+            varType=self.visit(ctx.vari_decls_type())
         else:
-            self.name=vari[0]
-            self.varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
-        return VarDecl(self.name, self.varType, self.modifier, self.varInit)
+            name=vari[0]
+            varType=ArrayType(vari[1],self.visit(ctx.vari_decls_type()))
+        return VarDecl(name, varType, modifier, varInit)
     
     def visitFunc_sepaContext(self, ctx: ZCodeParser.Func_sepaContext):
 #func_sepa: NEWLINE func_sepa | ;

@@ -1,17 +1,17 @@
 func main()
 begin
-    var a <- "lmao"
+    var a <- "simp"
     if (a <= 3.14 and not (a > 0)) begin
-        print("hehe")
-        if (a = a and QuanDepTrai()) print("true")
+        print("hell")
+        if (a = a and APondabeat()) print("true")
         elif (true = true)
             print("true")
-        else QuanDepTrai()
+        else APondabeat()
         
     end
     elif (a = 1) 
-        print("haha")
-    elif (a = 2) print("hoho")
+        print("luv")
+    elif (a = 2) print("diu")
     else 
-        print("huhu")
+        print("somuch")
 end

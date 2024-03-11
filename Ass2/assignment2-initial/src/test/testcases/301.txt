@@ -1,6 +1,6 @@
-number a
-bool b
-string c
-number a1[1, 2]
-bool _[0]
-string s[1, 2]
+number x
+bool y
+string z[3, 4]
+number arr[5, 6]
+bool flag[1]
+string names[7, 8]

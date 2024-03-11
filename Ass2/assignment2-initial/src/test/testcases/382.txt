@@ -1,5 +1,5 @@
-func getNumber() 
+func dieubong() 
 begin
     number arr[3] <- [1, 2, 3]
-    number first <- arr[0] + 10
+    number ngta <- arr[0] + 10
 end

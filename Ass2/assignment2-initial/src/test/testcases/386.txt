@@ -1,8 +1,8 @@
-func getNumber() 
+func dieubong() 
 begin
     return 10
 end
 func main()
 begin
-    number arr[3] <- [getNumber(), getNumber(), getNumber()]
+    number arr[3] <- [dieubong(), dieubong(), dieubong()]
 end

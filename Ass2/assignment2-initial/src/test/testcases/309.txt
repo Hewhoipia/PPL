@@ -1,4 +1,27 @@
-func main()
+func add(number a, number b) 
 begin
-    a[2] <- a[0]
+    return a + b
 end
+func sub(number a, number b) 
+begin
+    return a - b
+end
+func mul(number a, number b) 
+begin
+    return a * b
+end
+func div(number a, number b) 
+begin
+    if (b != 0) 
+    begin
+        return a / b
+    end
+    else 
+    begin
+        return 0
+    end
+end
+number x <- add(10, 20)
+number y <- sub(30, 40)
+number z <- mul(x, y)
+number rel <- div(z, x)

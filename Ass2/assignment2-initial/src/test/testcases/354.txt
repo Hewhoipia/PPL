@@ -1,15 +1,15 @@
-func random(number a)
+func conmobanggia(number a)
 
 begin
     if (a = 0) return 1 + a /3
-    return random(a-1)
+    return conmobanggia(a-1)
 end
 
-number a <- 16 / random(a)
+number a <- 16 / conmobanggia(a)
 
 func main()
 begin
-    for i until random(i) != "a"...a by random(a)
+    for i until conmobanggia(i) != "a"...a by conmobanggia(a)
     begin
         writeString(i)
     end

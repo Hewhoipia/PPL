@@ -2,6 +2,6 @@ func main()
 begin
     a <- 1
     b <- true
-    c <- "bruh"
+    c <- "ccc"
     d <- [1, 2, 3]
 end

@@ -1,8 +1,8 @@
 func main()
 begin
-    number a <- (1 + 2 - 3 / 4 % 5) <= not ((-"bruh" * ((2)...(3.2))) != (foo() == bar()))
+    number a <- (1 + 2 - 3 / 4 % 5) <= not ((-"bangkieu" * ((2)...(3.2))) != (beo() == unu()))
     number b[1,2]
-    a <- b[foo((1 + 2.2)... "bar"), (a + b) <= ((c / d) != 2)]
-    a <- foo()[1, 2, 3]
+    a <- b[beo((1 + 2.2)... "unu"), (a + b) <= ((c / d) != 2)]
+    a <- beo()[1, 2, 3]
 end
         

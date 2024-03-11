@@ -1,4 +1,4 @@
 func main()
 begin
-    for i until i > Q() by Q() - i simple()
+    for i until i > H() by H() - i simple()
 end

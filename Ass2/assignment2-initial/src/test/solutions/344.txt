@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(main), [], Block([If((Id(failed), If((Id(chained), CallStmt(Id(print), [StringLit(nuh uh)])), [], CallStmt(Id(print), [StringLit()]))), [], AssignStmt(Id(failed), UnaryOp(not, BooleanLit(True))))]))])
+Program([FuncDecl(Id(main), [], Block([If((Id(ngu), If((Id(simp), CallStmt(Id(print), [StringLit(dai gai)])), [], CallStmt(Id(print), [StringLit(hao han)]))), [], AssignStmt(Id(ngu), UnaryOp(not, BooleanLit(True))))]))])

@@ -5,7 +5,7 @@ begin
     number z <- x + y
     number arr[3] <- [1, 2, 3]
     number sum <- arr[0] + arr[1] + arr[2]
-    number result <- add(x, y)
+    number kq <- add(x, y)
 end
 func add(number a, number b) 
     begin

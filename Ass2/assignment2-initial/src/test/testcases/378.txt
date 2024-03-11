@@ -1,4 +1,4 @@
-func getNumber() 
+func dieubong() 
 begin
     number a <- 10
     number b <- 20

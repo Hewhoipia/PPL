@@ -1,8 +1,8 @@
 func main()
 begin
-    if (Qdeptrai() == true)
+    if (hth() == true)
     begin
-        if (above() == true) return true
+        if (gmon() == true) return true
         elif (c) begin
             break
         end

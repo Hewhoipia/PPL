@@ -1,6 +1,6 @@
-number a <- 3
-bool b <- true
-string c <- "test string"
-number a1[1, 2] <- [3, 4]
-bool _[0] <- funcall()
-string s[1, 2] <- funcall(1, true, [1, 2], [funcall(), 3])
+number x <- 5
+bool y <- false
+string z <- "modified string"
+number nums[2, 3] <- [7, 9]
+bool flags[0] <- customFunc()
+string words[4, 5] <- customFunc(2, false, [2, 4], [customFunc(), 5])

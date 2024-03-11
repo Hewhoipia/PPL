@@ -1,10 +1,10 @@
 func main()
 begin
-    for i until i > Q() by Q() - i begin
+    for i until i > H() by H() - i begin
         j <- i
         if (j > 10) break
         else 
         continue
-        wee()
+        ko()
     end
 end

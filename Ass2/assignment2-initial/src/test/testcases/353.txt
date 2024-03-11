@@ -1,12 +1,12 @@
-func random(number a)
+func conmobanggia(number a)
 
 begin
     if (a = 0) return 1 + a /3
-    return random(a-1)
+    return conmobanggia(a-1)
 end
 func main()
 begin
-    if (random()) begin
+    if (conmobanggia()) begin
         writeString("What's good" + 1.23e-12)
     end
 end

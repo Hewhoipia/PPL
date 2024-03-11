@@ -1,8 +1,4 @@
 func main()
 begin
-    number sum <- 0
-    for i until 10 by 1 
-    begin
-        sum <- sum + i
-    end
+    a[2] <- [a[0 + 1, b], funcall("1"...(not 12))]
 end

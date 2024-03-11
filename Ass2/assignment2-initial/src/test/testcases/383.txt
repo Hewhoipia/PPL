@@ -1,4 +1,4 @@
-func getNumber() 
+func dieubong() 
 begin
     number arr[3] <- [1, 2, 3]
     arr[0] <- 10 + 20

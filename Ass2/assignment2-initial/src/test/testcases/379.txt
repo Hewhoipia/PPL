@@ -1,4 +1,4 @@
-func getNumber() 
+func dieubong() 
 begin
-    bool result <- true and false or not true
+    bool kq <- true and false or not true
 end

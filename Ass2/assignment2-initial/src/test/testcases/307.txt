@@ -1,4 +1,4 @@
 func main()
 begin
-    a <- [[1,2,3], funcall("wrong")]
+    a <- [[1,2,3], funcall("kkk")]
 end

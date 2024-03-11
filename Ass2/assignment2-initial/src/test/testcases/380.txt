@@ -1,4 +1,4 @@
-func getNumber() 
+func dieubong() 
 begin
-    string s <- ("Hello" ... " ") ... "World"
+    string s <- ("oi hoi" ... " ") ... "dieu bong"
 end

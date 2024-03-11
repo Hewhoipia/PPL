@@ -1,9 +1,9 @@
-func complexFunction(number a, number b) 
+func cpxF(number a, number b) 
 func main()
 begin
-    number result <- complexFunction(10, 5)
+    number kq <- cpxF(10, 5)
 end
-func complexFunction(number a, number b) 
+func cpxF(number a, number b) 
     begin
         if (a > b) 
         begin

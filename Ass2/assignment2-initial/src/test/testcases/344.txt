@@ -1,5 +1,5 @@
 func main() begin
-    if (failed) if (chained) print("nuh uh")
-    else print("")
-    else failed <- not true
+    if (ngu) if (simp) print("dai gai")
+    else print("hao han")
+    else ngu <- not true
 end 

@@ -1,11 +1,11 @@
 func main()
 begin
-    var a <- "lmao"
-    for i until not (lmao + 4 > foo(i) / bar(i)) by print("lmao")...print("lmao2") 
+    var a <- "simp"
+    for i until not (simp + 4 > beo(i) / unu(i)) by print("simp")...print("simp2") 
     begin
-        func1()
-        func2(print("hj"))
-        func3(lmao, 1 + not true, func1(), func4()[1, foo()], array[a], 2 < 10)
+        nyc()
+        nym(print("hj"))
+        nymcuanym(simp, 1 + not true, nyc(), buontinh()[1, beo()], array[a], 2 < 10)
     end
     return
 end

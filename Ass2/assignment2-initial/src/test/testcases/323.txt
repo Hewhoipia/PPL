@@ -1,12 +1,12 @@
 func main()
 begin
-    if (Qdeptrai() == true)
-        if (above() == true) return true
+    if (hth() == true)
+        if (gmon() == true) return true
         elif (c) begin
             break
         end
     elif (d) return false
     else break
-    elif (e) return main(quan)
+    elif (e) return main(kts)
     else continue
 end

@@ -2,7 +2,7 @@ func add(number a, number b)
 begin
     return a + b
 end
-func getNumber() 
+func dieubong() 
 begin
     return add(10, 20)
 end

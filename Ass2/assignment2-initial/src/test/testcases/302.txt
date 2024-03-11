@@ -1,6 +1,6 @@
-number a <- 3
-bool b <- true
-string c <- "test string"
-number a1[1, 2] <- [3, 4]
-bool _[0] <- funcall()
-string s[1, 2] <- a1
+number value <- 7
+bool status <- false
+string text <- "modified string"
+number numbers[2, 3] <- [6, 8]
+bool flags[1] <- anotherFunc()
+string words[4, 5] <- numbers

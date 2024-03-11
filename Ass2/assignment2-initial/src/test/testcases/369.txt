@@ -1,4 +1,4 @@
 func main()
 begin
-    number result <- -10 + not true
+    number kq <- -10 + not true
 end
