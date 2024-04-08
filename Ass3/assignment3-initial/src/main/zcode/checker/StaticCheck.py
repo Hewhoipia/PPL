@@ -6,9 +6,14 @@ from functools import reduce
 
 
 class StaticChecker(BaseVisitor, Utils):
-    def __init__(self):
-        pass
+    def __init__(self,ast):
+        self.root=ast
+
+    def check(self):
+        return self.visit(self.root,None)
+    
     def visitProgram(self, ctx:Program, o:object):
+        raise NoEntryPoint()
         o=[[]]
         for x in ctx.decl:
             self.visit(x,o)
