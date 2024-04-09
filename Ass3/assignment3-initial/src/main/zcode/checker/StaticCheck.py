@@ -10,10 +10,9 @@ class StaticChecker(BaseVisitor, Utils):
         self.root=ast
 
     def check(self):
-        return self.visit(self.root,None)
+        return self.visit(self.root, None)
     
     def visitProgram(self, ctx:Program, o:object):
-        raise NoEntryPoint()
         o=[[]]
         for x in ctx.decl:
             self.visit(x,o)
