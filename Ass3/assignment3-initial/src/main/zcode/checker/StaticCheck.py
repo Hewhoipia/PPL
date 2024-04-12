@@ -4,6 +4,25 @@ from Utils import Utils
 from StaticError import *
 from functools import reduce
 
+class DeclKind:
+    def __init__(self, kind:str, param:list=None):
+        # kind must be 'var', 'param', 'funcDecl' or 'funcDefi'
+        self.kind=kind
+        self.param=param
+        
+class Symbol:
+    def __init__(self, kind:DeclKind, name:str, typ:Type=None):
+        self.kind=kind
+        self.name=name
+        self.typ=typ
+
+class Utils:
+    def infer(o, name, typ):
+        for scope in o:
+            for symbol in scope:
+                if symbol.name == name:
+                    symbol.typ=typ
+                    return typ
 
 class StaticChecker(BaseVisitor, Utils):
     def __init__(self,ast):
@@ -16,12 +35,31 @@ class StaticChecker(BaseVisitor, Utils):
         o=[[]]
         for x in ctx.decl:
             self.visit(x,o)
+        for symbol in o[0]:
+            if symbol.name == 'main': return
+        raise NoEntryPoint()
 
     def visitVarDecl(self, ctx:VarDecl, o:object):
-        pass
+        typDecl=None
+        typFromVal=None
+        if ctx.varType is not None:
+            typ = self.visit(ctx.varType)
+        if ctx.varInit is not None:
+            typ = self.visit(ctx.varInit)
+        for symbol in o[0]:
+            if ctx.name.name == symbol.name:
+                raise Redeclared(Variable, ctx.name.name)
+        o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
 
     def visitFuncDecl(self, ctx:FuncDecl, o:object):
-        pass
+        param=[]
+        for x in ctx.param:
+            typ=self.visit(x.varType)
+            for symbol in param:
+                if x.name.name == symbol.name:
+                    raise Redeclared(Parameter, x.name.name)
+            param.append(Symbol(DeclKind('param'), x.name.name, typ))
+        o[0].append(Symbol(DeclKind('funcDecl' if ctx.body is None else 'funcDefi', param), ctx.name.name))
 
     def visitNumberType(self, ctx:NumberType, o:object):
         pass
