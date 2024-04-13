@@ -17,12 +17,13 @@ class Symbol:
         self.typ=typ
 
 class Utils:
-    def infer(o, name, typ):
+    def Infer(o, name:object, typ:Type):
         for scope in o:
             for symbol in scope:
                 if symbol.name == name:
                     symbol.typ=typ
                     return typ
+        
 
 class StaticChecker(BaseVisitor, Utils):
     def __init__(self,ast):
@@ -40,16 +41,22 @@ class StaticChecker(BaseVisitor, Utils):
         raise NoEntryPoint()
 
     def visitVarDecl(self, ctx:VarDecl, o:object):
-        typDecl=None
-        typFromVal=None
-        if ctx.varType is not None:
-            typ = self.visit(ctx.varType)
-        if ctx.varInit is not None:
-            typ = self.visit(ctx.varInit)
-        for symbol in o[0]:
-            if ctx.name.name == symbol.name:
-                raise Redeclared(Variable, ctx.name.name)
-        o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
+        if ctx.varType is not None or ctx.modifier is not None:
+            typ=None
+            if ctx.varType is not None and ctx.varInit is not None:
+                typDecl=self.visit(ctx.varType)
+                typInit=self.visit(ctx.varInit)
+                if 
+            elif ctx.varType is not None:
+                typ = self.visit(ctx.varType)
+            elif ctx.varInit is not None:
+                typ = self.visit(ctx.varInit)
+            for symbol in o[0]:
+                if ctx.name.name == symbol.name:
+                    raise Redeclared(Variable, ctx.name.name)
+            o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
+        else:
+            pass
 
     def visitFuncDecl(self, ctx:FuncDecl, o:object):
         param=[]
