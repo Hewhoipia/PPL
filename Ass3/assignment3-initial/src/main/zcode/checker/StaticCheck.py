@@ -6,7 +6,7 @@ from functools import reduce
 
 class DeclKind:
     def __init__(self, kind:str, param:list=None):
-        # kind must be 'var', 'param', 'funcDecl' or 'funcDefi'
+        # kind must be 'var', 'funcDecl' or 'funcDefi'
         self.kind=kind
         self.param=param
         
@@ -17,13 +17,8 @@ class Symbol:
         self.typ=typ
 
 class Utils:
-    def Infer(o, name:object, typ:Type):
-        for scope in o:
-            for symbol in scope:
-                if symbol.name == name:
-                    symbol.typ=typ
-                    return typ
-        
+    def monoInfer(o, obj:Symbol, typ:Type):
+        pass
 
 class StaticChecker(BaseVisitor, Utils):
     def __init__(self,ast):
@@ -41,44 +36,56 @@ class StaticChecker(BaseVisitor, Utils):
         raise NoEntryPoint()
 
     def visitVarDecl(self, ctx:VarDecl, o:object):
-        if ctx.varType is not None or ctx.modifier is not None:
-            typ=None
-            if ctx.varType is not None and ctx.varInit is not None:
-                typDecl=self.visit(ctx.varType)
-                typInit=self.visit(ctx.varInit)
-                if 
-            elif ctx.varType is not None:
-                typ = self.visit(ctx.varType)
-            elif ctx.varInit is not None:
-                typ = self.visit(ctx.varInit)
-            for symbol in o[0]:
-                if ctx.name.name == symbol.name:
-                    raise Redeclared(Variable, ctx.name.name)
-            o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
-        else:
-            pass
-
+        typ=None
+        if ctx.varType is not None and ctx.varInit is not None:
+            typDecl=ctx.varType
+            typInit=self.visit(ctx.varInit,o)
+            if isinstance(typInit, Symbol):
+                if typInit.typ is None: typInit.typ = typDecl
+                if isinstance(typInit.typ, ArrayType):
+                    if type(typInit.typ.eleType) != type(typDecl): raise TypeMismatchInStatement(ctx)
+                else:
+                    if type(typInit.typ) != type(typDecl): raise TypeMismatchInStatement(ctx)
+            else:
+                if type(typDecl) != type(typInit): raise TypeMismatchInStatement(ctx)
+            typ=typDecl
+        elif ctx.varType is not None:
+            typ = ctx.varType
+        elif ctx.varInit is not None:
+            typInit = self.visit(ctx.varInit,o)
+            if isinstance(typInit, Symbol):
+                if typInit.typ is None: raise TypeCannotBeInferred(ctx)
+                typ=typInit.typ
+            else: typ=typInit
+        for symbol in o[0]:
+            if ctx.name.name == symbol.name:
+                raise Redeclared(Variable, ctx.name.name)
+        o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
+            
     def visitFuncDecl(self, ctx:FuncDecl, o:object):
-        param=[]
-        for x in ctx.param:
-            typ=self.visit(x.varType)
-            for symbol in param:
-                if x.name.name == symbol.name:
-                    raise Redeclared(Parameter, x.name.name)
-            param.append(Symbol(DeclKind('param'), x.name.name, typ))
-        o[0].append(Symbol(DeclKind('funcDecl' if ctx.body is None else 'funcDefi', param), ctx.name.name))
-
-    def visitNumberType(self, ctx:NumberType, o:object):
-        pass
-
-    def visitBoolType(self, ctx:BoolType, o:object):
-        pass
-
-    def visitStringType(self, ctx:StringType, o:object):
-        pass
-
-    def visitArrayType(self, ctx:ArrayType, o:object):
-        pass
+        param=[[]]
+        for vardecl in ctx.param:
+            typ=None
+            if vardecl.varInit is not None:
+                typDecl=vardecl.varType
+                typInit=self.visit(vardecl.varInit,param+o)
+                if isinstance(typInit, Symbol):
+                    if typInit.typ is None: typInit.typ = typDecl
+                    if isinstance(typInit.typ, ArrayType):
+                        if type(typInit.typ.eleType) != type(typDecl): raise TypeMismatchInStatement(vardecl)
+                    else:
+                        if type(typInit.typ) != type(typDecl): raise TypeMismatchInStatement(vardecl)
+                else:
+                    if type(typDecl) != type(typInit): raise TypeMismatchInStatement(vardecl)
+                typ=typDecl
+            else:
+                typ=vardecl.varType
+            for symbol in param[0]:
+                if vardecl.name.name == symbol.name:
+                    raise Redeclared(Parameter, vardecl.name.name)
+            param[0].append(Symbol(DeclKind('param'), vardecl.name.name, typ))
+        o[0].append(Symbol(DeclKind('funcDecl' if ctx.body is None else 'funcDefi', param[0]), ctx.name.name))
+        if ctx.body is not None: self.visit(ctx.body,param+o)
 
     def visitBinaryOp(self, ctx:BinaryOp, o:object):
         pass
@@ -120,13 +127,13 @@ class StaticChecker(BaseVisitor, Utils):
         pass
 
     def visitNumberLiteral(self, ctx:NumberLiteral, o:object):
-        pass
+        return NumberType()
 
     def visitBooleanLiteral(self, ctx:BooleanLiteral, o:object):
-        pass
+        return BoolType()
 
     def visitStringLiteral(self, ctx:StringLiteral, o:object):
-        pass
+        return BoolType()
 
     def visitArrayLiteral(self, ctx:ArrayLiteral, o:object):
-        pass
+        self.visit(ctx.value)
