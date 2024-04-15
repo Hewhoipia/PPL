@@ -88,10 +88,32 @@ class StaticChecker(BaseVisitor, Utils):
         if ctx.body is not None: self.visit(ctx.body,param+o)
 
     def visitBinaryOp(self, ctx:BinaryOp, o:object):
-        pass
+        if ctx.op in ['+', '-', '*', '/', '%']: # input Number
+            left=self.visit(ctx.left)
+            right=self.visit(ctx.right)
+            if isinstance(left, Symbol):
+                if left.typ is not None:
+                    if not isinstance(left.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                elif left.typ is None: left.typ = NumberType()
+            if isinstance(right, Symbol):
+                if right.typ is not None:
+                    if not isinstance(right.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                elif right.typ is None: right.typ = NumberType()
+            return NumberType()
+        if ctx.op in ['=', '!=', '<', '>', '<=', '>=']: # input Number
+            return BoolType()
+        if ctx.op in ['and', 'or']: # input Bool
+            return BoolType()
+        if ctx.op == '...': # input String
+            return StringType()
+        if ctx.op == '==': # input String
+            return BoolType()
 
     def visitUnaryOp(self, ctx:UnaryOp, o:object):
-        pass
+        if ctx.op == '-': # input Number
+            return NumberType()
+        if ctx.op == 'not': # input Bool
+            return BoolType()           
 
     def visitCallExpr(self, ctx:CallExpr, o:object):
         pass
