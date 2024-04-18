@@ -12,7 +12,7 @@ class DeclKind:
         
 class Symbol:
     def __init__(self, kind:DeclKind, name:str, typ:Type=None):
-        self.kind=kind
+        self.declKind=kind
         self.name=name
         self.typ=typ
 
@@ -36,18 +36,20 @@ class StaticChecker(BaseVisitor, Utils):
         raise NoEntryPoint()
 
     def visitVarDecl(self, ctx:VarDecl, o:object):
+        for symbol in o[0]:
+            if ctx.name.name == symbol.name and symbol.declKind.kind == 'var':
+                raise Redeclared(Variable(), ctx.name.name)
         typ=None
         if ctx.varType is not None and ctx.varInit is not None:
             typDecl=ctx.varType
             typInit=self.visit(ctx.varInit,o)
             if isinstance(typInit, Symbol):
                 if typInit.typ is None: typInit.typ = typDecl
-                if isinstance(typInit.typ, ArrayType):
-                    if type(typInit.typ.eleType) != type(typDecl): raise TypeMismatchInStatement(ctx)
-                else:
-                    if type(typInit.typ) != type(typDecl): raise TypeMismatchInStatement(ctx)
-            else:
-                if type(typDecl) != type(typInit): raise TypeMismatchInStatement(ctx)
+                typInit=typInit.typ
+            if type(typDecl) != type(typInit): raise TypeMismatchInStatement(ctx)
+            if isinstance(typDecl, ArrayType):
+                if type(typDecl.eleType) != type(typInit.eleType): raise TypeMismatchInStatement(ctx)
+                #if typDecl.size != typInit.size: raise TypeMismatchInStatement(ctx)
             typ=typDecl
         elif ctx.varType is not None:
             typ = ctx.varType
@@ -55,14 +57,15 @@ class StaticChecker(BaseVisitor, Utils):
             typInit = self.visit(ctx.varInit,o)
             if isinstance(typInit, Symbol):
                 if typInit.typ is None: raise TypeCannotBeInferred(ctx)
-                typ=typInit.typ
-            else: typ=typInit
-        for symbol in o[0]:
-            if ctx.name.name == symbol.name:
-                raise Redeclared(Variable, ctx.name.name)
+                typInit=typInit.typ
+            typ=typInit
         o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
             
     def visitFuncDecl(self, ctx:FuncDecl, o:object):
+        for symbol in o[0]:
+            if ctx.name.name == symbol.name and symbol.declKind.kind != 'var':
+                if symbol.declKind.kind == 'funcDefi' or (symbol.declKind.kind == 'funcDecl' and ctx.body is None):
+                    raise Redeclared(Variable(), ctx.name.name)
         param=[[]]
         for vardecl in ctx.param:
             typ=None
@@ -71,61 +74,171 @@ class StaticChecker(BaseVisitor, Utils):
                 typInit=self.visit(vardecl.varInit,param+o)
                 if isinstance(typInit, Symbol):
                     if typInit.typ is None: typInit.typ = typDecl
-                    if isinstance(typInit.typ, ArrayType):
-                        if type(typInit.typ.eleType) != type(typDecl): raise TypeMismatchInStatement(vardecl)
-                    else:
-                        if type(typInit.typ) != type(typDecl): raise TypeMismatchInStatement(vardecl)
-                else:
-                    if type(typDecl) != type(typInit): raise TypeMismatchInStatement(vardecl)
+                    typInit=typInit.typ
+                if type(typDecl) != type(typInit): raise TypeMismatchInStatement(vardecl)
+                if isinstance(typDecl, ArrayType):
+                    if type(typDecl.eleType) != type(typInit.eleType): raise TypeMismatchInStatement(vardecl)
+                    #if typDecl.size!= typInit.size: raise TypeMismatchInStatement(vardecl)
                 typ=typDecl
             else:
                 typ=vardecl.varType
             for symbol in param[0]:
                 if vardecl.name.name == symbol.name:
-                    raise Redeclared(Parameter, vardecl.name.name)
+                    raise Redeclared(Parameter(), vardecl.name.name)
             param[0].append(Symbol(DeclKind('param'), vardecl.name.name, typ))
         o[0].append(Symbol(DeclKind('funcDecl' if ctx.body is None else 'funcDefi', param[0]), ctx.name.name))
-        if ctx.body is not None: self.visit(ctx.body,param+o)
+        if ctx.body is not None: self.visit(ctx.body,[[]]+param+o)
 
     def visitBinaryOp(self, ctx:BinaryOp, o:object):
         if ctx.op in ['+', '-', '*', '/', '%']: # input Number
-            left=self.visit(ctx.left)
-            right=self.visit(ctx.right)
+            left=self.visit(ctx.left, o)
+            right=self.visit(ctx.right, o)
             if isinstance(left, Symbol):
                 if left.typ is not None:
                     if not isinstance(left.typ, NumberType()): raise TypeMismatchInExpression(ctx)
                 elif left.typ is None: left.typ = NumberType()
+                left=left.typ
             if isinstance(right, Symbol):
                 if right.typ is not None:
                     if not isinstance(right.typ, NumberType()): raise TypeMismatchInExpression(ctx)
                 elif right.typ is None: right.typ = NumberType()
+                right=right.typ
+            if not isinstance(left, NumberType) or not isinstance(right, NumberType):
+                raise TypeMismatchInExpression(ctx)
             return NumberType()
         if ctx.op in ['=', '!=', '<', '>', '<=', '>=']: # input Number
+            left=self.visit(ctx.left, o)
+            right=self.visit(ctx.right, o)
+            if isinstance(left, Symbol):
+                if left.typ is not None:
+                    if not isinstance(left.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                elif left.typ is None: left.typ = NumberType()
+                left=left.typ
+            if isinstance(right, Symbol):
+                if right.typ is not None:
+                    if not isinstance(right.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                elif right.typ is None: right.typ = NumberType()
+                right=right.typ
+            if not isinstance(left, NumberType) or not isinstance(right, NumberType):
+                raise TypeMismatchInExpression(ctx)
             return BoolType()
         if ctx.op in ['and', 'or']: # input Bool
+            left=self.visit(ctx.left, o)
+            right=self.visit(ctx.right, o)
+            if isinstance(left, Symbol):
+                if left.typ is not None:
+                    if not isinstance(left.typ, BoolType()): raise TypeMismatchInExpression(ctx)
+                elif left.typ is None: left.typ = BoolType()
+                left=left.typ
+            if isinstance(right, Symbol):
+                if right.typ is not None:
+                    if not isinstance(right.typ, BoolType()): raise TypeMismatchInExpression(ctx)
+                elif right.typ is None: right.typ = BoolType()
+                right=right.typ
+            if not isinstance(left, BoolType) or not isinstance(right, BoolType):
+                raise TypeMismatchInExpression(ctx)
             return BoolType()
         if ctx.op == '...': # input String
+            left=self.visit(ctx.left, o)
+            right=self.visit(ctx.right, o)
+            if isinstance(left, Symbol):
+                if left.typ is not None:
+                    if not isinstance(left.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                elif left.typ is None: left.typ = StringType()
+                left=left.typ
+            if isinstance(right, Symbol):
+                if right.typ is not None:
+                    if not isinstance(right.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                elif right.typ is None: right.typ = StringType()
+                right=right.typ
+            if not isinstance(left, StringType) or not isinstance(right, StringType):
+                raise TypeMismatchInExpression(ctx)
             return StringType()
         if ctx.op == '==': # input String
+            left=self.visit(ctx.left, o)
+            right=self.visit(ctx.right, o)
+            if isinstance(left, Symbol):
+                if left.typ is not None:
+                    if not isinstance(left.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                elif left.typ is None: left.typ = StringType()
+                left=left.typ
+            if isinstance(right, Symbol):
+                if right.typ is not None:
+                    if not isinstance(right.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                elif right.typ is None: right.typ = StringType()
+                right=right.typ
+            if not isinstance(left, StringType) or not isinstance(right, StringType):
+                raise TypeMismatchInExpression(ctx)
             return BoolType()
 
     def visitUnaryOp(self, ctx:UnaryOp, o:object):
         if ctx.op == '-': # input Number
+            operand=self.visit(ctx.operand, o)
+            if isinstance(operand, Symbol):
+                if operand.typ is not None:
+                    if not isinstance(operand.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                elif operand.typ is None: operand.typ = NumberType()
+                operand=operand.typ
+            if not isinstance(operand, NumberType):
+                raise TypeMismatchInExpression(ctx)
             return NumberType()
         if ctx.op == 'not': # input Bool
+            operand=self.visit(ctx.operand, o)
+            if isinstance(operand, Symbol):
+                if operand.typ is not None:
+                    if not isinstance(operand.typ, BoolType()): raise TypeMismatchInExpression(ctx)
+                elif operand.typ is None: operand.typ = BoolType()
+                operand=operand.typ
+            if not isinstance(operand, BoolType):
+                raise TypeMismatchInExpression(ctx)
             return BoolType()           
 
     def visitCallExpr(self, ctx:CallExpr, o:object):
-        pass
+        # func call
+        id=None
+        for x in o:
+            for symbol in x:
+                if ctx.name.name == symbol.name and symbol.declKind.kind != 'var':
+                    id=symbol
+        if id is None: raise Undeclared(Function(), ctx.name.name)
+        if id.declKind.kind == 'funcDecl': raise NoDefinition(id.name)
+        if isinstance(id.typ, VoidType): raise TypeMismatchInExpression(ctx)
+        if len(ctx.args) != len(id.declKind.param): raise TypeMismatchInExpression(ctx)
+        for i in range(len(ctx.args)):
+            typ = self.visit(ctx.args[i], o)
+            if isinstance(typ, Symbol):
+                if typ.typ is None:typ.typ=id.declKind.param[i].typ
+                if type(typ.typ) != type(id.declKind.param[i].typ): raise TypeMismatchInExpression(ctx)
+                continue
+            if type(typ) != type(id.declKind.param[i].typ): raise TypeMismatchInExpression(ctx)
+            if isinstance(typ, ArrayType):
+                if typ.size != id.declKind.param[i].typ.size: raise TypeMismatchInExpression(ctx)
+                if type(typ.eleType) != type(id.declKind.param[i].typ.eleType): raise TypeMismatchInExpression(ctx)
+        return id
 
     def visitId(self, ctx:Id, o:object):
-        pass
+        for x in o:
+            for symbol in x:
+                if ctx.name == symbol.name and symbol.declKind.kind == 'var':
+                    return symbol
+        raise Undeclared(Identifier(), ctx.name)
 
     def visitArrayCell(self, ctx:ArrayCell, o:object):
-        pass
+        typ=self.visit(ctx.arr, o)
+        if isinstance(typ, Symbol):
+            if not isinstance(typ.typ, ArrayType): raise TypeMismatchInExpression(ctx)
+            for i in ctx.idx:
+                if isinstance(i, Symbol):
+                    if i.typ is None:
+                        i.typ = NumberType()
+                        break
+                    if i.typ is not None: i=i.typ
+                if type(self.visit(i)) is not NumberType: raise TypeMismatchInExpression(ctx)
+        return typ
 
     def visitBlock(self, ctx:Block, o:object):
-        pass
+        for stmt in ctx.stmt:
+            self.visit(stmt, o)
 
     def visitIf(self, ctx:If, o:object):
         pass
@@ -158,4 +271,28 @@ class StaticChecker(BaseVisitor, Utils):
         return BoolType()
 
     def visitArrayLiteral(self, ctx:ArrayLiteral, o:object):
-        self.visit(ctx.value)
+        size=None # size: List[float]
+        eleType=None # eleType: Type
+        value=[]
+        for expr in ctx.value:
+            value.append(self.visit(expr, o))
+        for typ in value:
+            if isinstance(typ, Symbol):
+                if typ.typ is not None:
+                    eleType=typ.typ
+                    break
+                continue
+            if isinstance(typ, ArrayType):
+                eleType=typ.eleType
+                break
+            eleType=typ
+            break
+        if eleType is not None: # infer in expr
+            for typ in value:
+                if isinstance(typ, Symbol):
+                    if typ.typ is not None:
+                        if type(typ.typ) != type(eleType): raise TypeMismatchInExpression(ctx)
+                    if typ.typ is None:
+                        typ.typ=eleType()
+        elif eleType is None: raise TypeCannotBeInferred(ctx)
+        return ArrayType(size, eleType)
