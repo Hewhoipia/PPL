@@ -241,10 +241,24 @@ class StaticChecker(BaseVisitor, Utils):
             self.visit(stmt, o)
 
     def visitIf(self, ctx:If, o:object):
+        # if expr
         typeIf=self.visit(ctx.expr)
+        if isinstance(typeIf, Symbol):
+            if typeIf.typ is None: typeIf.typ = BoolType()
+            elif typeIf.typ is not None:
+                if not isinstance(typeIf.typ, BoolType): raise TypeMismatchInStatement(ctx)
+            typeIf=typeIf.typ
+        if not isinstance(typeIf, BoolType): raise TypeMismatchInStatement(ctx)
         self.visit(ctx.thenStmt)
+        # elif expr
         for tup in ctx.elifStmt:
             typeElif=self.visit(tup[0])
+            if isinstance(typeElif, Symbol):
+                if typeElif.typ is None: typeElif.typ = BoolType()
+                elif typeElif.typ is not None:
+                    if not isinstance(typeElif.typ, BoolType): raise TypeMismatchInStatement(ctx)
+                typeElif=typeElif.typ
+            if not isinstance(typeElif, BoolType): raise TypeMismatchInStatement(ctx)
             self.visit(tup[1])
         if ctx.elseStmt is not None: self.visit(ctx.elseStmt)
 
