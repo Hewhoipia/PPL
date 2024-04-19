@@ -241,7 +241,12 @@ class StaticChecker(BaseVisitor, Utils):
             self.visit(stmt, o)
 
     def visitIf(self, ctx:If, o:object):
-        pass
+        typeIf=self.visit(ctx.expr)
+        self.visit(ctx.thenStmt)
+        for tup in ctx.elifStmt:
+            typeElif=self.visit(tup[0])
+            self.visit(tup[1])
+        if ctx.elseStmt is not None: self.visit(ctx.elseStmt)
 
     def visitFor(self, ctx:For, o:object):
         pass
