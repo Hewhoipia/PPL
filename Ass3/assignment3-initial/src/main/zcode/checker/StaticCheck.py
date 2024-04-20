@@ -17,15 +17,17 @@ class Symbol:
         self.typ=typ
 
 class Utils:
-    def monoInfer(o, obj:Symbol, typ:Type):
-        pass
+    def infer(o:object, typ:Type):
+        for symbol in o:
+            if symbol.typ is None: symbol.typ=typ
+            elif symbol.typ is not None: continue
 
 class StaticChecker(BaseVisitor, Utils):
     def __init__(self,ast):
         self.root=ast
 
     def check(self):
-        return self.visit(self.root, None)
+        self.visit(self.root, None)
     
     def visitProgram(self, ctx:Program, o:object):
         o=[[]]
@@ -42,52 +44,73 @@ class StaticChecker(BaseVisitor, Utils):
         typ=None
         if ctx.varType is not None and ctx.varInit is not None:
             typDecl=ctx.varType
+            typ=typDecl
+            o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
             typInit=self.visit(ctx.varInit,o)
             if isinstance(typInit, Symbol):
                 if typInit.typ is None: typInit.typ = typDecl
                 typInit=typInit.typ
             if type(typDecl) != type(typInit): raise TypeMismatchInStatement(ctx)
             if isinstance(typDecl, ArrayType):
-                if type(typDecl.eleType) != type(typInit.eleType): raise TypeMismatchInStatement(ctx)
-                #if typDecl.size != typInit.size: raise TypeMismatchInStatement(ctx)
-            typ=typDecl
+                if not isinstance(typInit.eleType, Type):
+                    Utils.infer(typInit.eleType, typDecl.eleType)
+                    typInit.eleType=typDecl.eleType
+                if (type(typDecl.eleType) != type(typInit.eleType)) or (typDecl.size != typInit.size):
+                    raise TypeMismatchInStatement(ctx)
         elif ctx.varType is not None:
             typ = ctx.varType
+            o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
         elif ctx.varInit is not None:
+            symbol=Symbol(DeclKind('var'), ctx.name.name, typ)
+            o[0].append(symbol)
             typInit = self.visit(ctx.varInit,o)
             if isinstance(typInit, Symbol):
                 if typInit.typ is None: raise TypeCannotBeInferred(ctx)
                 typInit=typInit.typ
-            typ=typInit
-        o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
+            if isinstance(typInit, ArrayType):
+                if not isinstance(typInit.eleType, Type): raise TypeCannotBeInferred(ctx)
+            symbol.typ=typInit
+        else: o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
             
     def visitFuncDecl(self, ctx:FuncDecl, o:object):
+        is_func_decl=None #store a function if it is "funcDecl"
         for symbol in o[0]:
             if ctx.name.name == symbol.name and symbol.declKind.kind != 'var':
-                if symbol.declKind.kind == 'funcDefi' or (symbol.declKind.kind == 'funcDecl' and ctx.body is None):
-                    raise Redeclared(Variable(), ctx.name.name)
+                if symbol.declKind.kind == 'funcDefi':
+                    raise Redeclared(Function(), ctx.name.name)
+                elif symbol.declKind.kind == 'funcDecl':
+                    is_func_decl=symbol
+                    break
         param=[[]]
         for vardecl in ctx.param:
             typ=None
-            if vardecl.varInit is not None:
-                typDecl=vardecl.varType
-                typInit=self.visit(vardecl.varInit,param+o)
-                if isinstance(typInit, Symbol):
-                    if typInit.typ is None: typInit.typ = typDecl
-                    typInit=typInit.typ
-                if type(typDecl) != type(typInit): raise TypeMismatchInStatement(vardecl)
-                if isinstance(typDecl, ArrayType):
-                    if type(typDecl.eleType) != type(typInit.eleType): raise TypeMismatchInStatement(vardecl)
-                    #if typDecl.size!= typInit.size: raise TypeMismatchInStatement(vardecl)
-                typ=typDecl
-            else:
-                typ=vardecl.varType
+            # if vardecl.varInit is not None:
+            #     typDecl=vardecl.varType
+            #     typInit=self.visit(vardecl.varInit,param+o)
+            #     if isinstance(typInit, Symbol):
+            #         if typInit.typ is None: typInit.typ = typDecl
+            #         typInit=typInit.typ
+            #     if type(typDecl) != type(typInit): raise TypeMismatchInStatement(vardecl)
+            #     if isinstance(typDecl, ArrayType):
+            #         if (type(typDecl.eleType) != type(typInit.eleType)) or (typDecl.size != typInit.size):
+            #             raise TypeMismatchInStatement(ctx)
+            #     typ=typDecl
+            # else:
+            typ=vardecl.varType
             for symbol in param[0]:
                 if vardecl.name.name == symbol.name:
                     raise Redeclared(Parameter(), vardecl.name.name)
-            param[0].append(Symbol(DeclKind('param'), vardecl.name.name, typ))
-        o[0].append(Symbol(DeclKind('funcDecl' if ctx.body is None else 'funcDefi', param[0]), ctx.name.name))
-        if ctx.body is not None: self.visit(ctx.body,[[]]+param+o)
+            param[0].append(Symbol(DeclKind('var'), vardecl.name.name, typ))
+        if ctx.body is not None:
+            if is_func_decl is not None:
+                is_func_decl.declKind.kind = "funcDefi"
+                is_func_decl.declKind.param = param[0]
+            elif is_func_decl is None:
+                o[0].append(Symbol(DeclKind('funcDefi', param[0]), ctx.name.name))
+            self.visit(ctx.body,[[]]+param+o)
+        elif ctx.body is None:
+            if is_func_decl is not None: raise Redeclared(Function(), ctx.name.name)
+            o[0].append(Symbol(DeclKind('funcDecl', param[0]), ctx.name.name))
 
     def visitBinaryOp(self, ctx:BinaryOp, o:object):
         if ctx.op in ['+', '-', '*', '/', '%']: # input Number
@@ -95,12 +118,12 @@ class StaticChecker(BaseVisitor, Utils):
             right=self.visit(ctx.right, o)
             if isinstance(left, Symbol):
                 if left.typ is not None:
-                    if not isinstance(left.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(left.typ, NumberType): raise TypeMismatchInExpression(ctx)
                 elif left.typ is None: left.typ = NumberType()
                 left=left.typ
             if isinstance(right, Symbol):
                 if right.typ is not None:
-                    if not isinstance(right.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(right.typ, NumberType): raise TypeMismatchInExpression(ctx)
                 elif right.typ is None: right.typ = NumberType()
                 right=right.typ
             if not isinstance(left, NumberType) or not isinstance(right, NumberType):
@@ -111,12 +134,12 @@ class StaticChecker(BaseVisitor, Utils):
             right=self.visit(ctx.right, o)
             if isinstance(left, Symbol):
                 if left.typ is not None:
-                    if not isinstance(left.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(left.typ, NumberType): raise TypeMismatchInExpression(ctx)
                 elif left.typ is None: left.typ = NumberType()
                 left=left.typ
             if isinstance(right, Symbol):
                 if right.typ is not None:
-                    if not isinstance(right.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(right.typ, NumberType): raise TypeMismatchInExpression(ctx)
                 elif right.typ is None: right.typ = NumberType()
                 right=right.typ
             if not isinstance(left, NumberType) or not isinstance(right, NumberType):
@@ -127,12 +150,12 @@ class StaticChecker(BaseVisitor, Utils):
             right=self.visit(ctx.right, o)
             if isinstance(left, Symbol):
                 if left.typ is not None:
-                    if not isinstance(left.typ, BoolType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(left.typ, BoolType): raise TypeMismatchInExpression(ctx)
                 elif left.typ is None: left.typ = BoolType()
                 left=left.typ
             if isinstance(right, Symbol):
                 if right.typ is not None:
-                    if not isinstance(right.typ, BoolType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(right.typ, BoolType): raise TypeMismatchInExpression(ctx)
                 elif right.typ is None: right.typ = BoolType()
                 right=right.typ
             if not isinstance(left, BoolType) or not isinstance(right, BoolType):
@@ -143,12 +166,12 @@ class StaticChecker(BaseVisitor, Utils):
             right=self.visit(ctx.right, o)
             if isinstance(left, Symbol):
                 if left.typ is not None:
-                    if not isinstance(left.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(left.typ, StringType): raise TypeMismatchInExpression(ctx)
                 elif left.typ is None: left.typ = StringType()
                 left=left.typ
             if isinstance(right, Symbol):
                 if right.typ is not None:
-                    if not isinstance(right.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(right.typ, StringType): raise TypeMismatchInExpression(ctx)
                 elif right.typ is None: right.typ = StringType()
                 right=right.typ
             if not isinstance(left, StringType) or not isinstance(right, StringType):
@@ -159,12 +182,12 @@ class StaticChecker(BaseVisitor, Utils):
             right=self.visit(ctx.right, o)
             if isinstance(left, Symbol):
                 if left.typ is not None:
-                    if not isinstance(left.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(left.typ, StringType): raise TypeMismatchInExpression(ctx)
                 elif left.typ is None: left.typ = StringType()
                 left=left.typ
             if isinstance(right, Symbol):
                 if right.typ is not None:
-                    if not isinstance(right.typ, StringType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(right.typ, StringType): raise TypeMismatchInExpression(ctx)
                 elif right.typ is None: right.typ = StringType()
                 right=right.typ
             if not isinstance(left, StringType) or not isinstance(right, StringType):
@@ -176,7 +199,7 @@ class StaticChecker(BaseVisitor, Utils):
             operand=self.visit(ctx.operand, o)
             if isinstance(operand, Symbol):
                 if operand.typ is not None:
-                    if not isinstance(operand.typ, NumberType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(operand.typ, NumberType): raise TypeMismatchInExpression(ctx)
                 elif operand.typ is None: operand.typ = NumberType()
                 operand=operand.typ
             if not isinstance(operand, NumberType):
@@ -186,7 +209,7 @@ class StaticChecker(BaseVisitor, Utils):
             operand=self.visit(ctx.operand, o)
             if isinstance(operand, Symbol):
                 if operand.typ is not None:
-                    if not isinstance(operand.typ, BoolType()): raise TypeMismatchInExpression(ctx)
+                    if not isinstance(operand.typ, BoolType): raise TypeMismatchInExpression(ctx)
                 elif operand.typ is None: operand.typ = BoolType()
                 operand=operand.typ
             if not isinstance(operand, BoolType):
@@ -194,12 +217,14 @@ class StaticChecker(BaseVisitor, Utils):
             return BoolType()           
 
     def visitCallExpr(self, ctx:CallExpr, o:object):
-        # func call
+        # func call expr
         id=None
         for x in o:
             for symbol in x:
                 if ctx.name.name == symbol.name and symbol.declKind.kind != 'var':
                     id=symbol
+                    break
+            if id is not None: break
         if id is None: raise Undeclared(Function(), ctx.name.name)
         if id.declKind.kind == 'funcDecl': raise NoDefinition(id.name)
         if isinstance(id.typ, VoidType): raise TypeMismatchInExpression(ctx)
@@ -213,6 +238,9 @@ class StaticChecker(BaseVisitor, Utils):
             if type(typ) != type(id.declKind.param[i].typ): raise TypeMismatchInExpression(ctx)
             if isinstance(typ, ArrayType):
                 if typ.size != id.declKind.param[i].typ.size: raise TypeMismatchInExpression(ctx)
+                if not isinstance(typ.eleType, Type):
+                    Utils.infer(typ.eleType, id.declKind.param[i].typ.eleType)
+                    typ.eleType=id.declKind.param[i].typ.eleType
                 if type(typ.eleType) != type(id.declKind.param[i].typ.eleType): raise TypeMismatchInExpression(ctx)
         return id
 
@@ -227,14 +255,16 @@ class StaticChecker(BaseVisitor, Utils):
         typ=self.visit(ctx.arr, o)
         if isinstance(typ, Symbol):
             if not isinstance(typ.typ, ArrayType): raise TypeMismatchInExpression(ctx)
+            if len(ctx.idx) != len(typ.typ.size): raise TypeMismatchInExpression(ctx)
             for i in ctx.idx:
-                if isinstance(i, Symbol):
-                    if i.typ is None:
-                        i.typ = NumberType()
-                        break
-                    if i.typ is not None: i=i.typ
-                if type(self.visit(i)) is not NumberType: raise TypeMismatchInExpression(ctx)
-        return typ
+                idx=self.visit(i, o)
+                if isinstance(idx, Symbol):
+                    if idx.typ is None:
+                        idx.typ = NumberType()
+                        continue
+                    if idx.typ is not None: idx=idx.typ
+                if type(idx) is not NumberType: raise TypeMismatchInExpression(ctx)
+        return typ.typ.eleType
 
     def visitBlock(self, ctx:Block, o:object):
         for stmt in ctx.stmt:
@@ -242,43 +272,159 @@ class StaticChecker(BaseVisitor, Utils):
 
     def visitIf(self, ctx:If, o:object):
         # if expr
-        typeIf=self.visit(ctx.expr)
+        typeIf=self.visit(ctx.expr,o)
         if isinstance(typeIf, Symbol):
             if typeIf.typ is None: typeIf.typ = BoolType()
             elif typeIf.typ is not None:
                 if not isinstance(typeIf.typ, BoolType): raise TypeMismatchInStatement(ctx)
             typeIf=typeIf.typ
         if not isinstance(typeIf, BoolType): raise TypeMismatchInStatement(ctx)
-        self.visit(ctx.thenStmt)
+        self.visit(ctx.thenStmt, [[]]+o)
         # elif expr
         for tup in ctx.elifStmt:
-            typeElif=self.visit(tup[0])
+            typeElif=self.visit(tup[0],o)
             if isinstance(typeElif, Symbol):
                 if typeElif.typ is None: typeElif.typ = BoolType()
                 elif typeElif.typ is not None:
                     if not isinstance(typeElif.typ, BoolType): raise TypeMismatchInStatement(ctx)
                 typeElif=typeElif.typ
             if not isinstance(typeElif, BoolType): raise TypeMismatchInStatement(ctx)
-            self.visit(tup[1])
-        if ctx.elseStmt is not None: self.visit(ctx.elseStmt)
+            self.visit(tup[1],[[]]+o)
+        if ctx.elseStmt is not None: self.visit(ctx.elseStmt,[[]]+o)
+        return
 
     def visitFor(self, ctx:For, o:object):
-        pass
+        typ=self.visit(ctx.name,o)
+        if typ.typ is None: typ.typ = NumberType()
+        elif not isinstance(typ, NumberType): raise TypeMismatchInStatement(ctx)
+        typ=self.visit(ctx.condExpr,o)
+        if isinstance(typ, Symbol):
+            if typ.typ is None: typ.typ = BoolType()
+            elif not isinstance(typ, BoolType): raise TypeMismatchInStatement(ctx)
+        typ=self.visit(ctx.updExpr,o)
+        if isinstance(typ, Symbol):
+            if typ.typ is None: typ.typ = NumberType()
+            elif not isinstance(typ, NumberType): raise TypeMismatchInStatement(ctx)
+        self.visit(ctx.body, [[Symbol(DeclKind("var"),"inloop")]]+o)
+        return
 
     def visitContinue(self, ctx:Continue, o:object):
-        pass
+        for scope in o:
+            for symbol in scope:
+                if symbol.name == "inloop": return
+        raise MustInLoop(ctx)
 
     def visitBreak(self, ctx:Break, o:object):
-        pass
+        for scope in o:
+            for symbol in scope:
+                if symbol.name == "inloop": return
+        raise MustInLoop(ctx)
 
-    def visitReturn(self, ctx:VarDecl, o:object):
-        pass
+    def visitReturn(self, ctx:Return, o:object):
+        typ=None
+        if ctx.expr is None: typ=VoidType()
+        elif ctx.expr is not None:
+            typ = self.visit(ctx.expr, o)
+            if isinstance(typ, Symbol):
+                if typ.typ is None: raise TypeCannotBeInferred(ctx)
+                elif typ.typ is not None: typ=typ.typ
+            
+        for scope in o:
+            for symbol in scope:
+                if symbol.declKind.kind == "funcDefi":
+                    if symbol.typ is None:
+                        if isinstance(typ, ArrayType):
+                            if not isinstance(typ.eleType, Type): raise TypeCannotBeInferred(ctx)
+                        symbol.typ=typ
+                    elif type(symbol.typ) == type(typ):
+                        if isinstance(symbol, ArrayType):
+                            if not isinstance(typ.eleType, Type):
+                                Utils.infer(typ.eleType, symbol.typ.eleType)
+                                typ.eleType=symbol.typ.eleType
+                            if (type(typ.eleType) != type(symbol.typ.eleType)) or (typ.size != symbol.typ.size):
+                                raise TypeMismatchInStatement(ctx)
+                    elif type(symbol.typ) != type(typ): raise TypeMismatchInStatement(ctx)
+                elif symbol.declKind.kind == "funcDecl": raise NoDefinition(symbol.name)
 
     def visitAssign(self, ctx:Assign, o:object):
-        pass
+        lhs=self.visit(ctx.lhs, o)
+        rhs=self.visit(ctx.rhs, o)
+        if isinstance(lhs, Symbol) and isinstance(rhs, Symbol):
+            if lhs.typ is None:
+                if rhs.typ is None: raise TypeCannotBeInferred(ctx)
+                elif rhs.typ is not None:
+                    lhs.typ=rhs.typ
+                    return
+            if rhs.typ is None:
+                if lhs.typ is None: raise TypeCannotBeInferred(ctx)
+                elif lhs.typ is not None:
+                    rhs.typ = lhs.typ
+                    return
+            elif lhs.typ is not None and rhs.typ is not None:
+                if type(lhs.typ) != type(rhs.typ): raise TypeMismatchInStatement(ctx)
+                if isinstance(lhs.typ, ArrayType):
+                    if (type(lhs.typ.eleType) != type(rhs.typ.eleType)) or (lhs.typ.size != rhs.typ.size):
+                        raise TypeMismatchInStatement(ctx)
+        elif isinstance(lhs, Symbol):
+            if lhs.typ is None:
+                if rhs is None: raise TypeCannotBeInferred(ctx)
+                elif rhs is not None:
+                    if isinstance(rhs, ArrayType) and not isinstance(rhs.eleType, Type): raise TypeCannotBeInferred(ctx)
+                    lhs.typ=rhs
+                    return
+            elif lhs.typ is not None:
+                if type(lhs.typ) != type(rhs): raise TypeMismatchInStatement(ctx)
+                if isinstance(lhs.typ, ArrayType):
+                    if not isinstance(rhs.eleType, Type):
+                        Utils.infer(rhs.eleType, lhs.typ.eleType)
+                        rhs.eleType=lhs.typ.eleType
+                    if (type(lhs.typ.eleType) != type(rhs.eleType)) or (lhs.typ.size != rhs.size):
+                        raise TypeMismatchInStatement(ctx)
+        elif not isinstance(lhs, Symbol) and not isinstance(rhs, Symbol):
+            if type(lhs) != type(rhs): raise TypeMismatchInStatement(ctx)
+        elif not isinstance(lhs, Symbol):
+            if rhs.typ is None:
+                if lhs is None: raise TypeCannotBeInferred(ctx)
+                elif lhs is not None:
+                    rhs.typ = lhs
+                    return
+            elif lhs is not None and rhs.typ is not None:
+                if type(lhs) != type(rhs.typ): raise TypeMismatchInStatement(ctx)
+                if isinstance(rhs.typ, ArrayType):
+                    if (type(lhs.eleType) != type(rhs.typ.eleType)) or (lhs.size != rhs.typ.size):
+                        raise TypeMismatchInStatement(ctx)
+            
 
     def visitCallStmt(self, ctx:CallStmt, o:object):
-        pass
+        # func call stmt
+        id=None
+        for x in o:
+            for symbol in x:
+                if ctx.name.name == symbol.name and symbol.declKind.kind != 'var':
+                    id=symbol
+                    break
+            if id is not None: break
+        if id is None: raise Undeclared(Function(), ctx.name.name)
+        if id.declKind.kind == 'funcDecl': raise NoDefinition(id.name)
+        
+        if id.typ is None: id.typ=VoidType
+        elif not isinstance(id.typ, VoidType): raise TypeMismatchInStatement(ctx)
+        
+        if len(ctx.args) != len(id.declKind.param): raise TypeMismatchInStatement(ctx)
+        for i in range(len(ctx.args)):
+            typ = self.visit(ctx.args[i], o)
+            if isinstance(typ, Symbol):
+                if typ.typ is None:typ.typ=id.declKind.param[i].typ
+                if type(typ.typ) != type(id.declKind.param[i].typ): raise TypeMismatchInStatement(ctx)
+                continue
+            if type(typ) != type(id.declKind.param[i].typ): raise TypeMismatchInStatement(ctx)
+            if isinstance(typ, ArrayType):
+                if typ.size != id.declKind.param[i].typ.size: raise TypeMismatchInStatement(ctx)
+                if not isinstance(typ.eleType, Type):
+                    Utils.infer(typ.eleType, id.declKind.param[i].typ.eleType)
+                    typ.eleType=id.declKind.param[i].typ.eleType
+                if type(typ.eleType) != type(id.declKind.param[i].typ.eleType): raise TypeMismatchInStatement(ctx)
+        
 
     def visitNumberLiteral(self, ctx:NumberLiteral, o:object):
         return NumberType()
@@ -294,7 +440,9 @@ class StaticChecker(BaseVisitor, Utils):
         eleType=None # eleType: Type
         value=[]
         for expr in ctx.value:
-            value.append(self.visit(expr, o))
+            typ=self.visit(expr, o)
+            value.append(typ)
+        size=[float(len(ctx.value))]
         for typ in value:
             if isinstance(typ, Symbol):
                 if typ.typ is not None:
@@ -302,16 +450,36 @@ class StaticChecker(BaseVisitor, Utils):
                     break
                 continue
             if isinstance(typ, ArrayType):
-                eleType=typ.eleType
-                break
+                if isinstance(typ.eleType, Type):
+                    eleType=typ.eleType
+                    break
+                continue
             eleType=typ
             break
         if eleType is not None: # infer in expr
+            for i in range(len(ctx.value)):
+                if isinstance(value[i], Symbol):
+                    if value[i].typ is not None:
+                        if type(value[i].typ) != type(eleType): raise TypeMismatchInExpression(ctx)
+                        continue
+                    elif value[i].typ is None:
+                        value[i].typ=eleType
+                        continue
+                if isinstance(value[i], ArrayType):
+                    if isinstance(value[i].eleType, Type):
+                        if type(value[i].eleType) != type(eleType): raise TypeMismatchInExpression(ctx)
+                        continue
+                    elif not isinstance(value[i].eleType, Type):
+                        Utils.infer(value[i].eleType, eleType)
+                        continue
+                if type(value[i]) != type(eleType): raise TypeMismatchInExpression(ctx)
+        elif eleType is None:
+            eleType=[]
             for typ in value:
-                if isinstance(typ, Symbol):
-                    if typ.typ is not None:
-                        if type(typ.typ) != type(eleType): raise TypeMismatchInExpression(ctx)
-                    if typ.typ is None:
-                        typ.typ=eleType()
-        elif eleType is None: raise TypeCannotBeInferred(ctx)
+                if isinstance(typ, ArrayType):
+                    eleType+=typ.eleType
+                elif isinstance(typ, Symbol):
+                    eleType+=[typ]
+        if isinstance(value[0], ArrayType):
+            size+=value[0].size
         return ArrayType(size, eleType)

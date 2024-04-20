@@ -109,3 +109,10 @@ class MustInLoop(StaticError):
 class NoEntryPoint(StaticError):
     def __str__(self):
         return "No Entry Point"
+    
+class PrintTest(StaticError):
+    def __init__(self, str:str):
+        self.str=str
+        
+    def __str__(self):
+        return self.str

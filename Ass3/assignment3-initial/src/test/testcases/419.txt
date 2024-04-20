@@ -1,0 +1,8 @@
+
+dynamic a
+func foo (number b) return a
+func main()
+begin
+    foo <- foo(foo)
+end
+        

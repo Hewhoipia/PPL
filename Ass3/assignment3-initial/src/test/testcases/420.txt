@@ -1,0 +1,15 @@
+
+number a[3] <- [1,2,3]
+func foo (number b)
+    begin
+        a[1] <- b + a[2]
+        return a
+    end
+func main()
+begin
+    dynamic c
+    c <- a[c] + a[1,2]
+    bool d
+    c <- d
+end
+        

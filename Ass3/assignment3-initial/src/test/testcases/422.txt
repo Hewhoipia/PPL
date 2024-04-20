@@ -1,0 +1,11 @@
+
+dynamic a
+func foo (number b)
+    begin
+        a[1] <- 1
+        return a[1,2]
+    end
+func main()
+begin
+end
+        

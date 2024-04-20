@@ -1,0 +1,8 @@
+
+        func main() begin
+        number a <- a
+        end
+        func foo(number x, number y)
+        func foo(number z, number x) begin
+        end
+        

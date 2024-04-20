@@ -1,2 +1,6 @@
-number a
+
+        func foo()
+        func main() begin
+            foo()
+        end
         

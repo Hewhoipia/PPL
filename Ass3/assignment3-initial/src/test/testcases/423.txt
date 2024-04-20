@@ -1,0 +1,9 @@
+
+var a <- 3
+func foo (number b)
+    return a
+func main()
+begin
+    foo(a)
+end
+        

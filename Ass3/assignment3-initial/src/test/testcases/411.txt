@@ -1,0 +1,7 @@
+
+func main()
+begin
+    number a[2, 2] <- [[1, 2], [3, 4]]
+    number b[2] <- a[0]
+    writeNumber(b[0])
+end
