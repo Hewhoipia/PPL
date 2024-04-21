@@ -1,0 +1,13 @@
+
+            number a
+            func emiu() return
+            func main()begin
+                number a
+                number c
+                string emiu
+                begin
+                    number c
+                    string emiu
+                end
+            end
+        

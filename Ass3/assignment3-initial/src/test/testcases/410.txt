@@ -1,7 +1,9 @@
 
-            func a()
-            func main() begin 
-                a()
-            end
-            func a() return 1
+func beou(number a, bool b, string c)
+func main()
+begin
+    number a
+    bool b
+    a <- beou(a, b, c)
+end
         

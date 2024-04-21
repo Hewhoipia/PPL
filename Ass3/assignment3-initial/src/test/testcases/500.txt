@@ -1,5 +1,13 @@
-func main ()
-        begin
-            writeNumber(1)
-        end
+
+    number a
+    func bolero() return false
+    func bolero2(number c)
+    func main() begin
+        a <- bolero2(2)
+        a()
+    end
+    func bolero2(number c) begin
+        bool b <- bolero()
+        return c
+    end
         

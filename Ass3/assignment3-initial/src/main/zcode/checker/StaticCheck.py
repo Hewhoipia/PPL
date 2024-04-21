@@ -45,7 +45,7 @@ class StaticChecker(BaseVisitor, Utils):
             self.visit(x,o)
         isMain=False
         for symbol in o[0]:
-            if symbol.name == 'main' and symbol.declKind.kind == 'funcDefi' and not symbol.declKind.param:
+            if symbol.name == 'main' and symbol.declKind.kind == 'funcDefi' and not symbol.declKind.param and isinstance(symbol.typ, VoidType):
                 isMain=True
             if symbol.declKind.kind == 'funcDecl': raise NoDefinition(symbol.name)
         if isMain is False: raise NoEntryPoint()
@@ -86,7 +86,7 @@ class StaticChecker(BaseVisitor, Utils):
             typ = ctx.varType
             o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
         elif ctx.varInit is not None:
-            symbol=Symbol(DeclKind('var'), ctx.name.name, typ)
+            symbol=Symbol(DeclKind('var'), ctx.name.name, VoidType())
             o[0].append(symbol)
             typInit = self.visit(ctx.varInit,o)
             if typInit is None:
@@ -129,6 +129,7 @@ class StaticChecker(BaseVisitor, Utils):
                     raise Redeclared(Parameter(), vardecl.name.name)
             param[0].append(Symbol(DeclKind('var'), vardecl.name.name, typ))
         if ctx.body is not None:
+            check_return=None
             if is_func_decl is not None:
                 if len(param[0]) != len(is_func_decl.declKind.param):
                     raise Redeclared(Function(), ctx.name.name)
@@ -139,9 +140,12 @@ class StaticChecker(BaseVisitor, Utils):
                 is_func_decl.declKind.param = param[0]
                 o[0].remove(is_func_decl)
                 o[0].insert(0,is_func_decl)
+                check_return=is_func_decl
             elif is_func_decl is None:
-                o[0].insert(0,Symbol(DeclKind('funcDefi', param[0]), ctx.name.name))
-            self.visit(ctx.body,[[]]+param+o)
+                check_return=Symbol(DeclKind('funcDefi', param[0]), ctx.name.name)
+                o[0].insert(0,check_return)
+            self.visit(ctx.body,param+o)
+            if check_return.typ is None: check_return.typ=VoidType()
         elif ctx.body is None:
             if is_func_decl is not None: raise Redeclared(Function(), ctx.name.name)
             o[0].insert(0,Symbol(DeclKind('funcDecl', param[0]), ctx.name.name))
@@ -275,7 +279,6 @@ class StaticChecker(BaseVisitor, Utils):
             if id is not None: break
         if id is None: raise Undeclared(Function(), ctx.name.name)
         # if id.declKind.kind == 'funcDecl': raise NoDefinition(id.name)
-        if isinstance(id.typ, VoidType): raise TypeMismatchInExpression(ctx)
         if len(ctx.args) != len(id.declKind.param): raise TypeMismatchInExpression(ctx)
         for i in range(len(ctx.args)):
             typ = self.visit(ctx.args[i], o)
@@ -300,6 +303,7 @@ class StaticChecker(BaseVisitor, Utils):
                         Utils.infer(typ.eleType, id.declKind.param[i].typ.eleType)
                         typ=id.declKind.param[i].typ
                 if type(typ.eleType) != type(id.declKind.param[i].typ.eleType) or typ.size != id.declKind.param[i].typ.size: raise TypeMismatchInExpression(ctx)
+        if isinstance(id.typ, VoidType): raise TypeMismatchInExpression(ctx)
         return id
 
     def visitId(self, ctx:Id, o:object):
@@ -332,6 +336,7 @@ class StaticChecker(BaseVisitor, Utils):
         elif size: return ArrayType(size, typ.typ.eleType)
 
     def visitBlock(self, ctx:Block, o:object):
+        o=[[]]+o
         for stmt in ctx.stmt:
             self.visit(stmt, o)
 

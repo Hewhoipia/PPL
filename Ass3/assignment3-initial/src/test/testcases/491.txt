@@ -1,0 +1,6 @@
+
+            func babiboo() return
+            func babiboo()
+            
+            func main() return
+        
