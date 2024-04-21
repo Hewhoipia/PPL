@@ -1,6 +1,6 @@
 
-    func main() begin
-        number a
-        if (true) number a
-    end
+            func babiboo(number a)
+            func babiboo(number a) return     
+
+            func main() return
         

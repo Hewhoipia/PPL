@@ -1,7 +1,2 @@
-
-    func test(number a, bool b) begin
-    end
-    func main() begin
-        test("wrong", true)
-    end
+number a
         

@@ -1,8 +1,7 @@
 
-    func test(number a, bool b)
-    func main() begin
-        test(1, true)
-    end
-    func test(number a, bool b) begin
-    end
-        
+func main()
+begin
+    number a[2, 2] <- [[6, 8], [6, 8]]
+    number b[2] <- a[0]
+    writeNumber(b[0])
+end

@@ -1,13 +1,9 @@
 
-    number a
-    func test() return false
-    func test2(number c)
-    func main() begin
-        a <- test2(2)
-        a()
-    end
-    func test2(number c) begin
-        bool b <- test()
-        return c
-    end
+            number a
+            number b
+            func beounu(number a,string b) begin
+            end
+            func main() begin
+                beounu1()
+            end
         

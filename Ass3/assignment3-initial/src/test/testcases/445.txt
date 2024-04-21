@@ -1,7 +1,4 @@
 
-    func main() begin
-        string s <- readString()
-        number n <- readNumber()
-        readBool()
-    end
+            number a
+            func beounu(number a,string a)
         

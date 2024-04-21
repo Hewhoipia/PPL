@@ -1,6 +1,6 @@
 
-    func test(number a, bool b) return true
-    func main() begin
-        bool b <- test(1, test(2, false))
-    end
+        func main() begin
+        dynamic b
+            number x[2, 2] <- [[1,2], [b, b]]
+        end
         

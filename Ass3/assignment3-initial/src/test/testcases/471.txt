@@ -1,11 +1,7 @@
 
-    number a <- 10
-    dynamic b
-    func main() begin
-        number i
-        for i until b by 1 begin
-            writeNumber(i)
-            if (i > 5) break
-        end
-    end
+            dynamic a
+            func beounu() return
+            func main() begin
+                var b <- a and (a>b)
+            end
         

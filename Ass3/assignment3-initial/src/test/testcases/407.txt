@@ -1,6 +1,8 @@
-func test(number a, string b)
-    func test(number c, string d) begin
-    end
-    func main() begin
-    end
+number a
+bool d
+number b[3] <- [a,a,d]
+bool c <- a
+func main()
+begin
+end
         

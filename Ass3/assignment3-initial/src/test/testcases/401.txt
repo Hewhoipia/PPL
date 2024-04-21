@@ -1,6 +1,7 @@
-func test() begin
-    end
-    func test()
-    func main() begin
-    end
+dynamic a
+dynamic d
+number b[3] <- [a,true,d]
+func main()
+begin
+end
         

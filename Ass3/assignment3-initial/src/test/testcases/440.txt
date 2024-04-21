@@ -1,6 +1,10 @@
 
-    number a <- 1
-    func main() begin
-        number a <- a
-    end
+            dynamic a
+            dynamic x
+            dynamic y
+            func beou(number a,string b) return
+            func main() begin
+                number a <- beou(x,y)
+                number x
+            end
         

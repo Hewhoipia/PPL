@@ -1,15 +1,8 @@
 
-    func main() begin
-        number a
-        bool b <- true
-        bool c <- false
-        if (b) begin
-            string a <- "hello"
-        end
-        elif (b) begin
-            a <- 1
-        end
-        else
-            a <- 2
-    end
+            bool a
+            bool b
+            func beounu() begin
+                number c <- a + b
+            end
+            func main() return
         

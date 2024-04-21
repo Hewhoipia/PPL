@@ -1,11 +1,12 @@
 
-    func foo()
-    func main() begin
-        dynamic x
-        number a[2,2] <- [[foo(),x], [4,4]]
-        x <- 1000
-        number c <- x + foo()
-    end
-            
-    func foo() return 123
+            number a
+            func emiu() return
+            func main()begin
+                number a
+                begin
+                    number a
+                    string a
+                end
+                
+            end
         

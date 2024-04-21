@@ -1,15 +1,7 @@
 
-    bool a <- true
-    var b <- a or b
-    func main() begin
-        number i
-        for i until b by 1 begin
-            var j <- i
-            for j until a by j + 1
-            begin
-                if (j > 5) continue
+            dynamic a
+            func beounu() return
+            func main() begin
+                var y <- a+beounu(x)
             end
-            if (i > 5) break
-        end
-    end
         

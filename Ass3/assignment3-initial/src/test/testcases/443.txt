@@ -1,6 +1,15 @@
 
-    func writeNumber(number a)
-    func main() begin
-        writeNumber(1)
+func beou()
+func main()
+    begin
+        number x[3,3] <- beou()
     end
-        
+dynamic a
+dynamic b
+dynamic c
+func beou() return [a,b,c]
+func beou1() begin
+    a <- [7,7,7]
+    b <- [8,8,8]
+    c <- [9,9,9]
+end

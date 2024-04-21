@@ -1,6 +1,10 @@
 
-    func main() begin
-        var a <- 1
-        a <- 10.99
-    end
+func beou(number a, bool b, string c) return a
+func main()
+begin
+    dynamic a
+    bool b
+    dynamic c
+    a <- beou(a, c, b)
+end
         

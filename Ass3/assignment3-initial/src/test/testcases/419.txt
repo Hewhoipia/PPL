@@ -1,5 +1,8 @@
 
-    func main() begin
-        number a <- a
-    end
+dynamic a
+func beou (number b) return a
+func main()
+begin
+    beou <- beou(beou)
+end
         

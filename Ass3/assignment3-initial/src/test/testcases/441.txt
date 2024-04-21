@@ -1,7 +1,13 @@
 
-    func main() begin
-        writeNumber(1)
-        writeString("hello")
-        writeBool(true)
-    end
-        
+        func main()
+begin 
+    dynamic a
+    dynamic b
+    dynamic c
+    number x[3,3]
+    x <- [a,b,c]
+    a <- [7,7,7]
+    b <- [8,8,8]
+    c <- [9,9,9]
+    writeNumber(a[0] + b[0] + c[0])
+end

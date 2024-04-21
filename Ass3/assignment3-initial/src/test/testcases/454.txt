@@ -1,12 +1,5 @@
 
-    number a
-    func test() return false
-    func test2(number c)
-    func main() begin
-        a <- test2(2)
-    end
-    func test2(number c) begin
-        bool b <- test()
-        return b
-    end
+            number a
+            number b
+            var c <- d
         

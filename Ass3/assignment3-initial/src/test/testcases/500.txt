@@ -1,10 +1,13 @@
 
-    func foo(number a[3, 4])
+    number a
+    func bolero() return false
+    func bolero2(number c)
     func main() begin
-        dynamic a
-        number b <- foo(a)
-        a <- [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+        a <- bolero2(2)
+        a()
     end
-            
-    func foo(number a[3, 4]) return 123
+    func bolero2(number c) begin
+        bool b <- bolero()
+        return c
+    end
         

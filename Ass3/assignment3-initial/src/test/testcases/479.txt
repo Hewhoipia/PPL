@@ -1,5 +1,9 @@
 
-    func main() begin
-        number a[5] <- [1,2,3,4,5,6]
-    end
+            dynamic a
+            dynamic x
+            dynamic y
+            func beounu(number a,string b) return
+            func main() begin
+                number a <- beounu(x,y)
+            end
         

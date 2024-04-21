@@ -1,7 +1,12 @@
 
-    func test(number a, bool b)
-    func main() begin
-        test(1, true)
-    end
-    func test(number a, bool b) return 1
-        
+        func main()
+begin 
+    dynamic a
+    dynamic b
+    dynamic c
+    number x[3,3] <- [a,b]
+    a <- [7,7,7]
+    b <- [8,8,8]
+    c <- [9,9,9]
+    writeNumber(a[0] + b[0] + c[0])
+end

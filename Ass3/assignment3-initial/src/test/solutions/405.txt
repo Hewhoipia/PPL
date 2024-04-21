@@ -1,1 +1,1 @@
-No Entry Point
+Type Cannot Be Inferred: VarDecl(Id(b), ArrayType([7.0, 7.0, 7.0], NumberType), None, ArrayLit(ArrayLit(Id(a), Id(d)), ArrayLit(Id(a), Id(d)), ArrayLit(Id(a), Id(d))))

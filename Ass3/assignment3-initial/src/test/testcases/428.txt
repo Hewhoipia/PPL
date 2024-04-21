@@ -1,6 +1,8 @@
 
-    func test(number a, bool b) return true
-    func main() begin
-        test(1, true)
-    end
+        func main() begin
+            
+            dynamic b
+            dynamic a 
+            number x[1, 2] <- [[1,b]]
+        end
         

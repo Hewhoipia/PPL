@@ -1,5 +1,11 @@
-func test()
-    func main() begin
+
+func beou()
+func beou()
+    begin
+        return
     end
-    func test()
+func beou() return
+func main()
+    begin
+    end
         

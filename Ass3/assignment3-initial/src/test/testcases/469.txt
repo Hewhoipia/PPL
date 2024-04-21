@@ -1,16 +1,7 @@
 
-    func main() begin
-        dynamic a
-        dynamic b
-        dynamic c
-        dynamic d
-        dynamic e
-        dynamic f
-        if ((a = b) and (a < b) or (a > b) or (a <=b) or (a >= b) or (a != b)) begin
-            b <- a
-            a <- b
-        end
-        elif ((c and d) or (c or d)) c <- d
-        elif ((e..."zcode") == f) f <- "sucks"
-    end
+            dynamic a
+            func beounu() return
+            func main() begin
+                var b <- a
+            end
         

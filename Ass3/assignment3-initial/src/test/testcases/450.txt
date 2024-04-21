@@ -1,9 +1,4 @@
 
-    number a
-    func main() begin
-        string a <- readString()
-    end
-    func test() begin
-        a <- "Hello, World!"
-    end
+            func beounu(number a,string b) 
+            func beounu(number a,string b) 
         

@@ -1,6 +1,8 @@
 
-    number a[1, 2]
-    func main() begin
-        a[1 + 1, 0] <- 1
-    end
+            dynamic a
+            dynamic x
+            func beounu(number a) return a
+            func main() begin
+                var y <- a+beounu(x)
+            end
         

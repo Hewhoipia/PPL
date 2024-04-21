@@ -1,7 +1,6 @@
 
-    func main() begin
-        dynamic a
-        number b[2, 5] <- [[1, 2, 3, 4, 5], a]
-        a <- [1, 2, 3, 4, 5]
-    end
+            func main()
+            func main() begin
+                number main
+            end
         

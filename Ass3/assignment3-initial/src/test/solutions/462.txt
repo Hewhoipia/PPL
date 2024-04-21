@@ -1,1 +1,1 @@
-Type Mismatch In Statement: If((Id(a), AssignStmt(Id(a), NumLit(1.0))), [], AssignStmt(Id(a), NumLit(2.0)))
+Type Mismatch In Expression: BinaryOp(+, Id(a), Id(b))

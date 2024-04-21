@@ -1,5 +1,4 @@
 
-    func main() begin
-        number a <- writeNumber(1)
-    end
+            func beounu() return
+            func beounu() return
         

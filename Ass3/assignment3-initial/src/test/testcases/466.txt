@@ -1,9 +1,11 @@
 
-    func main() begin
-        bool a <- true
-        bool b <- false
-        if (a and b) begin
-            a <- false
-        end
-    end
+            number a
+            bool b
+            func beounu() begin
+                number c <- -a
+            end
+            func beounu1() begin
+                b <- beounu()
+            end
+            func main() return
         

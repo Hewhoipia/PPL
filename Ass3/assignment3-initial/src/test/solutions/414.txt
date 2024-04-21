@@ -1,1 +1,1 @@
-Type Mismatch In Statement: AssignStmt(Id(a), StringLit(hello))
+Type Mismatch In Expression: CallExpr(Id(beou), [Id(a), Id(b), Id(c)])

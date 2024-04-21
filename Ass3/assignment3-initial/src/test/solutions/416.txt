@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: VarDecl(Id(b), None, var, Id(a))
+Type Mismatch In Expression: CallExpr(Id(beou), [Id(beou), Id(beou), Id(beou)])

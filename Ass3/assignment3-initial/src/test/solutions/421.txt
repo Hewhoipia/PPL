@@ -1,1 +1,1 @@
-Type Mismatch In Statement: AssignStmt(Id(a), NumLit(456.0))
+Type Mismatch In Expression: ArrayCell(CallExpr(Id(beou), [ArrayCell(Id(a), [NumLit(1.0)])]), [NumLit(1.0)])

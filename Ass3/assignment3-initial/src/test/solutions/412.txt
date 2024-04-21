@@ -1,1 +1,1 @@
-Type Mismatch In Statement: AssignStmt(Id(a), BooleanLit(True))
+Type Mismatch In Statement: AssignStmt(Id(a), CallExpr(Id(beou), [Id(a), Id(b), Id(c)]))

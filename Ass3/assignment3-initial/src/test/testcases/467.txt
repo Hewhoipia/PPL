@@ -1,10 +1,12 @@
 
-    func main() begin
-        bool a <- true
-        bool b <- false
-        number c
-        if (a or b) begin
-            c <- 1 + 2 / 3
-        end
-    end
+            number a
+            bool b
+            func beounu() begin
+                number c <- -a
+                return true
+            end
+            func beounu1() begin
+                b <- beounu()
+            end
+            func main() return
         
