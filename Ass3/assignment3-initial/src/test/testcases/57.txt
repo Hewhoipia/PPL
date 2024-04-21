@@ -1,5 +1,5 @@
 
-            func beounu() begin
+            func foo() begin
                 ## continue
                 ## break
             end

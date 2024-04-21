@@ -1,1 +1,1 @@
-Type Mismatch In Statement: VarDecl(Id(b), ArrayType([3.0], NumberType), None, ArrayLit(Id(a), BooleanLit(True), Id(d)))
+Redeclared Function: test

@@ -1,7 +1,11 @@
 
-            var a<-5
-            func beounu() return
-            func main() begin
-                var b <- a
-            end
+    number a <- 10
+    bool b <- true
+    func test(number e) begin
+        return e + 1
+    end
+    func main() begin
+        number c <- test(a)
+        if ((c > a) and b) return
+    end
         

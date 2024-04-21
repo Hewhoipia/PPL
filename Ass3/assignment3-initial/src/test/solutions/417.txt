@@ -1,1 +1,1 @@
-Redeclared Function: beou
+Type Cannot Be Inferred: AssignStmt(Id(b), Id(a))

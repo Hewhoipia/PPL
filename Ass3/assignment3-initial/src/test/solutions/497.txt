@@ -1,1 +1,1 @@
-Redeclared Variable: a
+Type Cannot Be Inferred: VarDecl(Id(a), None, var, ArrayLit(ArrayLit(Id(x), Id(x)), ArrayLit(Id(y), Id(y))))

@@ -1,8 +1,6 @@
 
-dynamic beou
-func beou(number a[3], bool b, string c) return b
-func main()
-begin
-    beou <- beou(beou, beou, beou)
-end
+    func main() begin
+        dynamic a
+        var b <- a
+    end
         

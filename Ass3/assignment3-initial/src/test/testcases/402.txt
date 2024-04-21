@@ -1,9 +1,6 @@
-dynamic a
-func beou(number b, string c)
-    begin
-        beou(a,a)    
+func test()
+    func main() begin
     end
-func main()
-    begin
+    func test() begin
     end
         

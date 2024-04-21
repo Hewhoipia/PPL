@@ -5,6 +5,6 @@ dynamic d
 func main()
 begin
     number a[3] <- [b,c,d]
-    bool f <- d
+    number f <- d
 end
         

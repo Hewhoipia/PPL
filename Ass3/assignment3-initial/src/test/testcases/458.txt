@@ -1,8 +1,14 @@
 
-            number a[2,3]
-            number c
-            func beounu() begin
-                c["1","2"]<-5
-            end
-            func main() return
+    dynamic a
+    func getA(number x)
+    func test2(number c)
+    func main() begin
+        dynamic x
+        test2(getA(x))
+    end
+    func getA(number x) return a
+    func test2(number c) begin
+        writeNumber(c)
+        return
+    end
         

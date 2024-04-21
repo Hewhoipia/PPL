@@ -1,8 +1,14 @@
 
-            number a
-            bool b
-            func beounu() begin
-                number c <- -a
-            end
-            func main() return
+    func main() begin
+        number a
+        bool b <- true
+        dynamic c
+        dynamic d
+        if (c) begin
+            string a <- "hello"
+            c <- false
+        end
+        elif (d) d <- false
+        c <- d
+    end
         

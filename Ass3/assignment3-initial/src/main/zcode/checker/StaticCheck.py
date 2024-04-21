@@ -7,7 +7,7 @@ from functools import reduce
 # Phan Thanh Thong - 2153846
 
 class DeclKind:
-    def __init__(self, kind:str, param:list=None):
+    def __init__(self, kind:str, param:list=[]):
         # kind must be 'var', 'funcDecl' or 'funcDefi'
         self.kind=kind
         self.param=param
@@ -85,7 +85,7 @@ class StaticChecker(BaseVisitor, Utils):
         elif ctx.varType is not None:
             typ = ctx.varType
             o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
-        elif ctx.varInit is not None:
+        elif ctx.varInit is not None and ctx.modifier == "var":
             symbol=Symbol(DeclKind('var'), ctx.name.name, VoidType())
             o[0].append(symbol)
             typInit = self.visit(ctx.varInit,o)
@@ -97,6 +97,39 @@ class StaticChecker(BaseVisitor, Utils):
             if isinstance(typInit, ArrayType):
                 if not isinstance(typInit.eleType, Type): raise TypeCannotBeInferred(ctx)
             symbol.typ=typInit
+        elif ctx.varInit is not None and ctx.modifier == "dynamic":
+            symbol=Symbol(DeclKind('var'), ctx.name.name)
+            o[0].append(symbol)
+            typInit = self.visit(ctx.varInit,o)
+            if symbol.typ is None:
+                if typInit is None:
+                    raise TypeCannotBeInferred(ctx)
+                if isinstance(typInit, Symbol):
+                    if typInit.typ is None: raise TypeCannotBeInferred(ctx)
+                    typInit=typInit.typ
+                if isinstance(typInit, ArrayType):
+                    if not isinstance(typInit.eleType, Type): raise TypeCannotBeInferred(ctx)
+                symbol.typ=typInit
+            elif symbol.typ is not None:
+                if isinstance(typInit, Symbol):
+                    if typInit.typ is None: typInit.typ = symbol.typ
+                    typInit=typInit.typ
+                if type(symbol.typ) != type(typInit): raise TypeMismatchInStatement(ctx)
+                if isinstance(symbol.typ, ArrayType):
+                    if not isinstance(typInit.eleType, Type):
+                        if symbol.typ.size < typInit.size: raise TypeCannotBeInferred(ctx)
+                        resi=symbol.typ.size[:]
+                        for i in range(len(typInit.size)):
+                            if symbol.typ.size[i] != typInit.size[i]: raise TypeCannotBeInferred(ctx)
+                            resi.pop(0)
+                        if resi:
+                            Utils.infer(typInit.eleType, ArrayType(resi, symbol.typ.eleType))
+                            typInit=symbol.typ
+                        elif not resi:
+                            Utils.infer(typInit.eleType, symbol.typ.eleType)
+                            typInit=symbol.typ
+                    if (type(symbol.typ.eleType) != type(typInit.eleType)) or (symbol.typ.size != typInit.size):
+                        raise TypeMismatchInStatement(ctx)
         else: o[0].append(Symbol(DeclKind('var'), ctx.name.name, typ))
             
     def visitFuncDecl(self, ctx:FuncDecl, o:object):
@@ -330,8 +363,10 @@ class StaticChecker(BaseVisitor, Utils):
                     if idx.typ is not None: idx=idx.typ
                 if type(idx) is not NumberType: raise TypeMismatchInExpression(ctx)
         if len(ctx.idx) < len(typ.typ.size):
+            resi=typ.typ.size[:]
             for i in range(len(ctx.idx)):
-                size.append(typ.typ.size[i])
+                resi.pop(0)
+            size=resi
         if not size: return typ.typ.eleType
         elif size: return ArrayType(size, typ.typ.eleType)
 
@@ -443,7 +478,6 @@ class StaticChecker(BaseVisitor, Utils):
     def visitAssign(self, ctx:Assign, o:object):
         lhs=self.visit(ctx.lhs, o)
         rhs=self.visit(ctx.rhs, o)
-        # raise PrintTest(lhs.name + "|" + str(type(lhs.typ)))
         if lhs is None or rhs is None:
             raise TypeCannotBeInferred(ctx)
         if isinstance(lhs, Symbol) and isinstance(rhs, Symbol):
@@ -490,6 +524,9 @@ class StaticChecker(BaseVisitor, Utils):
                         raise TypeMismatchInStatement(ctx)
         elif not isinstance(lhs, Symbol) and not isinstance(rhs, Symbol):
             if type(lhs) != type(rhs): raise TypeMismatchInStatement(ctx)
+            if isinstance(lhs, ArrayType):
+                if type(lhs.eleType) != type(rhs.eleType): raise TypeMismatchInStatement(ctx)
+                if lhs.size != rhs.size: raise TypeMismatchInStatement(ctx)
         elif not isinstance(lhs, Symbol):
             if rhs.typ is None:
                 if lhs is None: raise TypeCannotBeInferred(ctx)
@@ -573,7 +610,7 @@ class StaticChecker(BaseVisitor, Utils):
                 continue
             if isinstance(typ, ArrayType):
                 if isinstance(typ.eleType, Type):
-                    eleType=typ.eleType
+                    eleType=typ
                     break
                 continue
             eleType=typ
@@ -588,13 +625,22 @@ class StaticChecker(BaseVisitor, Utils):
                         value[i].typ=eleType
                         continue
                 if isinstance(value[i], ArrayType):
-                    if isinstance(value[i].eleType, Type):
-                        if type(value[i].eleType) != type(eleType): raise TypeMismatchInExpression(ctx)
-                        continue
-                    elif not isinstance(value[i].eleType, Type):
-                        Utils.infer(value[i].eleType, eleType)
-                        continue
+                    if isinstance(eleType, ArrayType):
+                        if isinstance(value[i].eleType, Type):
+                            if type(value[i].eleType) != type(eleType.eleType): raise TypeMismatchInExpression(ctx)
+                            continue
+                        elif not isinstance(value[i].eleType, Type):
+                            Utils.infer(value[i].eleType, eleType.eleType)
+                            continue
+                    elif not isinstance(eleType, ArrayType):
+                        if isinstance(value[i].eleType, Type):
+                            if type(value[i].eleType) != type(eleType): raise TypeMismatchInExpression(ctx)
+                            continue
+                        elif not isinstance(value[i].eleType, Type):
+                            Utils.infer(value[i].eleType, eleType)
+                            continue
                 if type(value[i]) != type(eleType): raise TypeMismatchInExpression(ctx)
+            if isinstance(eleType, ArrayType): eleType=eleType.eleType
         elif eleType is None:
             eleType=[]
             for typ in value:
@@ -602,8 +648,26 @@ class StaticChecker(BaseVisitor, Utils):
                     eleType+=typ.eleType
                 elif isinstance(typ, Symbol):
                     eleType+=[typ]
+        check_size=None
+        for typ in value:
+            if isinstance(typ, ArrayType):
+                check_size=typ.size
+            elif isinstance(typ, Symbol):
+                if isinstance(typ.typ, ArrayType):
+                    check_size=typ.typ.size
+                else: check_size=1
+            else: check_size=1
+            break
+        for typ in value:
+            if isinstance(typ, ArrayType):
+                if check_size != typ.size: raise TypeMismatchInExpression(ctx)
+            elif isinstance(typ, Symbol):
+                if isinstance(typ.typ, ArrayType):
+                    if check_size != typ.typ.size: raise TypeMismatchInExpression(ctx)
+                else:
+                    if check_size != 1: raise TypeMismatchInExpression(ctx)
+            else:
+                if check_size != 1: raise TypeMismatchInExpression(ctx)
         if isinstance(value[0], ArrayType):
-            for typ in value:
-                if typ.size != value[0].size: raise TypeMismatchInExpression(ctx)
             size+=value[0].size
         return ArrayType(size, eleType)

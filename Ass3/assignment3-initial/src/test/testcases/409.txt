@@ -1,9 +1,6 @@
 
-func beou(number a, bool b, string c) return
-func main()
-begin
-    number a
-    bool b
-    a <- beou(a, b)
-end
+    func main() begin
+        number a <- 1
+        a <- "bruh"
+    end
         

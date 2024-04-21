@@ -1,0 +1,16 @@
+
+    func foo(number a[3, 4]) begin
+        dynamic gg
+        if (a[1,1] > 0) return a[1]
+        elif (a[1, 1] = 0) return gg
+        else begin
+            gg <- [1, 2, 3, 4]
+            return gg
+        end
+    end
+    func main() begin
+        dynamic a
+        var b <- foo(a)
+        b <- a[3]
+    end
+        

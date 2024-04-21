@@ -1,8 +1,6 @@
-
-func beou()
-func main()
-func main()
-begin
-    beou()
-end
+func test(number a, string a)
+    func test(number c, string d) begin
+    end
+    func main() begin
+    end
         

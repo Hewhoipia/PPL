@@ -1,6 +1,5 @@
 
-            func babiboo() return
-            func babiboo()
-            
-            func main() return
+    func main() begin
+        dynamic a <- [a, 2, 3]
+    end
         

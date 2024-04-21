@@ -1,8 +1,6 @@
 
-        func beou() begin
-            return 1
-        end
-        func main() begin
-            beou()
-        end
+    func test(number a, bool b) return true
+    func main() begin
+        number b <- test(1, true)
+    end
         

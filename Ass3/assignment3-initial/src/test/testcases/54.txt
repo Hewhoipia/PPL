@@ -1,6 +1,6 @@
 
             func a()
-            func beounu() begin
+            func foo() begin
                 return "hehe"
             end
             func main() return

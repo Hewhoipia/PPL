@@ -1,7 +1,13 @@
 
-            number a
-            number b
-            func main() begin
-                c <- d
-            end
+    number a
+    func test() return false
+    func test2(number c)
+    func main() begin
+        a <- test2(2)
+        c <- a
+    end
+    func test2(number c) begin
+        bool b <- test()
+        return c
+    end
         

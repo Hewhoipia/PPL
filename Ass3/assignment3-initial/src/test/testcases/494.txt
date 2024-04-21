@@ -1,6 +1,7 @@
 
-            number babiboo
-            func babiboo() return
-            
-            func main() return
+    func main() begin
+        dynamic x
+        dynamic y
+        number a[2,2] <- [[x,x], [4,4]]
+    end
         

@@ -1,7 +1,11 @@
 
-            number a
-            func beounu() return
-            func main() begin
-                number b <- a
-            end
+    func main() begin
+        bool a <- true
+        bool b <- false
+        number c
+        dynamic d
+        if (c = d) begin
+            d <- 1
+        end
+    end
         

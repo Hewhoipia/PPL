@@ -1,6 +1,7 @@
 
-func main()
-begin
-    var x <- [[[[1, 6]], [3, 4, 8]], [[2, 4, 1], [9, 40, 11]]]
-
-end
+    func test(number a, bool b)
+    func main() begin
+        bool b <- test(1, test(2, false))
+    end
+    func test(number c, bool d) return true
+        

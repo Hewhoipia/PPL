@@ -1,7 +1,7 @@
 
-            func beounu() return 1
-            func beounu1() begin
-                beounu()
+            func foo() return 1
+            func foo1() begin
+                foo()
             end
             func main() return
         

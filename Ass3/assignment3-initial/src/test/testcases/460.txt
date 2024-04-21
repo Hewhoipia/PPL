@@ -1,8 +1,16 @@
 
-            number a[2,3]
-            number c
-            func beounu() begin
-                a[2,3]<-5
-            end
-            func main() return
+    dynamic a
+    func getA(number x)
+    func test2(number c)
+    func test3()
+    func main() begin
+        dynamic x
+        test2(getA(x))
+    end
+    func getA(number x) return test3()
+    func test2(number c) begin
+        writeNumber(c)
+        return
+    end
+    func test3() return false
         

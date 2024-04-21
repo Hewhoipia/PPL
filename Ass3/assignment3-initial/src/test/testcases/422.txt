@@ -1,11 +1,13 @@
 
-dynamic a
-func beou (number b)
-    begin
-        a[1] <- 1
-        return a[1,2]
+    number a
+    string b
+    bool c
+    func main() begin
+        a <- 123
+        b <- "hello"
+        c <- true
+        string a <- "another a"
+        var c <- a
+        b <- c
     end
-func main()
-begin
-end
         

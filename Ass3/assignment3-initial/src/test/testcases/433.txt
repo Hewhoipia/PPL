@@ -1,8 +1,6 @@
 
-        func main() begin
-        number a <- a
-        end
-        func beou(number x, number y)
-        func beou(number z, number x) begin
-        end
+    func test(number a, bool b)
+    func main() begin
+        string b <- test(1, test(2, false))
+    end
         

@@ -1,7 +1,9 @@
 
-            number a
-            func beounu(number a,string a)
-                begin
-                    number a
-                end
+    func test() begin
+        return 1
+        return 3.14
+    end
+    func main() begin
+        number a <- test()
+    end
         

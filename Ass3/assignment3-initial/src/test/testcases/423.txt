@@ -1,9 +1,7 @@
 
-var a <- 3
-func beou (number b)
-    return a
-func main()
-begin
-    beou(a)
-end
+    func test() begin
+    end
+    func main() begin
+        test()
+    end
         

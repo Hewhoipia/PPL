@@ -1,11 +1,5 @@
-
-func beou()
-func beou()
-    begin
-        return
+func test()
+    func main() begin
     end
-func beou() return
-func main()
-    begin
-    end
+    func test()
         

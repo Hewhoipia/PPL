@@ -1,10 +1,6 @@
 
-func beou(number a[3], bool b, string c) return 3
-func main()
-begin
-    bool a[3]
-    bool b
-    dynamic c
-    a <- beou(a, b, c)
-end
+    func main() begin
+        dynamic a
+        a <- 1000
+    end
         

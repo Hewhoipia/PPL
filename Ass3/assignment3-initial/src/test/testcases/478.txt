@@ -1,9 +1,7 @@
 
-            dynamic a
-            dynamic x
-            dynamic y
-            func beounu(number a,string b) return 
-            func main() begin
-                beounu(x,y)
-            end
+    func main() begin
+        bool a[2, 3] <- [[true, true, true], [false, false, false]]
+        a[1] <- [true, true, false]
+        a[1] <- true
+    end
         

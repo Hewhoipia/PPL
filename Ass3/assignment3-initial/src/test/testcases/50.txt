@@ -1,7 +1,7 @@
 
-            func beounu(number x,number y) return 
-            func beounu1() begin
-                beounu(x)
+            func foo(number x,number y) return 
+            func foo1() begin
+                foo(x)
             end
             func main() return
         

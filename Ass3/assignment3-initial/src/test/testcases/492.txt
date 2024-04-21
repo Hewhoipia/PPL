@@ -1,6 +1,6 @@
 
-            func babiboo()
-            func babiboo()
-            
-            func main() return
+    func main() begin
+        dynamic x
+        x[1, 2] <- [1,2,3]
+    end
         

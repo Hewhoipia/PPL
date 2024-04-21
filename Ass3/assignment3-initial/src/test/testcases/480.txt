@@ -1,7 +1,5 @@
 
-            dynamic a
-            dynamic b
-            func main() begin
-                a <- b
-            end
+    func main() begin
+        number a[5] <- [1,true,3,4,5]
+    end
         

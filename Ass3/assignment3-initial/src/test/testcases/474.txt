@@ -1,7 +1,7 @@
 
-            dynamic a
-            func beounu(number a) return
-            func main() begin
-                var y <- a+beounu(x)
-            end
+    number a[1, 2]
+    func main() begin
+        a[1, 1] <- 1
+        a[2, 1] <- 2
+    end
         

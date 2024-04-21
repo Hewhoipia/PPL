@@ -1,6 +1,9 @@
 
-            func beounu(number a,string b) 
-            func beounu(number a,string b) begin
-            end
-            func main() return
+    func test() begin
+        return 1
+        return "true"
+    end
+    func main() begin
+        number a <- test()
+    end
         

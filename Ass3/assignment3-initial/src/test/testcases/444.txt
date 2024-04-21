@@ -1,4 +1,7 @@
 
-            number a
-            number a
+    func main() begin
+        string s <- readString()
+        number n <- readNumber()
+        bool b <- readBool()
+    end
         

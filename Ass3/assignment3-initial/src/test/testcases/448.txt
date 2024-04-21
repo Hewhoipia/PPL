@@ -1,4 +1,7 @@
 
-            func beounu() return
-            func beounu() 
+    func main() begin
+        string s <- readString(1)
+        number n <- readNumber()
+        bool b <- readBool()
+    end
         

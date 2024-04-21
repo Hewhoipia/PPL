@@ -1,7 +1,6 @@
-dynamic a
-dynamic d
-number b[7,7,7] <- [[a,d],[a,d],[a,d]]
-func main()
-begin
-end
+func test()
+    func test() begin
+    end
+    func main(number a) begin
+    end
         

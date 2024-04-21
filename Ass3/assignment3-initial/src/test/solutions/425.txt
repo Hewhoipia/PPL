@@ -1,1 +1,1 @@
-No Entry Point
+Type Mismatch In Statement: CallStmt(Id(test), [StringLit(wrong), BooleanLit(True)])
