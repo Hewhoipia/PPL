@@ -1,1 +1,1 @@
-Type Mismatch In Statement: CallStmt(Id(foo), [Id(a)])
+Type Mismatch In Statement: CallStmt(Id(beou), [Id(a)])

@@ -1,0 +1,6 @@
+
+        func boo()
+        func main() begin
+            boo()
+        end
+        

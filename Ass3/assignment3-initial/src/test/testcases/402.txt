@@ -1,8 +1,9 @@
-
-        func foo() begin
-            return 1
-        end
-        func main() begin
-            foo()
-        end
+dynamic a
+func beou(number b, string c)
+    begin
+        beou(a,a)    
+    end
+func main()
+    begin
+    end
         

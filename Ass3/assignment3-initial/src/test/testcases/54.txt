@@ -1,0 +1,7 @@
+
+            func a()
+            func beounu() begin
+                return "hehe"
+            end
+            func main() return
+        

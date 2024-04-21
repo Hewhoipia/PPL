@@ -1,7 +1,10 @@
 
+func beou(number a, bool b, string c) return a
 func main()
 begin
-    number a[2, 2] <- [[1, 2], [3, 4]]
-    number b[2] <- a[0]
-    writeNumber(b[0])
+    dynamic a
+    bool b
+    dynamic c
+    a <- beou(a, c, b)
 end
+        

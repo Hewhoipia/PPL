@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: VarDecl(Id(d), None, dynamic, ArrayLit(Id(a), Id(b), Id(c)))
+Type Mismatch In Expression: CallExpr(Id(beou), [Id(a), Id(b), Id(c)])

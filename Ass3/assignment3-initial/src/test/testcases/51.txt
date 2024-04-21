@@ -1,0 +1,9 @@
+
+            func beounu(number x,string y) return 
+            func beounu1() begin
+                number y
+                string x
+                beounu(x,y)
+            end
+            func main() return
+        

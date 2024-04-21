@@ -4,7 +4,7 @@ from AST import *
 
 
 class CheckerSuite(unittest.TestCase):
-############# Me (TIN)
+############ Me (TIN)
     def test1(self):
         input = """number a
         """
@@ -4264,4 +4264,44 @@ end
         """
         expect = "Redeclared Function: foo"
         self.assertTrue(TestChecker.test(input, expect, 503))
-    
+    def test_424(self):
+        input = """
+dynamic b
+dynamic c
+dynamic d
+func main()
+begin
+    number a[3] <- [b,c,d]
+    number f <- d
+end
+        """
+        expect = ""
+        # infer b c d to number
+        self.assertTrue(TestChecker.test(input, expect, 424))
+    def test_1(self):
+        input = """
+        dynamic x
+        number a[2,2] <- [x,[x,x]]
+        func main() return
+        """
+        expect = "Type Mismatch In Expression: ArrayLit(Id(x), ArrayLit(Id(x), Id(x)))"
+        self.assertTrue(TestChecker.test(input, expect, 504))
+    def test_uninfer_or_mismatch_13(self):
+        input = """
+            func main()
+            begin
+                number a[2,3] <- [[1,2,3],[4,5,6]]
+                a <- [[1,2,3,4],[4,5,6]]
+            end
+
+        """
+        expect = "Type Mismatch In Expression: ArrayLit(ArrayLit(NumLit(1.0), NumLit(2.0), NumLit(3.0), NumLit(4.0)), ArrayLit(NumLit(4.0), NumLit(5.0), NumLit(6.0)))"
+        self.assertTrue(TestChecker.test(input, expect, 523))
+    def testsomething(self):
+        input = """
+        func trong(number a[1])
+                        return a[1]
+                    var abc <- false > "1" + 2
+                    """
+        expect = "Type Mismatch In Expression: BinaryOp(>, BooleanLit(False), BinaryOp(+, StringLit(1), NumLit(2.0)))"
+        self.assertTrue(TestChecker.test(input, expect, 1910))

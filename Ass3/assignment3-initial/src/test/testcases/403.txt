@@ -1,8 +1,11 @@
 
-        func main() begin
-            
-            dynamic b
-            dynamic a 
-            number x[1, 2] <- [[1,b]]
-        end
+func beou()
+func beou()
+    begin
+        return
+    end
+func beou() return
+func main()
+    begin
+    end
         

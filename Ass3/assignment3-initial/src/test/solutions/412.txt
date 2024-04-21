@@ -1,1 +1,1 @@
-Type Mismatch In Statement: VarDecl(Id(x), ArrayType([3.0, 3.0], NumberType), None, ArrayLit(Id(a), Id(b)))
+Type Mismatch In Statement: AssignStmt(Id(a), CallExpr(Id(beou), [Id(a), Id(b), Id(c)]))

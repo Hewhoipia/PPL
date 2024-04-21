@@ -1,2 +1,6 @@
-number a
+dynamic a
+number b[3] <- [true,2,a]
+func main()
+begin
+end
         

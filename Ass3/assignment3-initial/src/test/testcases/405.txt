@@ -1,5 +1,7 @@
-
-        func main() begin
-            number x[1, 2] <- [[1,2]]
-        end
+dynamic a
+dynamic d
+number b[7,7,7] <- [[a,d],[a,d],[a,d]]
+func main()
+begin
+end
         

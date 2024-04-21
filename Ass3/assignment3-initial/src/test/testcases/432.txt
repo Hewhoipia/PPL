@@ -1,0 +1,7 @@
+
+        func main() begin
+        end
+        func beou(number x)
+        func beou(number x, number y) begin
+        end
+        

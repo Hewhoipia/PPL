@@ -1,0 +1,8 @@
+
+            dynamic a
+            dynamic x
+            func beounu(number a) return a
+            func main() begin
+                beounu(x,y)
+            end
+        

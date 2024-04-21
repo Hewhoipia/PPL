@@ -1,7 +1,8 @@
-
-        func main() begin
-        end
-        func foo(number x)
-        func foo(number x, number y) begin
-        end
+number a
+bool d
+number b[3] <- [a,a,d]
+bool c <- a
+func main()
+begin
+end
         

@@ -1,9 +1,9 @@
 
 var a <- 3
-func foo (number b)
+func beou (number b)
     return a
 func main()
 begin
-    foo(a)
+    beou(a)
 end
         

@@ -1,0 +1,11 @@
+
+            number a
+            bool b
+            func beounu() begin
+                number c <- -a
+            end
+            func beounu1() begin
+                b <- beounu()
+            end
+            func main() return
+        

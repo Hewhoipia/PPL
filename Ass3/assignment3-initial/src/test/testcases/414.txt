@@ -1,8 +1,10 @@
 
-        func main()
-begin 
-    dynamic a
-    dynamic b
+func beou(number a[3], bool b, string c) return
+func main()
+begin
+    number a[3]
+    bool b
     dynamic c
-    dynamic d <- [a,b,c]
+    a <- beou(a, b, c)
 end
+        

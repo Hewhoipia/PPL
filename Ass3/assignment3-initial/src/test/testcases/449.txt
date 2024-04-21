@@ -1,0 +1,4 @@
+
+            func beounu(number a,string b) 
+            func beounu(string a,number b) 
+        

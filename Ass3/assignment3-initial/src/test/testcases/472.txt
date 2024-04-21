@@ -1,0 +1,7 @@
+
+            dynamic a
+            func beounu() return
+            func main() begin
+                var b <- a and true
+            end
+        

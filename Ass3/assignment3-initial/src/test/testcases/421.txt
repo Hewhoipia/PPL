@@ -1,10 +1,10 @@
 
-number a[3] <- [1,2,3]
-func foo (number b)
+number a[3] <- [7,7,7]
+func beou (number b)
     begin
         a[1] <- b + a[2]
         dynamic c
-        c <- a[c] + foo(a[1])[1]
+        c <- a[c] + beou(a[1])[1]
         return a
     end
 func main()

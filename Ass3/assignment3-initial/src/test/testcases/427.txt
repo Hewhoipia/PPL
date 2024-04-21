@@ -1,0 +1,8 @@
+
+        func beou() begin
+            return 1
+        end
+        func main() begin
+            beou()
+        end
+        

@@ -1,6 +1,6 @@
 
 dynamic a
-func foo (number b)
+func beou (number b)
     begin
         a[1] <- 1
         return a[1,2]
