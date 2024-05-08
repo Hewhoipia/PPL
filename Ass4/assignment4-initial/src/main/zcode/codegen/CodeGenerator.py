@@ -147,6 +147,62 @@ class CodeGenVisitor(BaseVisitor):
         self.genMETHOD(ast, o.sym, frame)
         return Symbol(ast.name, MType([x.typ for x in ast.param], ast.returnType), CName(self.className))
 
+    def visitVarDecl(self, ast, o):
+        pass
+
+    def visitFuncDecl(self, ast, o):
+        pass
+
+    def visitNumberType(self, ast, o):
+        pass
+
+    def visitBoolType(self, ast, o):
+        pass
+
+    def visitStringType(self, ast, o):
+        pass
+
+    def visitArrayType(self, ast, o):
+        pass
+
+    def visitBinaryOp(self, ast, o):
+        e1c, e1t = self.visit(ast.left, o)
+        e2c, e2t = self.visit(ast.right, o)
+        return e1c + e2c + self.emit.emitADDOP(ast.op, e1t, o.frame), e1t
+
+    def visitUnaryOp(self, ast, o):
+        pass
+
+    def visitCallExpr(self, ast, o):
+        pass
+
+    def visitId(self, ast, o):
+        pass
+
+    def visitArrayCell(self, ast, o):
+        pass
+
+    def visitBlock(self, ast, o):
+        pass
+
+    def visitIf(self, ast, o):
+        pass
+
+    def visitFor(self, ast, o):
+        pass
+
+    def visitContinue(self, ast, o):
+        pass
+
+    def visitBreak(self, ast, o):
+        pass
+
+    def visitReturn(self, ast, o):
+        pass
+
+    def visitAssign(self, ast, o):
+        pass
+
     def visitCallStmt(self, ast, o):
         ctxt = o
         frame = ctxt.frame
@@ -165,7 +221,11 @@ class CodeGenVisitor(BaseVisitor):
     def visitNumberLiteral(self, ast, o):
         return self.emit.emitPUSHFCONST(ast.value, o.frame), IntType()
 
-    def visitBinaryOp(self, ast, o):
-        e1c, e1t = self.visit(ast.left, o)
-        e2c, e2t = self.visit(ast.right, o)
-        return e1c + e2c + self.emit.emitADDOP(ast.op, e1t, o.frame), e1t
+    def visitBooleanLiteral(self, ast, o):
+        pass
+
+    def visitStringLiteral(self, ast, o):
+        pass
+
+    def visitArrayLiteral(self, ast, o):
+        pass
