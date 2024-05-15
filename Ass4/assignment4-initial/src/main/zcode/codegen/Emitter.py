@@ -3,8 +3,15 @@ from Utils import *
 # from StaticError import *
 import CodeGenerator as cgen
 from MachineCode import JasminCode
+from dataclasses import dataclass
 from AST import *
 
+@dataclass
+class ClassType(Type):
+    def __init__(self, classname):
+        self.classname = classname
+    def __str__(self):
+        return "ClassType(" + str(self.classname)  + ")"
 
 class Emitter():
     def __init__(self, filename):
@@ -14,7 +21,7 @@ class Emitter():
 
     def getJVMType(self, inType):
         typeIn = type(inType)
-        if typeIn is IntType:
+        if typeIn is NumberType:
             return "I"
         elif typeIn is StringType:
             return "Ljava/lang/String;"
@@ -29,7 +36,7 @@ class Emitter():
 
     def getFullType(inType):
         typeIn = type(inType)
-        if typeIn is IntType:
+        if typeIn is NumberType:
             return "int"
         elif typeIn is StringType:
             return "java/lang/String"
@@ -80,7 +87,7 @@ class Emitter():
         # typ: Type
         # frame: Frame
 
-        if type(typ) is IntType:
+        if type(typ) is NumberType:
             return self.emitPUSHICONST(in_, frame)
         elif type(typ) is StringType:
             frame.push()
@@ -96,7 +103,7 @@ class Emitter():
         # ..., arrayref, index, value -> ...
 
         frame.pop()
-        if type(in_) is IntType:
+        if type(in_) is NumberType:
             return self.jvm.emitIALOAD()
         # elif type(in_) is cgen.ArrayPointerType or type(in_) is cgen.ClassType or type(in_) is StringType:
         elif type(in_) is ClassType or type(in_) is StringType:
@@ -112,7 +119,7 @@ class Emitter():
         frame.pop()
         frame.pop()
         frame.pop()
-        if type(in_) is IntType:
+        if type(in_) is NumberType:
             return self.jvm.emitIASTORE()
         # elif type(in_) is cgen.ArrayPointerType or type(in_) is cgen.ClassType or type(in_) is StringType:
         elif type(in_) is ClassType or type(in_) is StringType:
@@ -146,7 +153,7 @@ class Emitter():
         # ... -> ..., value
 
         frame.push()
-        if type(inType) is IntType:
+        if type(inType) is NumberType:
             return self.jvm.emitILOAD(index)
         # elif type(inType) is cgen.ArrayPointerType or type(inType) is cgen.ClassType or type(inType) is StringType:
         elif type(inType) is ClassType or type(inType) is StringType:
@@ -181,7 +188,7 @@ class Emitter():
 
         frame.pop()
 
-        if type(inType) is IntType:
+        if type(inType) is NumberType:
             return self.jvm.emitISTORE(index)
         # elif type(inType) is cgen.ArrayPointerType or type(inType) is cgen.ClassType or type(inType) is StringType:
         elif type(inType) is ClassType or type(inType) is StringType:
@@ -312,7 +319,7 @@ class Emitter():
         # frame: Frame
         # ..., value -> ..., result
 
-        if type(in_) is IntType:
+        if type(in_) is NumberType:
             return self.jvm.emitINEG()
         else:
             return self.jvm.emitFNEG()
@@ -346,12 +353,12 @@ class Emitter():
 
         frame.pop()
         if lexeme == "+":
-            if type(in_) is IntType:
+            if type(in_) is NumberType:
                 return self.jvm.emitIADD()
             else:
                 return self.jvm.emitFADD()
         else:
-            if type(in_) is IntType:
+            if type(in_) is NumberType:
                 return self.jvm.emitISUB()
             else:
                 return self.jvm.emitFSUB()
@@ -370,12 +377,12 @@ class Emitter():
 
         frame.pop()
         if lexeme == "*":
-            if type(in_) is IntType:
+            if type(in_) is NumberType:
                 return self.jvm.emitIMUL()
             else:
                 return self.jvm.emitFMUL()
         else:
-            if type(in_) is IntType:
+            if type(in_) is NumberType:
                 return self.jvm.emitIDIV()
             else:
                 return self.jvm.emitFDIV()
@@ -436,11 +443,11 @@ class Emitter():
             result.append(self.jvm.emitIFICMPEQ(labelF))
         elif op == "==":
             result.append(self.jvm.emitIFICMPNE(labelF))
-        result.append(self.emitPUSHCONST("1", IntType(), frame))
+        result.append(self.emitPUSHCONST("1", NumberType(), frame))
         frame.pop()
         result.append(self.emitGOTO(labelO, frame))
         result.append(self.emitLABEL(labelF, frame))
-        result.append(self.emitPUSHCONST("0", IntType(), frame))
+        result.append(self.emitPUSHCONST("0", NumberType(), frame))
         result.append(self.emitLABEL(labelO, frame))
         return ''.join(result)
 
@@ -501,7 +508,7 @@ class Emitter():
     def getConst(self, ast):
         # ast: Literal
         if type(ast) is IntLiteral:
-            return (str(ast.value), IntType())
+            return (str(ast.value), NumberType())
 
     '''   generate code to initialize a local array variable.<p>
     *   @param index the index of the local variable.
@@ -590,7 +597,7 @@ class Emitter():
         # in_: Type
         # frame: Frame
 
-        if type(in_) is IntType:
+        if type(in_) is NumberType:
             frame.pop()
             return self.jvm.emitIRETURN()
         elif type(in_) is VoidType:
