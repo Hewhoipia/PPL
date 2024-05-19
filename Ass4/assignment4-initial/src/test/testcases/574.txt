@@ -1,0 +1,20 @@
+
+        func init()
+        begin
+            string a[4] <- ["T1", "vo", "dich", "vip"]
+            return a
+        end
+        var a <- init()
+        func main()
+        begin
+            var b <- a
+            b[3] <- "ko noi nhieu"
+            number i <- 0
+            for i until i > 3 by 1
+            begin
+                writeString(a[i])
+                if (i = 3) break
+                writeString(" ")
+            end
+        end
+        

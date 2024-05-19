@@ -1,0 +1,15 @@
+
+        dynamic a <- [15, 8, 2000]
+        func tinhcamnaykhonoi()
+        func main()
+        begin
+            tinhcamnaykhonoi()
+            number i <- 0
+            for i until i > 2 by 1
+                writeNumber(a[i])
+        end
+        
+        func tinhcamnaykhonoi() begin
+            a[2] <- 2003
+        end
+        

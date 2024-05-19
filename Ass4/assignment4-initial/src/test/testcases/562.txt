@@ -1,0 +1,17 @@
+
+        func main()
+        begin
+            number a <- 15.8
+            number b <- 0
+            if (a > 30.0)
+            begin
+                number b <- 99.99
+            end
+            elif (a < 20) begin
+                writeString("here")
+                b <- 88.88
+                number b <- 99.99
+            end
+            writeNumber(b)
+        end
+        

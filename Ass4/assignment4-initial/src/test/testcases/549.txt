@@ -1,0 +1,10 @@
+
+        func main()
+        begin
+            string a <- "Hello, "
+            string b <- "World!"
+            writeBool(a == b)
+            string c <- "Hello, "
+            writeBool(a == c)
+        end
+        

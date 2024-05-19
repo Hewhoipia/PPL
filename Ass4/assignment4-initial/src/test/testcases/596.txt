@@ -1,0 +1,17 @@
+
+        var a <- 2
+        func tinhcamnaykhonoi() begin
+            return a * 2
+        end
+        func emnhinanhmalongboiroi()
+        func main()
+        begin
+            number a <- tinhcamnaykhonoi()
+            writeNumber(a)
+            number b <- emnhinanhmalongboiroi()
+            writeNumber(b)
+        end
+        func emnhinanhmalongboiroi() begin
+            return a
+        end
+        

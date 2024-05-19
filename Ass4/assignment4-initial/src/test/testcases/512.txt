@@ -1,0 +1,7 @@
+
+        func main ()
+        begin
+            var check <- "check var!"
+            writeString(check)
+        end
+        

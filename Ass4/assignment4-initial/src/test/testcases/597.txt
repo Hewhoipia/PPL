@@ -1,0 +1,16 @@
+
+        var a <- 2
+        func tinhcamnaykhonoi()
+        func emnhinanhmalongboiroi()
+        func main()
+        begin
+            if (not tinhcamnaykhonoi()) begin
+                number b <- emnhinanhmalongboiroi()
+                writeNumber(b)
+            end
+        end
+        func tinhcamnaykhonoi() return false
+        func emnhinanhmalongboiroi() begin
+            return a
+        end
+        

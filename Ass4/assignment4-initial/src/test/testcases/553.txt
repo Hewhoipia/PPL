@@ -1,0 +1,14 @@
+
+        func T1vodich(string shoyo)
+        
+        func main()
+        begin
+            string shoyo <- "string"
+            T1vodich(s)
+            writeString(shoyo)
+        end
+        
+        func T1vodich(string shoyo) begin
+            s <- "new string"
+        end
+        

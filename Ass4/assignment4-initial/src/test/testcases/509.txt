@@ -1,0 +1,9 @@
+
+        func main ()
+        begin
+            number bao <- 3
+            writeNumber(bao)
+            bool chuan <- true
+            writeBool(chuan)
+        end
+        

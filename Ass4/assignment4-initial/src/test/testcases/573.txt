@@ -1,0 +1,20 @@
+
+        func init()
+        begin
+            bool a[4] <- [true, true, false, false]
+            return a
+        end
+        var a <- init()
+        func main()
+        begin
+            var b <- a
+            b[3] <- true
+            number i <- 0
+            for i until i > 3 by 1
+            begin
+                writeBool(a[i])
+                if (i = 3) break
+                writeString(" ")
+            end
+        end
+        

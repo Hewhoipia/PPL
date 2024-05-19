@@ -1,0 +1,9 @@
+
+        func main()
+        begin
+            number a <- 5.5
+            number b <- 5
+            bool c <- a = b
+            writeBool(c)
+        end
+        

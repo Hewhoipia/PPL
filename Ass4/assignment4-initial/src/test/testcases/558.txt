@@ -1,0 +1,13 @@
+
+        func main()
+        begin
+            if (true) begin
+                writeNumber(1)
+                return
+            end
+            else begin
+                writeNumber(0)
+                return
+            end
+        end
+        

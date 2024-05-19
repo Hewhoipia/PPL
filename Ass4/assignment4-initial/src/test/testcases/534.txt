@@ -1,0 +1,14 @@
+
+        func main()
+        begin
+            number a <- 1
+            number i <- 0
+            for i until i > 9 by 1 begin
+                if (i < 5) begin
+                    number a <- 2
+                    writeNumber(a)
+                end
+            end
+            writeNumber(a)
+        end
+        

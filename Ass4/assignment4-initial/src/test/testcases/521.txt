@@ -1,0 +1,9 @@
+
+        func main()
+        begin
+            var bao <- true
+            bool chuan <- false
+            writeBool(not bao)
+            writeBool(not chuan)
+        end
+        

@@ -1,0 +1,9 @@
+
+        func main()
+        begin
+            number bao <- 3 + 15 - 8
+            bao <- bao * 2
+            bao <- bao / 2
+            writeNumber(bao)
+        end
+        

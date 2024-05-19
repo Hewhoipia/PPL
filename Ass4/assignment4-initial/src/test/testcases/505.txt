@@ -1,0 +1,10 @@
+
+        func main ()
+        begin
+            writeNumber(1)
+            writeString(" is equal to ")
+            writeNumber(2)
+            writeString(" is ")
+            writeBool(false)
+        end
+        

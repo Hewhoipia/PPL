@@ -1,0 +1,16 @@
+
+        func main()
+        begin
+            number a[5] <- [8, 7, 8, 4, 8]
+            var i <- 3
+            a[i] <- 8
+            a[1] <- a[0]
+            var j <- 0
+            for j until j > 4 by 1
+            begin
+                writeNumber(a[j])
+                if (j = 4) break
+                writeString(" ")
+            end
+        end
+        

@@ -1,0 +1,12 @@
+
+        number a <- 5
+        func tanglen()
+        begin
+            a <- 6
+        end
+        func main()
+        begin
+            tanglen()
+            writeNumber(a)
+        end
+        

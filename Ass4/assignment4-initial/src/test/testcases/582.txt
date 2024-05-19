@@ -1,0 +1,29 @@
+
+        func main()
+        begin
+            if (true)
+            begin
+                bool b[3, 2, 3] <- [[[true, false, true], [false, true, false]], [[true, false, true], [false, true, false]], [[true, false, true], [false, true, false]]]
+                b[0, 1] <- [true, false, true]
+                number i <- 0
+                for i until i > 2 by 1
+                begin
+                    number j <- 0
+                    for j until j > 1 by 1
+                    begin
+                        number k <- 0
+                        for k until k > 2 by 1
+                        begin
+                            writeBool(b[i, j, k])
+                            if (k = 2) break
+                            writeString(" ")
+                        end
+                        if (j = 1) break
+                        writeString(" ")
+                    end
+                    if (i = 2) break
+                    writeString(" ")
+                end
+            end
+        end
+        

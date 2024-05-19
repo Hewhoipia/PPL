@@ -1,0 +1,10 @@
+
+        func main()
+        begin
+            number a <- readNumber()
+            number b <- readNumber()
+            if (a > b) writeString("a lon hon b")
+            elif (a = b) writeString("a is equal to b")
+            else writeString("a is less than b")
+        end
+        

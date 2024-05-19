@@ -1,0 +1,11 @@
+
+        func main()
+        begin
+            number a <- 8.89
+            number b <- 8.88
+            number c <- 8.8
+            if ((a = c) and (b = c)) writeString("a bang b bang c")
+            elif (a < b) writeString("a < b")
+            else writeString("a > b")
+        end
+        

@@ -1,0 +1,9 @@
+
+        func main()
+        begin
+            var bao <- 22
+            var chuan <- 10
+            var nek <- bao % chuan
+            writeNumber(nek)
+        end
+        

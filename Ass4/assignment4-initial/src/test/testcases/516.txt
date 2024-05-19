@@ -1,0 +1,12 @@
+
+        dynamic a
+        func ganGlob()
+        begin
+            a <- 6
+        end
+        func main()
+        begin
+            ganGlob()
+            writeNumber(a)
+        end
+        

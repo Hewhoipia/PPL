@@ -1,0 +1,14 @@
+
+        func main()
+        begin
+            number a <- 3 + 15 - 8
+            a <- a * 2
+            a <- a / 2
+            writeNumber(a)
+            if (a = 10.0) begin
+                return
+            end
+            a <- 10.5
+            writeNumber(a)
+        end
+        

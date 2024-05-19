@@ -1,0 +1,16 @@
+
+        func main()
+        begin
+            bool b[5] <- [true, false, true, false, true]
+            var i <- 3
+            b[i] <- true
+            b[1] <- b[0]
+            var j <- 0
+            for j until j > 4 by 1
+            begin
+                writeBool(b[j])
+                if (j = 4) break
+                writeString(" ")
+            end
+        end
+        

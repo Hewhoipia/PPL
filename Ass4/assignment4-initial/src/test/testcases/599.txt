@@ -1,0 +1,9 @@
+
+        func main()
+        begin
+            number a <- 6
+            number b <- 6
+            number c <- 6
+            if ((a = b) and (b = c)) writeString("a bang b bang c")
+        end
+        

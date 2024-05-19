@@ -1,0 +1,15 @@
+
+        func ref1D(bool a[2])
+        begin
+            a <- [true, true]
+            return a
+        end
+        func main()
+        begin
+            bool b[2]
+            b <- [false, false]
+            b <- ref1D(b)
+            writeBool(b[0])
+            writeBool(b[1])
+        end
+        

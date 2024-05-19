@@ -1,0 +1,28 @@
+
+        func search(number arr[10], number n, number target)
+        begin
+            number i <- 0
+            for i until i >= n - 1 by 1
+            begin
+                if (arr[i] = target) return i
+            end
+            return -1
+        end
+        func print1DArray(number arr[10], number n)
+        func main()
+        begin
+            number arr[10] <- [64, 34, 1000, 12, 22, 11, 90, 1, -9, -2]
+            number target <- readNumber()
+            writeNumber(search(arr, 10, target))
+        end
+        func print1DArray(number arr[10], number n)
+        begin
+            number i <- 0
+            for i until i > n - 1 by 1
+            begin
+                writeNumber(arr[i])
+                if (i = n - 1) break
+                writeString(" ")
+            end
+        end
+        

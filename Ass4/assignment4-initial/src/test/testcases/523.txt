@@ -1,0 +1,8 @@
+
+        func main()
+        begin
+            writeString("trongcoveratkho: ")
+            var a <- true and not false or false and false
+            writeBool(a)
+        end
+        

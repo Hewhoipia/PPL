@@ -1,0 +1,14 @@
+
+        func main()
+        begin
+            string a[3] <- ["Hello,", "World", "?"]
+            a[2] <- "!"
+            number i <- 0
+            for i until i > 2 by 1
+            begin
+                writeString(a[i * 2 / 2 + 1 - 1])
+                if (i > 0) continue 
+                writeString(" ")
+            end
+        end
+        

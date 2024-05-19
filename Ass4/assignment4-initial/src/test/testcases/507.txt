@@ -1,0 +1,7 @@
+
+        func main ()
+        begin
+            number cuon <- 3
+            writeNumber(cuon)
+        end
+        

@@ -889,12 +889,45 @@ class CodeGenVisitor(BaseVisitor):
         pass
 
     def visitBinaryOp(self, ast:BinaryOp, o):
-        e1c, e1t = self.visit(ast.left, o)
-        e2c, e2t = self.visit(ast.right, o)
-        return e1c + e2c + self.emit.emitADDOP(ast.op, e1t, o.frame), e1t
-
-    def visitUnaryOp(self, ast:UnaryOp, o):
-        pass
+        e1code, e1type = self.visit(ast.left,o)
+        e2code, e2type = self.visit(ast.right,o)
+        op = ast.op
+        
+        right = e1type
+        if op in ['>','<','>=','<=','!=','=']:
+            #if op == '=': op = '==' # ZCode make = be the compare of number
+            opCode = fast[op](op, right, o.frame)
+            right = BoolType()
+        elif op in ['+', '-', '', '/']: #['+', '-', '', '/', '%']:
+            opCode = fast[op](op, right, o.frame)
+            right = NumberType()
+        elif op == '%':
+            opCode = self.emit.emitMOD(o.frame)
+            right = NumberType()
+        elif op == 'and':
+            opCode = self.emit.emitANDOP(o.frame)
+            right = BoolType()
+        elif op == 'or':
+            opCode = self.emit.emitOROP(o.frame)
+            right = BoolType()
+        elif op == "...":
+            obj = "\tnew java/lang/StringBuilder\n"
+            duplicate = "\tdup\n"
+            initialize = "\tinvokespecial java/lang/StringBuilder/<init>()V\n"
+            apd = "\tinvokevirtual java/lang/StringBuilder/append(Ljava/lang/String;)Ljava/lang/StringBuilder;\n"
+            sth2Str = "\tinvokevirtual java/lang/StringBuilder/toString()Ljava/lang/String;\n"
+            return obj+duplicate+initialize+ e1code+apd+ e2code+apd +sth2Str, StringType()
+        elif op == "==":
+            opcode = "\tinvokevirtual java/lang/String/equals(Ljava/lang/Object;)Z\n"
+            right = BoolType()
+        return e1code + e2code + opcode, right
+    
+    def visitUnaryOp(self, ast, o):
+        op = ast.op
+        ec, typ = self.visit(ast.operand, o)
+        if op == '-':
+            return ec + self.emit.emitNEGOP(typ, o.frame), typ
+        return ec + self.emit.emitNOT(typ, o.frame), typ
 
     def visitCallExpr(self, ast:CallExpr, o):
         pass

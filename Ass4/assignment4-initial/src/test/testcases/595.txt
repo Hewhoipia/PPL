@@ -1,0 +1,8 @@
+
+        func tinhcamnaykhonoi() return 1
+        func main()
+        begin
+            number a <- tinhcamnaykhonoi()
+            writeNumber(a)
+        end
+        

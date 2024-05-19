@@ -1,0 +1,22 @@
+
+        func T1vodich(string shoyo, number b, bool c) begin
+            b <- b + 1
+            s <- s..."method "
+            writeString(shoyo)
+            writeNumber(b)
+            if (c) writeBool(c)
+            else c <- true
+            writeBool(c)
+        end
+        
+        func main()
+        begin
+            number a <- 5
+            string abc <- "This is inside "
+            bool c <- false
+            T1vodich(abc, a, c)
+            writeString(abc)
+            writeNumber(a)
+            writeBool(c)
+        end
+        

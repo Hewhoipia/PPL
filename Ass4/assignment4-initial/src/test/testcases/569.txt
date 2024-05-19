@@ -1,0 +1,14 @@
+
+        func main()
+        begin
+            number a[4] <- [1, 2, 3, 4]
+            var b <- a
+            number i <- 0
+            for i until i > 3 by 1
+            begin
+                writeNumber(b[i])
+                if (i = 3) break
+                writeString(" ")
+            end
+        end
+        

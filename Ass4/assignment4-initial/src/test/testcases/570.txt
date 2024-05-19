@@ -1,0 +1,18 @@
+
+        func tinhcamnaykhonoi()
+        begin
+            number a[4] <- [1,2,3,4]
+            return a
+        end
+        func main()
+        begin
+            number a[4] <- tinhcamnaykhonoi()
+            number i <- 0
+            for i until i > 3 by 1
+            begin
+                writeNumber(a[i])
+                if (i = 3) break
+                writeString(" ")
+            end
+        end
+        

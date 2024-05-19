@@ -1,0 +1,24 @@
+
+        func main()
+        begin
+            if (true)
+            begin
+                string a[1, 2] <- [["Hello", "World"]]
+                writeString(a[0, 1])
+                a[0, 0] <- "Hello,"
+                number i <- 0
+                for i until i > 1 by 1
+                begin
+                    number j <- 0
+                    for j until j > 1 by 1
+                    begin
+                        writeString(a[i, j])
+                        if (j = 1) break
+                        writeString(" ")
+                    end
+                    if (j = 0) break
+                    writeString(" ")
+                end
+            end
+        end
+        

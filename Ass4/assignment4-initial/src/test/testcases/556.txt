@@ -1,0 +1,22 @@
+
+        func test(number a, bool b)
+        func main()
+        begin
+        number a <- 0
+            test(0, true)
+            writeNumber(a)
+        end
+        
+        func test(number a, bool b) 
+        begin
+            if (b) begin
+                a <- a + 1
+                writeNumber(a)
+                return
+            end
+            else begin
+                writeNumber(a)
+                return
+            end
+        end
+        

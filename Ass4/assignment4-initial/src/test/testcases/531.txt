@@ -1,0 +1,17 @@
+
+        func main()
+        begin
+            dynamic a <- 1000
+            if (a = 0) writeString("a = 0")
+            elif (a = 1) writeString("a = 1")
+            elif (a = 2) writeString("a = 2")
+            elif (a = 3) writeString("a = 3")
+            elif (a = 4) writeString("a = 4")
+            elif (a = 5) writeString("a = 5")
+            elif (a = 6) writeString("a = 6")
+            elif (a = 7) writeString("a = 7")
+            elif (a = 8) writeString("a = 8")
+            elif (a = 9) writeString("a = 9")
+            else writeString("a > 9")
+        end
+        

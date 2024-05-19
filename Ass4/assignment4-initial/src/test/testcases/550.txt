@@ -1,0 +1,17 @@
+
+        func T1vodich(string shoyo, number b) begin
+            b <- b + 1
+            s <- s..."method "
+            writeString(shoyo)
+            writeNumber(b)
+        end
+        
+        func main()
+        begin
+            number a <- 5
+            string abc <- "This is inside "
+            T1vodich(abc, a)
+            writeString(abc)
+            writeNumber(a)
+        end
+        

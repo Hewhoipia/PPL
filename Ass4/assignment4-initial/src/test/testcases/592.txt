@@ -1,0 +1,17 @@
+
+        func main()
+        begin
+            number i <- 0
+            number j <- -1
+            for i until not (i < 5) by (3 + 3 - 5) begin
+                number j <- 0
+                for j until not (j < 5) by -1 + 2 begin
+                    if (j = 3) continue
+                    writeNumber(j)
+                end
+                writeNumber(j)
+                if (i = 3) break
+            end
+            writeNumber(j)
+        end
+        

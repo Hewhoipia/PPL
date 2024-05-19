@@ -1,0 +1,15 @@
+
+        func test(number a, bool b)
+        func main()
+        begin
+            writeString(test(0, true))
+        end
+        
+        func test(number a, bool b) 
+        begin
+            if (b) 
+                return "true"
+            else 
+                return "false"
+        end
+        

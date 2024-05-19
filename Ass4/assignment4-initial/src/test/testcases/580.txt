@@ -1,0 +1,19 @@
+
+        number a[3, 3] <- [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        func main()
+        begin
+            number i <- 0
+            for i until i > 2 by 1
+            begin
+                number j <- 0
+                for j until j > 2 by 1
+                begin
+                    writeNumber(a[i, j])
+                    if (j = 2) break
+                    writeString(" ")
+                end
+                if (i = 2) break
+                writeString(" ")
+            end
+        end
+        

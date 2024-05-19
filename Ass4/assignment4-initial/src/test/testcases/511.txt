@@ -1,0 +1,22 @@
+
+        func tinhcamnaykhonoi() begin
+            string shoyo <- "This is inside test function: "
+            writeString(shoyo)
+            number bao
+            bao <- 3.14
+            writeNumber(bao)
+            writeString(" ")
+        end
+        func main ()
+        begin
+            tinhcamnaykhonoi()
+            string shoyo <- "This is inside main function: "
+            writeString(shoyo)
+            number bao <- 5
+            writeNumber(bao)
+            bool chuan <- true
+            writeBool(chuan)
+            string nek <- "Hello, World!"
+            writeString(nek)
+        end
+        

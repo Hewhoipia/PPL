@@ -1,0 +1,9 @@
+
+        func main()
+        begin
+            dynamic a
+            a <- 1000
+            var b <- 888
+            if (not (a = b)) writeString("a khac b")
+        end
+        

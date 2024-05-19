@@ -1,0 +1,18 @@
+
+        func tinhcamnaykhonoi()
+        begin
+            number i <- 0
+            for i until i > 9 by 1
+            begin
+                if (i = 5) begin
+                    writeNumber(i)
+                    return
+                end
+            end
+            writeNumber(10.0)
+        end
+        func main()
+        begin
+            tinhcamnaykhonoi()
+        end
+        

@@ -1,0 +1,16 @@
+
+        func test(number a, bool b)
+        func main()
+        begin
+            writeNumber(test(0, true))
+        end
+        
+        func test(number a, bool b) 
+        begin
+            if (b) 
+                return a + 1
+            else 
+                return a
+            
+        end
+        

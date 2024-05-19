@@ -1,0 +1,16 @@
+
+        func T1vodich(string shoyo[2])
+        
+        func main()
+        begin
+            string shoyo[2] <- ["Hello, ", "Werld!"]
+            T1vodich(s)
+            number i <- 0
+            for i until i > 1 by 1
+                writeString(s[i])
+        end
+        
+        func T1vodich(string a[2]) begin
+            a[1] <- "World!"
+        end
+        
