@@ -7,11 +7,11 @@ from Visitor import *
 from AST import *
 from Utils import *
 
+# Phan Thanh Thong - 2153846
+
 ###### Static Check #####
 
 from StaticError import *
-
-# Phan Thanh Thong - 2153846
 
 class DeclKind:
     def __init__(self, kind:str, param:list=[]):
@@ -20,12 +20,10 @@ class DeclKind:
         self.param=param
         
 class Symbol:
-    def __init__(self, kind:DeclKind, name:str, typ:Type=None, mtype=None, value=None):
+    def __init__(self, kind:DeclKind, name:str, typ:Type=None):
         self.declKind=kind
         self.name=name
         self.typ=typ
-        self.mtype=mtype
-        self.value=value
 
 class Utils:
     def infer(o:object, typ:Type):
@@ -696,39 +694,43 @@ class MType:
         self.rettype = rettype
 
 
-# class Symbol:
-#     def __init__(self, name, mtype, kind:str=None, value=None):
-#         self.name = name
-#         self.mtype = mtype
-#         self.value = value
-#         self.kind = kind # func, var
+class SymbolLove:
+    def __init__(self, name:str, mtype:MType, value=None, kind=None):
+        self.name = name
+        self.mtype = mtype
+        self.value = value
+        self.kind = kind # var or func
 
-#     def __str__(self):
-#         return "Symbol("+self.name+","+str(self.mtype)+")"
+    def __str__(self):
+        return "Symbol("+self.name+","+str(self.mtype)+")"
 
 class CodeGenerator:
     def __init__(self):
         self.libName = "io"
 
     def init(self):
-        # return [Symbol("readNumber", MType(list(), NumberType()), "func", CName(self.libName)),
-        #         Symbol("writeNumber", MType([NumberType()],
-        #                VoidType()), "func", CName(self.libName)),
-        #         Symbol("readBool", MType(list(), BoolType()), "func", CName(self.libName)),
-        #         Symbol("writeBool", MType([BoolType()],
-        #                VoidType()), "func", CName(self.libName)),
-        #         Symbol("readString", MType(list(), StringType()), "func", CName(self.libName)),
-        #         Symbol("writeString", MType([StringType()],
-        #                VoidType()), "func", CName(self.libName))
-        #         ]
-        pass
+        return [SymbolLove("readNumber", MType(list(), NumberType()), CName(self.libName), 'func'),
+                SymbolLove("writeNumber", MType([NumberType()],
+                       VoidType()), CName(self.libName), 'func'),
+                SymbolLove("readBool", MType(list(), BoolType()), CName(self.libName), 'func'),
+                SymbolLove("writeBool", MType([BoolType()],
+                       VoidType()), CName(self.libName), 'func'),
+                SymbolLove("readString", MType(list(), StringType()), CName(self.libName), 'func'),
+                SymbolLove("writeString", MType([StringType()],
+                       VoidType()), CName(self.libName), 'func')
+                ]
 
     def gen(self, ast, path):
         # ast: AST
         # dir_: String
-
-        gl = [ClassData("io", "", self.init())]
-        gc = CodeGenVisitor(ast, gl, path)
+        glob = StaticChecker(ast).check()        
+        glob_env = []
+        for sym in glob[0][:(len(glob[0])-6)]:
+            glob_env.append(SymbolLove(sym.name,
+                MType([i.typ for i in sym.declKind.param] if sym.declKind.kind!='var' else None,sym.typ),
+                CName(None), 'func' if sym.declKind.kind != 'var' else 'var'))
+        gl = self.init()
+        gc = CodeGenVisitor(ast, gl+glob_env, path)
         gc.visit(ast, None)
 
 
@@ -764,38 +766,52 @@ class CodeGenVisitor(BaseVisitor):
         self.astTree = astTree
         self.env = env
         self.path = path
+        self.globInit=list() #list of Assign stmt
 
-    def visitProgram(self, ast, c):
+    def visitProgram(self, ast:Program, c):
         ctx = ClassType("ZCodeClass")
         self.className = ctx.classname
         self.emit = Emitter(self.path+"/" + self.className + ".j")
         self.emit.printout(self.emit.emitPROLOG(self.className, "java.lang.Object"))
-        # for ele in ast.decl:
-        #     if type(ele) == FuncDecl:
-        #         self.visit(ele, SubBody(None, self.env))
-        #     # elif type(ele) == VarDecl:
-        #     #     self.visit(ele, self.env)
+        for sym in self.env:
+            sym.value.value = self.className
+        for ele in ast.decl:
+            if type(ele) is FuncDecl:
+                self.visit(ele, SubBody(None, self.env))
+        self.genMETHOD(FuncDecl(Id("<clinit>"), list(), Block(self.globInit)), self.env, Frame("<clinit>", None))
         # generate default constructor
-        #self.genMETHOD(FuncDecl(Id("<init>"), list(), None), c, Frame("<init>", VoidType()))
-        [self.visit(ele, SubBody(None, self.env)) for ele in ast.decl]
+        self.genMETHOD(FuncDecl(Id("<init>"), list(), None), self.env, Frame("<init>", None))
+        for ele in ast.decl:
+            if type(ele) is FuncDecl:
+                self.visit(ele, SubBody(None, self.env))
         self.emit.emitEPILOG()
-        return c
 
     def visitClassDecl(self, ast, c):
         pass
 
     def genMETHOD(self, ast, o, frame):
-        isInit = frame.returnType is None
+        isInit = ast.name.name == "init"
+        isClinit = ast.name.name == "clinit"
         isMain = ast.name.name == "main" and len(
             ast.param) == 0 and type(frame.returnType) is VoidType
-        returnType = VoidType() if isInit else frame.returnType
-        methodName = "<init>" if isInit else ast.name.name
-        intype = [ArrayType(0, StringType())] if isMain else list(
-            map(lambda x: x.typ, ast.param))
+        symbol=None
+        for sym in o:
+            if sym.name == ast.name.name and type(sym.value) is CName:
+                symbol=sym
+                break
+        returnType = frame.returnType if isMain else VoidType()
+        methodName = ast.name.name
+        intype = None
+        if isMain:
+            intype=[ArrayType(0, StringType())]
+        elif isInit or isClinit:
+            intype=[]
+        else:
+            intype=symbol.mtype.partype
         mtype = MType(intype, returnType)
 
         self.emit.printout(self.emit.emitMETHOD(
-            methodName, mtype, not isInit, frame))
+            methodName, mtype, True, frame))
 
         frame.enterScope(True)
 
@@ -805,6 +821,8 @@ class CodeGenVisitor(BaseVisitor):
         if isInit:
             self.emit.printout(self.emit.emitVAR(frame.getNewIndex(), "this", ClassType(
                 Id(self.className)), frame.getStartLabel(), frame.getEndLabel(), frame))
+        if isClinit:
+            [self.visit(x,SubBody(frame, glenv)) for x in self.globInit]
         elif isMain:
             self.emit.printout(self.emit.emitVAR(frame.getNewIndex(), "args", ArrayType(
                 0, StringType()), frame.getStartLabel(), frame.getEndLabel(), frame))
@@ -817,102 +835,113 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.printout(self.emit.emitLABEL(frame.getStartLabel(), frame))
 
         # Generate code for statements
-        if isInit:
-            self.emit.printout(self.emit.emitREADVAR(
-                "this", ClassType(Id(self.className)), 0, frame))
-            self.emit.printout(self.emit.emitINVOKESPECIAL(frame))
-        list(map(lambda x: self.visit(x, SubBody(frame, glenv)), body.stmt))
+        self.visit(body, SubBody(frame, glenv))
 
         self.emit.printout(self.emit.emitLABEL(frame.getEndLabel(), frame))
-        if type(returnType) is VoidType:
+        noReturn = True
+        if type(body) is Block:
+            for stmt in body.stmt:
+                if type(stmt) is Return: noReturn = False
+        if noReturn:
             self.emit.printout(self.emit.emitRETURN(VoidType(), frame))
         self.emit.printout(self.emit.emitENDMETHOD(frame))
         frame.exitScope()
 
-    def visitFuncDecl(self, ast, o):
-        frame = Frame(ast.name, VoidType())
-        self.genMETHOD(ast, o.sym, frame)
-        return Symbol(ast.name, MType([x.typ for x in ast.param], VoidType()), CName(self.className))
+    def visitFuncDecl(self, ast:FuncDecl, o):
+        symbol=None
+        for sym in o:
+            if sym.name == ast.name.name and sym.kind == 'func':
+                symbol=sym
+                break
+        frame = Frame(ast.name.name, symbol.mtype.rettype)
+        self.genMETHOD(ast, o, frame)
 
-    def visitVarDecl(self, ast, o):
+    def visitVarDecl(self, ast:VarDecl, o):
+        if o.frame is not None:
+            idx = o.frame.getNewIndex()
+            self.emit.printout(self.emit.emitVAR(idx, ast.name.name, ast.varType,
+                o.frame.getStartLabel(), o.frame.getEndLabel()))
+            return SymbolLove(ast.name.name, MType(None,ast.varType), Index(idx), 'var')
+        if o.frame is None:
+            symbol=None
+            for sym in o:
+                if sym.name == ast.name.name and sym.kind == 'var':
+                    symbol=sym
+                    break
+            self.emit.printout(self.emit.emitATTRIBUTE(ast.name.name, symbol.mtype.rettype, False, ""))
+
+    def visitNumberType(self, ast:NumberType, o):
         pass
 
-    def visitFuncDecl(self, ast, o):
+    def visitBoolType(self, ast:BoolType, o):
         pass
 
-    def visitNumberType(self, ast, o):
+    def visitStringType(self, ast:StringType, o):
         pass
 
-    def visitBoolType(self, ast, o):
+    def visitArrayType(self, ast:ArrayType, o):
         pass
 
-    def visitStringType(self, ast, o):
-        pass
-
-    def visitArrayType(self, ast, o):
-        pass
-
-    def visitBinaryOp(self, ast, o):
+    def visitBinaryOp(self, ast:BinaryOp, o):
         e1c, e1t = self.visit(ast.left, o)
         e2c, e2t = self.visit(ast.right, o)
         return e1c + e2c + self.emit.emitADDOP(ast.op, e1t, o.frame), e1t
 
-    def visitUnaryOp(self, ast, o):
+    def visitUnaryOp(self, ast:UnaryOp, o):
         pass
 
-    def visitCallExpr(self, ast, o):
+    def visitCallExpr(self, ast:CallExpr, o):
         pass
 
-    def visitId(self, ast, o):
+    def visitId(self, ast:Id, o):
         pass
 
-    def visitArrayCell(self, ast, o):
+    def visitArrayCell(self, ast:ArrayCell, o):
         pass
 
-    def visitBlock(self, ast, o):
+    def visitBlock(self, ast:Block, o):
+        list(map(lambda x: self.visit(x, o), ast.stmt))
+
+    def visitIf(self, ast:If, o):
         pass
 
-    def visitIf(self, ast, o):
+    def visitFor(self, ast:For, o):
         pass
 
-    def visitFor(self, ast, o):
+    def visitContinue(self, ast:Continue, o):
         pass
 
-    def visitContinue(self, ast, o):
+    def visitBreak(self, ast:Break, o):
         pass
 
-    def visitBreak(self, ast, o):
+    def visitReturn(self, ast:Return, o):
         pass
 
-    def visitReturn(self, ast, o):
+    def visitAssign(self, ast:Assign, o):
         pass
 
-    def visitAssign(self, ast, o):
-        pass
-
-    def visitCallStmt(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        nenv = ctxt.sym
-        sym = next(filter(lambda x: ast.method.name == x.name, nenv), None)
+    def visitCallStmt(self, ast:CallStmt, o):
+        frame = o.frame
+        nenv = o.sym
+        sym = next(filter(lambda x: ast.name.name == x.name and x.kind == 'func', nenv), None)
         cname = sym.value.value
         ctype = sym.mtype
         in_ = ("", list())
-        for x in ast.param:
+        for x in ast.args:
             str1, typ1 = self.visit(x, Access(frame, nenv, False, True))
             in_ = (in_[0] + str1, in_[1].append(typ1))
         self.emit.printout(in_[0])
         self.emit.printout(self.emit.emitINVOKESTATIC(
-            cname + "/" + ast.method.name, ctype, frame))
+            cname + "/" + ast.name.name, ctype, frame))
 
-    def visitNumberLiteral(self, ast, o):
-        return self.emit.emitPUSHFCONST(ast.value, o.frame), NumberType()
+    def visitNumberLiteral(self, ast:NumberLiteral, o):
+        return self.emit.emitPUSHFCONST(str(ast.value), o.frame), NumberType()
 
-    def visitBooleanLiteral(self, ast, o):
+    def visitBooleanLiteral(self, ast:BooleanLiteral, o):
         pass
 
-    def visitStringLiteral(self, ast, o):
+    def visitStringLiteral(self, ast:StringLiteral, o):
         pass
 
-    def visitArrayLiteral(self, ast, o):
+    def visitArrayLiteral(self, ast:ArrayLiteral, o):
         pass

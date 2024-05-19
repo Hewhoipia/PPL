@@ -2,5 +2,6 @@ dynamic a
 number b[3] <- [true,2,a]
 func main()
 begin
+    writeNumber(1)
 end
         

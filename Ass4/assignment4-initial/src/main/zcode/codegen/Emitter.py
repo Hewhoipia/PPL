@@ -67,7 +67,6 @@ class Emitter():
     def emitPUSHFCONST(self, in_, frame):
         # in_: String
         # frame: Frame
-
         f = float(in_)
         frame.push()
         rst = "{0:.4f}".format(f)
@@ -221,7 +220,7 @@ class Emitter():
         # isFinal: Boolean
         # value: String
 
-        return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), false)
+        return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), False)
 
     def emitGETSTATIC(self, lexeme, in_, frame):
         # lexeme: String

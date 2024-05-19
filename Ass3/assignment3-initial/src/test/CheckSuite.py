@@ -10,6 +10,7 @@ class CheckSuite(unittest.TestCase):
 number b[3] <- [true,2,a]
 func main()
 begin
+    writeNumber(1)
 end
         """
         expect = "Type Mismatch In Expression: ArrayLit(BooleanLit(True), NumLit(2.0), Id(a))"

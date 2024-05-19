@@ -1,5 +1,6 @@
-func main ()
-        begin
-            writeNumber(1)
-        end
+
+func main()
+begin
+    writeNumber(1)
+end
         
