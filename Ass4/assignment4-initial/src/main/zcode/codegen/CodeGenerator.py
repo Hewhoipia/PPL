@@ -728,7 +728,7 @@ class CodeGenerator:
         for sym in glob[0][:(len(glob[0])-6)]:
             glob_env.append(SymbolLove(sym.name,
                 MType([i.typ for i in sym.declKind.param] if sym.declKind.kind!='var' else None,sym.typ),
-                CName(None), 'func' if sym.declKind.kind != 'var' else 'var'))
+                CName("ZCodeClass"), 'func' if sym.declKind.kind != 'var' else 'var'))
         gl = self.init()
         gc = CodeGenVisitor(ast, gl+glob_env, path)
         gc.visit(ast, None)
@@ -773,45 +773,47 @@ class CodeGenVisitor(BaseVisitor):
         self.className = ctx.classname
         self.emit = Emitter(self.path+"/" + self.className + ".j")
         self.emit.printout(self.emit.emitPROLOG(self.className, "java.lang.Object"))
-        for sym in self.env:
-            sym.value.value = self.className
         for ele in ast.decl:
-            if type(ele) is FuncDecl:
+            if type(ele) is VarDecl:
                 self.visit(ele, SubBody(None, self.env))
         self.genMETHOD(FuncDecl(Id("<clinit>"), list(), Block(self.globInit)), self.env, Frame("<clinit>", None))
         # generate default constructor
         self.genMETHOD(FuncDecl(Id("<init>"), list(), None), self.env, Frame("<init>", None))
         for ele in ast.decl:
             if type(ele) is FuncDecl:
-                self.visit(ele, SubBody(None, self.env))
+                self.visit(ele, self.env)
         self.emit.emitEPILOG()
 
     def visitClassDecl(self, ast, c):
         pass
 
     def genMETHOD(self, ast, o, frame):
-        isInit = ast.name.name == "init"
-        isClinit = ast.name.name == "clinit"
+        isInit = ast.name.name == "<init>"
+        isClinit = ast.name.name == "<clinit>"
         isMain = ast.name.name == "main" and len(
             ast.param) == 0 and type(frame.returnType) is VoidType
-        symbol=None
-        for sym in o:
-            if sym.name == ast.name.name and type(sym.value) is CName:
-                symbol=sym
-                break
         returnType = frame.returnType if isMain else VoidType()
         methodName = ast.name.name
         intype = None
+        isStatic = None
         if isMain:
             intype=[ArrayType(0, StringType())]
+            isStatic=True
         elif isInit or isClinit:
             intype=[]
+            isStatic=False
         else:
+            symbol=None
+            for sym in o:
+                if sym.name == ast.name.name and type(sym.value) is CName:
+                    symbol=sym
+                    break
             intype=symbol.mtype.partype
+            isStatic=True
         mtype = MType(intype, returnType)
 
         self.emit.printout(self.emit.emitMETHOD(
-            methodName, mtype, True, frame))
+            methodName, mtype, isStatic, frame))
 
         frame.enterScope(True)
 
@@ -821,8 +823,9 @@ class CodeGenVisitor(BaseVisitor):
         if isInit:
             self.emit.printout(self.emit.emitVAR(frame.getNewIndex(), "this", ClassType(
                 Id(self.className)), frame.getStartLabel(), frame.getEndLabel(), frame))
-        if isClinit:
-            [self.visit(x,SubBody(frame, glenv)) for x in self.globInit]
+            self.emit.printout(self.emit.emitREADVAR("this", ClassType(
+                Id(self.className)), 0, frame))
+            self.emit.printout(self.emit.emitINVOKESPECIAL(frame))
         elif isMain:
             self.emit.printout(self.emit.emitVAR(frame.getNewIndex(), "args", ArrayType(
                 0, StringType()), frame.getStartLabel(), frame.getEndLabel(), frame))
@@ -835,7 +838,7 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.printout(self.emit.emitLABEL(frame.getStartLabel(), frame))
 
         # Generate code for statements
-        self.visit(body, SubBody(frame, glenv))
+        if body is not None: self.visit(body, SubBody(frame, glenv))
 
         self.emit.printout(self.emit.emitLABEL(frame.getEndLabel(), frame))
         noReturn = True
@@ -869,6 +872,9 @@ class CodeGenVisitor(BaseVisitor):
                     symbol=sym
                     break
             self.emit.printout(self.emit.emitATTRIBUTE(ast.name.name, symbol.mtype.rettype, False, ""))
+            if ast.varInit is not None:
+                self.globInit+=[Assign(Id(ast.name), ast.varInit)]
+            
 
     def visitNumberType(self, ast:NumberType, o):
         pass

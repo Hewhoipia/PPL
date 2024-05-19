@@ -22,7 +22,7 @@ class Emitter():
     def getJVMType(self, inType):
         typeIn = type(inType)
         if typeIn is NumberType:
-            return "I"
+            return "F"
         elif typeIn is StringType:
             return "Ljava/lang/String;"
         elif typeIn is VoidType:
